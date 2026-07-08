@@ -177,6 +177,8 @@ Use this runbook to do everything from terminal.
 
 - [x] `npm run lint`
 - [x] `npm run build`
+- [x] Added Node PATH fallback runner: `.\scripts\run-npm.ps1` for shells where `node` is not detected by npm.
+- [x] Added one-command production verification: `.\scripts\verify-production.ps1`.
 
 ### 9.2 GitHub Push (already completed)
 
@@ -220,6 +222,7 @@ Required env values to include:
 ### 9.6 HubSpot Terminal Verification Checklist
 
 - [x] Add terminal helper script: `.\scripts\configure-hubspot-env.ps1` to set HubSpot env vars via `doctl` without writing secrets to repo files.
+- [x] Add one-command health check script: `.\scripts\verify-production.ps1`.
 - [x] Submit lead form from site URL
 - [x] Confirm API response success in browser/network logs
 - [ ] Confirm inbox receives lead email
@@ -252,3 +255,4 @@ Required env values to include:
 - [ ] Add multilingual support if targeting wider audience
 - [ ] Add client portal for project updates and files
 - [ ] Add analytics dashboard for campaign and lead reporting
+
