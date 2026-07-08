@@ -1,5 +1,15 @@
 {
   "name": "seroocool",
+  "domains": [
+    {
+      "domain": "zerocool-development.com",
+      "type": "PRIMARY"
+    },
+    {
+      "domain": "www.zerocool-development.com",
+      "type": "ALIAS"
+    }
+  ],
   "services": [
     {
       "name": "web",
@@ -13,6 +23,18 @@
         {
           "key": "NODE_ENV",
           "value": "production"
+        },
+        {
+          "key": "NEXT_PUBLIC_SITE_URL",
+          "value": "https://zerocool-development.com"
+        },
+        {
+          "key": "LEAD_TO_EMAIL",
+          "value": "thenewchapter1785@gmail.com"
+        },
+        {
+          "key": "LEAD_FROM_EMAIL",
+          "value": "onboarding@resend.dev"
         }
       ],
       "http_port": 3000,

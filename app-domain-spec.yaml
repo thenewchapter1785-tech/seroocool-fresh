@@ -1,0 +1,37 @@
+ingress:
+  rules:
+  - component:
+      name: web
+    match:
+      path:
+        prefix: /
+name: seroocool
+region: nyc
+domains:
+- domain: zerocool-development.com
+  type: PRIMARY
+- domain: www.zerocool-development.com
+  type: ALIAS
+services:
+- envs:
+  - key: NODE_ENV
+    scope: RUN_AND_BUILD_TIME
+    value: production
+  - key: NEXT_PUBLIC_SITE_URL
+    scope: RUN_AND_BUILD_TIME
+    value: https://zerocool-development.com
+  - key: LEAD_TO_EMAIL
+    scope: RUN_AND_BUILD_TIME
+    value: thenewchapter1785@gmail.com
+  - key: LEAD_FROM_EMAIL
+    scope: RUN_AND_BUILD_TIME
+    value: onboarding@resend.dev
+  git:
+    branch: main
+    repo_clone_url: https://github.com/thenewchapter1785-tech/seroocool-fresh.git
+  http_port: 3000
+  instance_count: 1
+  instance_size_slug: basic-xs
+  name: web
+  run_command: npm run start
+  source_dir: .

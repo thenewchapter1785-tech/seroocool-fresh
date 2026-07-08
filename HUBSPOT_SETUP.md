@@ -47,3 +47,24 @@ Optional website/social settings:
 - Current integration writes standard contact fields (`email`, `firstname`, `lastname`, `lifecyclestage`).
 - Source/campaign fields remain available in your API payload and inbox email.
 - Next upgrade can add automatic deal creation and source tagging in HubSpot.
+
+## Terminal-First Setup (PowerShell)
+
+Run this helper to configure HubSpot and related env vars directly in DigitalOcean without saving tokens in repo files:
+
+```powershell
+.\scripts\configure-hubspot-env.ps1
+```
+
+What it does:
+
+- Prompts for `HUBSPOT_ACCESS_TOKEN` (secure input)
+- Prompts for `NEXT_PUBLIC_HUBSPOT_PORTAL_ID`
+- Prompts for `RESEND_API_KEY` (secure input)
+- Optionally sets social/meta env vars
+- Validates and updates the app spec via `doctl apps update --spec - --wait`
+
+Security note:
+
+- Enter secrets directly in terminal prompts (never in chat/messages).
+- Rotate `HUBSPOT_ACCESS_TOKEN` and `RESEND_API_KEY` immediately if they were shared in chat or pasted into logs.
