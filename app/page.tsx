@@ -1,3 +1,4 @@
+import Link from "next/link";
 import LeadForm from "./lead-form";
 import TrackedLink from "./tracked-link";
 
@@ -6,6 +7,9 @@ export default function Home() {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-development.com";
   const facebookPageUrl =
     process.env.NEXT_PUBLIC_FACEBOOK_PAGE_URL ?? "https://facebook.com/";
+  const bookingUrl =
+    process.env.NEXT_PUBLIC_BOOKING_URL ??
+    "mailto:thenewchapter1785@gmail.com?subject=Strategy%20Call%20-%20$erocool-Development";
   const phoneHref = "tel:+14017862811";
   const jsonLd = {
     "@context": "https://schema.org",
@@ -95,6 +99,24 @@ export default function Home() {
       step: "03",
       title: "Build and launch",
       copy: "Once aligned, I handle implementation, polish, and deployment without dragging the project out.",
+    },
+  ];
+
+  const servicePaths = [
+    {
+      href: "/services/business-websites",
+      title: "Business Websites",
+      copy: "Position your offer clearly and turn more visitors into qualified leads.",
+    },
+    {
+      href: "/services/custom-web-apps",
+      title: "Custom Web Apps",
+      copy: "Build internal tools, client portals, or product workflows around your process.",
+    },
+    {
+      href: "/services/automation-integrations",
+      title: "Automation + APIs",
+      copy: "Connect systems and remove repetitive admin tasks across your stack.",
     },
   ];
 
@@ -203,6 +225,24 @@ export default function Home() {
               ))}
             </div>
           </article>
+        </section>
+
+        <section className="section-stack animate-rise-delayed grid gap-4">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="section-heading">Choose Your Service Path</h2>
+            <Link href="/services" className="cta-secondary inline-flex">
+              View All Services
+            </Link>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {servicePaths.map((service) => (
+              <Link key={service.href} href={service.href} className="project-card">
+                <p className="project-tag">Service</p>
+                <h3 className="project-title">{service.title}</h3>
+                <p className="project-copy">{service.copy}</p>
+              </Link>
+            ))}
+          </div>
         </section>
 
         <section className="section-stack animate-rise-delayed-2 grid gap-4 md:grid-cols-2">
@@ -343,6 +383,14 @@ export default function Home() {
                   </dd>
                 </div>
               </dl>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <a href={bookingUrl} className="cta-primary inline-flex">
+                  Book a Strategy Call
+                </a>
+                <a href={phoneHref} className="cta-secondary inline-flex">
+                  Call Now
+                </a>
+              </div>
             </div>
           </div>
         </section>
@@ -360,13 +408,13 @@ export default function Home() {
             Start Your Project
           </TrackedLink>
           <TrackedLink
-            href={facebookPageUrl}
+            href={bookingUrl}
             target="_blank"
             rel="noreferrer"
             className="cta-secondary"
-            eventName="facebook_message_click"
+            eventName="mobile_book_call_click"
           >
-            Message on Facebook
+            Book a Call
           </TrackedLink>
         </div>
       </main>

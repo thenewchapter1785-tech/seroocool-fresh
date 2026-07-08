@@ -4,6 +4,8 @@ type LeadPayload = {
   name?: string;
   email?: string;
   projectType?: string;
+  budgetRange?: string;
+  timeline?: string;
   source?: string;
   utmSource?: string;
   utmCampaign?: string;
@@ -138,6 +140,8 @@ export async function POST(request: Request) {
     name: body.name,
     email: body.email,
     projectType: body.projectType,
+    budgetRange: body.budgetRange,
+    timeline: body.timeline,
     source: body.source,
     utmSource: body.utmSource,
     utmCampaign: body.utmCampaign,
@@ -159,6 +163,8 @@ export async function POST(request: Request) {
     `Name: ${body.name}`,
     `Email: ${body.email}`,
     `Project Type: ${body.projectType ?? ""}`,
+    `Budget Range: ${body.budgetRange ?? ""}`,
+    `Timeline: ${body.timeline ?? ""}`,
     `Source: ${body.source ?? ""}`,
     `UTM Source: ${body.utmSource ?? ""}`,
     `UTM Campaign: ${body.utmCampaign ?? ""}`,

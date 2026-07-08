@@ -65,6 +65,8 @@ export default function LeadForm() {
       name: "",
       email: "",
       projectType: "website",
+      budgetRange: "not_sure",
+      timeline: "asap",
       message: "",
     }),
     []
@@ -179,6 +181,43 @@ export default function LeadForm() {
         <option value="android">Android App</option>
         <option value="automation">Automation / API Project</option>
         <option value="other">Other</option>
+      </select>
+
+      <label htmlFor="budgetRange">Budget Range</label>
+      <select
+        id="budgetRange"
+        name="budgetRange"
+        value={formData.budgetRange}
+        onChange={(event) =>
+          setFormData((current) => ({
+            ...current,
+            budgetRange: event.target.value,
+          }))
+        }
+      >
+        <option value="not_sure">Not sure yet</option>
+        <option value="under_2k">Under $2k</option>
+        <option value="2k_5k">$2k - $5k</option>
+        <option value="5k_10k">$5k - $10k</option>
+        <option value="10k_plus">$10k+</option>
+      </select>
+
+      <label htmlFor="timeline">Desired Timeline</label>
+      <select
+        id="timeline"
+        name="timeline"
+        value={formData.timeline}
+        onChange={(event) =>
+          setFormData((current) => ({
+            ...current,
+            timeline: event.target.value,
+          }))
+        }
+      >
+        <option value="asap">As soon as possible</option>
+        <option value="1_2_months">1-2 months</option>
+        <option value="this_quarter">This quarter</option>
+        <option value="exploring">Just exploring options</option>
       </select>
 
       <label htmlFor="message">Project Details</label>

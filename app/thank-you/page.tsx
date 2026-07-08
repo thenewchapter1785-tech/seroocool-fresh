@@ -10,6 +10,10 @@ export const metadata: Metadata = {
 };
 
 export default function ThankYouPage() {
+  const bookingUrl =
+    process.env.NEXT_PUBLIC_BOOKING_URL ??
+    "mailto:thenewchapter1785@gmail.com?subject=Strategy%20Call%20-%20$erocool-Development";
+
   return (
     <div className="site-shell">
       <main className="mx-auto flex min-h-screen w-full max-w-3xl items-center px-6 py-12">
@@ -22,9 +26,31 @@ export default function ThankYouPage() {
             Corey will review your request and follow up with next steps. If your
             project is urgent, call 401-786-2811.
           </p>
-          <Link href="/" className="cta-primary mt-7 inline-flex">
-            Back to Homepage
-          </Link>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a href={bookingUrl} className="cta-primary inline-flex">
+              Book a Strategy Call
+            </a>
+            <a href="tel:+14017862811" className="cta-secondary inline-flex">
+              Call Now
+            </a>
+            <Link href="/" className="cta-secondary inline-flex">
+              Back to Homepage
+            </Link>
+          </div>
+          <div className="mt-6 grid gap-3 md:grid-cols-3">
+            <Link href="/services/business-websites" className="faq-card">
+              <h3 className="faq-question">Business Websites</h3>
+              <p className="faq-answer">Fast, polished marketing sites built to convert.</p>
+            </Link>
+            <Link href="/services/custom-web-apps" className="faq-card">
+              <h3 className="faq-question">Custom Web Apps</h3>
+              <p className="faq-answer">Dashboards, portals, and product workflows.</p>
+            </Link>
+            <Link href="/services/automation-integrations" className="faq-card">
+              <h3 className="faq-question">Automation + APIs</h3>
+              <p className="faq-answer">Cut repetitive work and connect your stack.</p>
+            </Link>
+          </div>
         </section>
       </main>
     </div>
