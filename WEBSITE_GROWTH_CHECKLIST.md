@@ -98,6 +98,62 @@ This section is reserved for new tasks identified during build sessions.
 - [ ] Configure HubSpot lifecycle/source mapping for: Facebook Lead, Instagram Lead, Organic Lead.
 - [ ] Add HubSpot deal automation for new leads after contact creation.
 
+## 9) Terminal-Only Runbook (PowerShell)
+
+Use this runbook to do everything from terminal.
+
+### 9.1 Local Final Validation
+
+- [x] `npm run lint`
+- [x] `npm run build`
+
+### 9.2 GitHub Push (already completed)
+
+- [x] `git add -A`
+- [x] `git commit -m "..."`
+- [x] `git branch -M main`
+- [x] `gh repo create thenewchapter1785-tech/seroocool-fresh --public --source=. --remote=origin --push`
+
+### 9.3 Set GitHub Secrets for DigitalOcean CI Deploy
+
+- [ ] `gh secret set DIGITALOCEAN_ACCESS_TOKEN --body "<your_do_token>"`
+- [ ] `gh secret set DIGITALOCEAN_APP_ID --body "<your_do_app_id>"`
+
+### 9.4 DigitalOcean App Setup from Terminal
+
+- [x] Install doctl: `winget install DigitalOcean.doctl`
+- [ ] Authenticate: `doctl auth init --access-token <your_do_token>`
+- [ ] Create app from spec: `doctl apps create --spec app.json`
+- [ ] Capture app id: `doctl apps list`
+- [ ] Trigger deployment manually (optional): `doctl apps create-deployment <app-id>`
+
+### 9.5 Configure App Environment Variables via doctl
+
+- [ ] Prepare env values in your shell/session.
+- [ ] Update app spec envs in `app.json` then run:
+- [ ] `doctl apps update <app-id> --spec app.json`
+
+Required env values to include:
+
+- [ ] `NEXT_PUBLIC_SITE_URL`
+- [ ] `NEXT_PUBLIC_FACEBOOK_PAGE_URL`
+- [ ] `NEXT_PUBLIC_INSTAGRAM_PROFILE_URL`
+- [ ] `NEXT_PUBLIC_META_PIXEL_ID`
+- [ ] `FACEBOOK_DOMAIN_VERIFICATION`
+- [ ] `RESEND_API_KEY`
+- [ ] `LEAD_TO_EMAIL`
+- [ ] `LEAD_FROM_EMAIL`
+- [ ] `HUBSPOT_ACCESS_TOKEN`
+- [ ] `NEXT_PUBLIC_HUBSPOT_PORTAL_ID`
+
+### 9.6 HubSpot Terminal Verification Checklist
+
+- [ ] Submit lead form from site URL
+- [ ] Confirm API response success in browser/network logs
+- [ ] Confirm inbox receives lead email
+- [ ] Confirm contact appears in HubSpot
+- [ ] Confirm behavioral events are visible in HubSpot tracking tools
+
 ## 5) Performance and SEO Add-ons
 
 - [ ] Add Open Graph image for social shares
