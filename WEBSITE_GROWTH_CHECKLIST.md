@@ -4,7 +4,7 @@ This file combines your deployment checklist and feature roadmap so your site ca
 
 ## 1) Deployment and Facebook Integration Checklist
 
-- [ ] Deploy app to DigitalOcean App Platform
+- [x] Deploy app to DigitalOcean App Platform
 - [ ] Point custom domain to the app
 - [ ] Set production environment variables in DigitalOcean:
   - [ ] NEXT_PUBLIC_SITE_URL
@@ -97,6 +97,11 @@ This section is reserved for new tasks identified during build sessions.
 - [ ] Verify HubSpot custom behavioral events are appearing (form view, submit attempt, submit success, submit error, CTA clicks).
 - [ ] Configure HubSpot lifecycle/source mapping for: Facebook Lead, Instagram Lead, Organic Lead.
 - [ ] Add HubSpot deal automation for new leads after contact creation.
+- [x] DigitalOcean app creation blocker: grant DigitalOcean GitHub integration access to repo `thenewchapter1785-tech/seroocool-fresh`.
+- [x] Re-run `doctl apps create --spec app.json` after GitHub repo access is granted.
+- [x] Terminal-only workaround used: switched app spec source from `github` to `git.repo_clone_url` and created app successfully.
+- [x] New DigitalOcean App ID: `a7fabd80-117e-4683-8ca7-2636b2a48c93`.
+- [ ] Monitor initial deployment `fdcd7079-2e2d-4103-9787-232eff92cc5e` to completion and confirm default ingress URL.
 
 ## 9) Terminal-Only Runbook (PowerShell)
 

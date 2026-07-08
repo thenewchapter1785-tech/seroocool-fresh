@@ -3,9 +3,9 @@
   "services": [
     {
       "name": "web",
-      "github": {
+      "git": {
         "branch": "main",
-        "repo": "thenewchapter1785-tech/seroocool-fresh"
+        "repo_clone_url": "https://github.com/thenewchapter1785-tech/seroocool-fresh.git"
       },
       "build_command": "npm run build",
       "run_command": "npm run start",
@@ -18,12 +18,7 @@
       ],
       "http_port": 3000,
       "instance_count": 1,
-      "instance_size_slug": "basic-xs",
-      "log_destinations": [
-        {
-          "name": "stdout"
-        }
-      ]
+      "instance_size_slug": "basic-xs"
     }
   ],
   "static_sites": [],
