@@ -1,0 +1,32 @@
+{
+  "name": "seroocool",
+  "services": [
+    {
+      "name": "web",
+      "github": {
+        "branch": "main",
+        "repo": "YOUR_GITHUB_USERNAME/seroocool-fresh"
+      },
+      "build_command": "npm run build",
+      "run_command": "npm run start",
+      "source_dir": ".",
+      "envs": [
+        {
+          "key": "NODE_ENV",
+          "value": "production"
+        }
+      ],
+      "http_port": 3000,
+      "instance_count": 1,
+      "instance_size_slug": "basic-xs",
+      "log_destinations": [
+        {
+          "name": "stdout"
+        }
+      ]
+    }
+  ],
+  "static_sites": [],
+  "databases": [],
+  "functions": []
+}

@@ -1,0 +1,78 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run linting
+        run: npm run lint
+        continue-on-error: true
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: .next/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: .next/
+      
+      - name: Deploy to DigitalOcean
+        env:
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          DIGITALOCEAN_APP_ID: ${{ secrets.DIGITALOCEAN_APP_ID }}
+        run: |
+          # Install doctl CLI
+          cd ~
+          wget https://github.com/digitalocean/doctl/releases/download/v1.97.0/doctl-1.97.0-linux-x64.tar.gz
+          tar xf ~/doctl-1.97.0-linux-x64.tar.gz
+          sudo mv ~/doctl /usr/local/bin
+          
+          # Authenticate with DigitalOcean
+          doctl auth init --access-token $DIGITALOCEAN_ACCESS_TOKEN
+          
+          # Deploy app
+          doctl apps create-deployment $DIGITALOCEAN_APP_ID
+      
+      - name: Deployment notification
+        if: success()
+        run: echo "✅ Successfully deployed to DigitalOcean App Platform"
+      
+      - name: Deployment failed
+        if: failure()
+        run: echo "❌ Deployment to DigitalOcean failed"
