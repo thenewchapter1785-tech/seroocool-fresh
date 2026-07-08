@@ -14,7 +14,8 @@ const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-development.com";
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION ?? "";
 const facebookDomainVerification =
   process.env.FACEBOOK_DOMAIN_VERIFICATION ?? "";
 const siteName = "$erocool";
@@ -76,13 +77,17 @@ export const metadata: Metadata = {
     description: defaultDescription,
     images: ["/og-image.svg"],
   },
-  verification: facebookDomainVerification
-    ? {
-        other: {
-          "facebook-domain-verification": facebookDomainVerification,
-        },
-      }
-    : undefined,
+  verification:
+    googleSiteVerification || facebookDomainVerification
+      ? {
+          google: googleSiteVerification || undefined,
+          other: facebookDomainVerification
+            ? {
+                "facebook-domain-verification": facebookDomainVerification,
+              }
+            : undefined,
+        }
+      : undefined,
 };
 
 export default function RootLayout({
