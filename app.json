@@ -7,7 +7,6 @@
         "branch": "main",
         "repo_clone_url": "https://github.com/thenewchapter1785-tech/seroocool-fresh.git"
       },
-      "build_command": "npm run build",
       "run_command": "npm run start",
       "source_dir": ".",
       "envs": [

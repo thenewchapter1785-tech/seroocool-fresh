@@ -102,6 +102,7 @@ This section is reserved for new tasks identified during build sessions.
 - [x] Terminal-only workaround used: switched app spec source from `github` to `git.repo_clone_url` and created app successfully.
 - [x] New DigitalOcean App ID: `a7fabd80-117e-4683-8ca7-2636b2a48c93`.
 - [ ] Monitor initial deployment `fdcd7079-2e2d-4103-9787-232eff92cc5e` to completion and confirm default ingress URL.
+- [x] Deployment fix: removed custom `build_command` from `app.json` to prevent post-prune Next.js TypeScript build failure.
 
 ## 9) Terminal-Only Runbook (PowerShell)
 
