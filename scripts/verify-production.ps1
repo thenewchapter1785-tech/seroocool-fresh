@@ -67,12 +67,25 @@ $urls = @(
 
 foreach ($url in $urls) {
   try {
-    $response = Invoke-WebRequest -UseBasicParsing -Uri $url -MaximumRedirection 5 -TimeoutSec 25
-    $ok = ($response.StatusCode -ge 200 -and $response.StatusCode -lt 400)
-    $results.Add((New-CheckResult -Name "HTTP check: $url" -Passed $ok -Details "Status $($response.StatusCode)"))
+    $response = Invoke-WebRequest -UseBasicParsing -Uri $url -MaximumRedirection 0 -TimeoutSec 25
+    $statusCode = [int]$response.StatusCode
+    $location = $response.Headers["Location"]
+    $ok = ($statusCode -ge 200 -and $statusCode -lt 400)
+    $details = if ($location) { "Status $statusCode -> $location" } else { "Status $statusCode" }
+    $results.Add((New-CheckResult -Name "HTTP check: $url" -Passed $ok -Details $details))
   }
   catch {
-    $results.Add((New-CheckResult -Name "HTTP check: $url" -Passed $false -Details $_.Exception.Message))
+    $webResponse = $_.Exception.Response
+    if ($webResponse) {
+      $statusCode = [int]$webResponse.StatusCode
+      $location = $webResponse.Headers["Location"]
+      $ok = ($statusCode -ge 300 -and $statusCode -lt 400)
+      $details = if ($location) { "Status $statusCode -> $location" } else { "Status $statusCode" }
+      $results.Add((New-CheckResult -Name "HTTP check: $url" -Passed $ok -Details $details))
+    }
+    else {
+      $results.Add((New-CheckResult -Name "HTTP check: $url" -Passed $false -Details $_.Exception.Message))
+    }
   }
 }
 
