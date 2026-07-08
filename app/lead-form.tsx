@@ -48,7 +48,7 @@ function getInitialTrackingData() {
 export default function LeadForm() {
   const router = useRouter();
   const [trackingData] = useState(getInitialTrackingData);
-  const [source, setSource] = useState(trackingData.source);
+  const [source] = useState(trackingData.source);
   const [state, setState] = useState<SubmitState>("idle");
 
   useEffect(() => {
@@ -135,10 +135,13 @@ export default function LeadForm() {
 
   return (
     <form className="lead-form" onSubmit={handleSubmit}>
+      <p className="form-kicker">Get a reply with scope, next steps, and timing.</p>
+
       <label htmlFor="name">Name</label>
       <input
         id="name"
         name="name"
+        placeholder="Your name"
         required
         value={formData.name}
         onChange={(event) =>
@@ -151,6 +154,7 @@ export default function LeadForm() {
         id="email"
         type="email"
         name="email"
+        placeholder="you@company.com"
         required
         value={formData.email}
         onChange={(event) =>
@@ -177,24 +181,12 @@ export default function LeadForm() {
         <option value="other">Other</option>
       </select>
 
-      <label htmlFor="source">How did you find me?</label>
-      <select
-        id="source"
-        name="source"
-        value={source}
-        onChange={(event) => setSource(event.target.value)}
-      >
-        <option value="facebook">Facebook</option>
-        <option value="instagram">Instagram</option>
-        <option value="organic">Website Search</option>
-        <option value="referral">Referral</option>
-      </select>
-
       <label htmlFor="message">Project Details</label>
       <textarea
         id="message"
         name="message"
         rows={5}
+        placeholder="What do you need built, fixed, or automated?"
         required
         value={formData.message}
         onChange={(event) =>
@@ -203,8 +195,10 @@ export default function LeadForm() {
       />
 
       <button type="submit" className="cta-primary" disabled={state === "sending"}>
-        {state === "sending" ? "Sending..." : "Send Project Request"}
+        {state === "sending" ? "Sending..." : "Get My Project Estimate"}
       </button>
+
+      <p className="response-note">Most replies go out within one business day.</p>
 
       {state === "success" ? (
         <p className="lead-status success">Thanks. Your request was sent successfully.</p>

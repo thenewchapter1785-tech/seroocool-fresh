@@ -18,16 +18,16 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-developmen
 const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION ?? "";
 const facebookDomainVerification =
   process.env.FACEBOOK_DOMAIN_VERIFICATION ?? "";
-const siteName = "$erocool";
-const defaultTitle = "$erocool | Full-Stack Developer";
+const siteName = "$erocool-Development";
+const defaultTitle = "$erocool-Development | Full-Stack Developer";
 const defaultDescription =
-  "Business websites, web apps, and automation by $erocool. Full-stack delivery from idea to launch.";
+  "Business websites, web apps, and automation systems by $erocool-Development. Full-stack delivery built to launch fast, convert visitors, and support long-term growth.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: defaultTitle,
-    template: "%s | $erocool",
+    template: "%s | $erocool-Development",
   },
   description: defaultDescription,
   manifest: "/manifest.webmanifest",
@@ -46,13 +46,17 @@ export const metadata: Metadata = {
     },
   },
   keywords: [
+    "$erocool-Development",
     "$erocool",
     "full-stack developer",
     "software developer portfolio",
     "business website development",
     "web app development",
     "API integrations",
-    "full-stack developer",
+    "website developer",
+    "automation developer",
+    "small business website developer",
+    "landing page developer",
     "web design",
     "automation",
   ],
@@ -67,7 +71,7 @@ export const metadata: Metadata = {
         url: "/og-image.svg",
         width: 1200,
         height: 630,
-        alt: "$erocool full-stack developer profile card",
+        alt: "$erocool-Development full-stack developer profile card",
       },
     ],
   },

@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "$erocool",
-    short_name: "$erocool",
+    name: "$erocool-Development",
+    short_name: "$erocool-Development",
     description:
-      "Business websites, web apps, and automation by $erocool.",
+      "Business websites, web apps, and automation by $erocool-Development.",
     start_url: "/",
     display: "standalone",
     background_color: "#020617",

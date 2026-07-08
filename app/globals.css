@@ -91,6 +91,22 @@ body {
   max-width: 62ch;
 }
 
+.hero-proof-grid {
+  max-width: 50rem;
+}
+
+.proof-chip {
+  border: 1px solid rgba(188, 246, 255, 0.22);
+  border-radius: 9999px;
+  padding: 0.58rem 0.8rem;
+  text-align: center;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(218, 248, 255, 0.92);
+  background: rgba(7, 32, 46, 0.74);
+}
+
 .tech-pill {
   border: 1px solid rgba(188, 246, 255, 0.21);
   border-radius: 0.8rem;
@@ -215,6 +231,12 @@ body {
   gap: 0.65rem;
 }
 
+.form-kicker {
+  margin-bottom: 0.15rem;
+  color: rgba(222, 244, 255, 0.86);
+  line-height: 1.7;
+}
+
 .lead-form label {
   margin-top: 0.35rem;
   font-size: 0.78rem;
@@ -257,6 +279,12 @@ body {
 
 .lead-status.error {
   color: #ffc3c3;
+}
+
+.response-note {
+  color: rgba(181, 241, 255, 0.8);
+  font-size: 0.8rem;
+  line-height: 1.5;
 }
 
 .direct-contact-card {

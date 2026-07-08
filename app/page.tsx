@@ -6,6 +6,7 @@ export default function Home() {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-development.com";
   const facebookPageUrl =
     process.env.NEXT_PUBLIC_FACEBOOK_PAGE_URL ?? "https://facebook.com/";
+  const phoneHref = "tel:+14017862811";
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -20,7 +21,7 @@ export default function Home() {
       },
       {
         "@type": "ProfessionalService",
-        name: "$erocool Development",
+        name: "$erocool-Development",
         url: siteUrl,
         areaServed: "US",
         serviceType: [
@@ -34,12 +35,12 @@ export default function Home() {
   };
 
   const capabilities = [
-    "Business Websites That Convert",
-    "Clean UI Design and Brand Styling",
-    "Android App Development",
-    "Automation and API Integrations",
-    "Full-Stack Product Development",
-    "Speed, SEO, and Performance Tuning",
+    "Lead-focused business websites",
+    "Custom client portals and dashboards",
+    "Automation for repetitive admin work",
+    "API integrations and backend systems",
+    "Android and mobile-ready product builds",
+    "Performance, SEO, and launch support",
   ];
 
   const techStack = [
@@ -56,26 +57,44 @@ export default function Home() {
   ];
 
   const trustStats = [
-    { label: "Build Phases Managed", value: "6" },
+    { label: "Response Window", value: "1 Business Day" },
     { label: "Delivery Coverage", value: "Web + Mobile + Backend" },
-    { label: "Support Window", value: "Launch + Growth" },
+    { label: "Project Style", value: "Strategy + Build + Launch" },
   ];
 
-  const testimonials = [
+  const deliveryStandards = [
     {
-      quote:
-        "The process was easy to understand and the final site looked premium from day one.",
-      author: "Small Business Owner",
+      title: "Clear planning",
+      copy:
+        "You get direct guidance on scope, priorities, and technical tradeoffs before work starts.",
     },
     {
-      quote:
-        "Clear architecture decisions and fast implementation. Great communication with technical teams.",
-      author: "Product Team Lead",
+      title: "Production-ready delivery",
+      copy:
+        "The work is designed to launch cleanly, scale sensibly, and avoid handoff confusion later.",
     },
     {
-      quote:
-        "Exactly what we needed: strong design, clean code, and reliable project delivery.",
-      author: "Startup Founder",
+      title: "Business-first execution",
+      copy:
+        "Every build is aimed at a real outcome: more leads, smoother operations, or a product users can adopt.",
+    },
+  ];
+
+  const processSteps = [
+    {
+      step: "01",
+      title: "Tell me the problem",
+      copy: "Share the site, app, workflow, or idea you need help with in plain language.",
+    },
+    {
+      step: "02",
+      title: "Get a practical plan",
+      copy: "I reply with the best next step, likely scope, and the right build path for the goal.",
+    },
+    {
+      step: "03",
+      title: "Build and launch",
+      copy: "Once aligned, I handle implementation, polish, and deployment without dragging the project out.",
     },
   ];
 
@@ -106,28 +125,49 @@ export default function Home() {
         />
         <header className="glass-panel animate-rise relative overflow-hidden rounded-3xl p-7 md:p-10">
           <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-[radial-gradient(circle_at_center,rgba(0,255,198,0.25)_0%,rgba(0,255,198,0)_65%)]" />
-          <p className="label-chip mb-5 inline-flex">Tag: $erocool</p>
+          <p className="label-chip mb-5 inline-flex">$erocool-Development</p>
           <div className="grid gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-end">
             <div>
               <h1 className="text-4xl leading-tight font-semibold tracking-tight md:text-6xl">
-                I build digital products
-                <span className="text-cyan-300"> from idea to deployment.</span>
+                Websites, apps, and automation
+                <span className="text-cyan-300"> built to win real business.</span>
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-7 text-slate-200/85 md:text-lg">
-                I help people turn ideas into real software without confusion,
-                while still delivering production-grade engineering for teams
-                that need advanced technical execution.
+                I help founders, small businesses, and technical teams launch
+                polished software that looks credible, works reliably, and turns
+                interest into booked work.
               </p>
+              <div className="hero-actions mt-6 flex flex-wrap gap-3">
+                <TrackedLink
+                  href="#contact"
+                  className="cta-primary"
+                  eventName="hero_project_estimate_click"
+                >
+                  Get a Project Estimate
+                </TrackedLink>
+                <TrackedLink
+                  href={phoneHref}
+                  className="cta-secondary"
+                  eventName="hero_call_click"
+                >
+                  Call 401-786-2811
+                </TrackedLink>
+              </div>
+              <div className="hero-proof-grid mt-6 grid gap-2 sm:grid-cols-3">
+                <div className="proof-chip">Fast launch planning</div>
+                <div className="proof-chip">Lead-focused builds</div>
+                <div className="proof-chip">Full-stack execution</div>
+              </div>
             </div>
             <div className="rounded-2xl border border-cyan-200/15 bg-slate-950/60 p-5">
               <p className="text-xs font-medium tracking-[0.25em] text-cyan-200/70 uppercase">
-                Quick Resume
+                Best Fit
               </p>
               <ul className="mt-3 space-y-2 text-sm text-slate-100/90">
-                <li>Role: Full-Stack Developer</li>
-                <li>Focus: Business-ready products</li>
-                <li>Strength: Design + Engineering</li>
-                <li>Delivery: Web, mobile, backend</li>
+                <li>Need: A site or product that feels credible fast</li>
+                <li>Need: Better lead capture or backend automation</li>
+                <li>Need: One person handling design and engineering</li>
+                <li>Need: A clean launch path without technical drag</li>
               </ul>
             </div>
           </div>
@@ -220,10 +260,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section-stack animate-rise-delayed-3 grid gap-4">
-          <h2 className="section-heading">
-            Trust and Results
-          </h2>
+        <section className="section-stack animate-rise-delayed-2 grid gap-4">
+          <h2 className="section-heading">Why This Works</h2>
           <div className="grid gap-4 md:grid-cols-3">
             {trustStats.map((stat) => (
               <article key={stat.label} className="stat-card">
@@ -233,10 +271,23 @@ export default function Home() {
             ))}
           </div>
           <div className="grid gap-4 md:grid-cols-3">
-            {testimonials.map((item) => (
-              <article key={item.author} className="testimonial-card">
-                <p className="testimonial-quote">&quot;{item.quote}&quot;</p>
-                <p className="testimonial-author">{item.author}</p>
+            {deliveryStandards.map((item) => (
+              <article key={item.title} className="testimonial-card">
+                <p className="testimonial-author">{item.title}</p>
+                <p className="testimonial-quote mt-3">{item.copy}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section-stack animate-rise-delayed-3 grid gap-4">
+          <h2 className="section-heading">What Happens Next</h2>
+          <div className="grid gap-4 md:grid-cols-3">
+            {processSteps.map((item) => (
+              <article key={item.step} className="faq-card">
+                <p className="project-tag">Step {item.step}</p>
+                <h3 className="faq-question mt-2">{item.title}</h3>
+                <p className="faq-answer">{item.copy}</p>
               </article>
             ))}
           </div>
@@ -260,9 +311,8 @@ export default function Home() {
         >
           <h2 className="section-title">Contact and Project Intake</h2>
           <p className="section-copy section-intro mt-3 max-w-4xl">
-            Tell me what you want to build. I will reply with the next best step
-            for your project, whether you are just getting started or running a
-            technical team.
+            Tell me what you need built, fixed, or automated. You will get a
+            practical reply with the next best step for your project.
           </p>
           <div className="mt-6 grid gap-6 md:grid-cols-[1.05fr_0.95fr]">
             <LeadForm />
@@ -298,7 +348,7 @@ export default function Home() {
         </section>
 
         <footer className="pb-3 text-center text-xs tracking-[0.18em] text-slate-300/70 uppercase">
-          $erocool | Build anything in code
+          $erocool-Development | Build anything in code
         </footer>
 
         <div className="sticky-mobile-cta">
