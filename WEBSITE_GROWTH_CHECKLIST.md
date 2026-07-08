@@ -8,7 +8,7 @@ This file combines your deployment checklist and feature roadmap so your site ca
 - [x] Point custom domain to the app (`zerocool-development.com` + `www` active)
 - [~] Set production environment variables in DigitalOcean:
   - [x] NEXT_PUBLIC_SITE_URL
-  - [ ] NEXT_PUBLIC_FACEBOOK_PAGE_URL
+  - [x] NEXT_PUBLIC_FACEBOOK_PAGE_URL
   - [ ] NEXT_PUBLIC_INSTAGRAM_PROFILE_URL
   - [ ] NEXT_PUBLIC_META_PIXEL_ID
   - [ ] FACEBOOK_DOMAIN_VERIFICATION
@@ -93,14 +93,14 @@ Implementation order:
 
 HubSpot app scopes needed:
 
-- [ ] crm.objects.contacts.read
-- [ ] crm.objects.contacts.write
+- [x] crm.objects.contacts.read
+- [x] crm.objects.contacts.write
 
 ## 8) Auto-Captured Follow-Ups
 
 This section is reserved for new tasks identified during build sessions.
 
-- [ ] Set `NEXT_PUBLIC_HUBSPOT_PORTAL_ID` in local and DigitalOcean environments so HubSpot tracking script loads.
+- [x] Set `NEXT_PUBLIC_HUBSPOT_PORTAL_ID` in local and DigitalOcean environments so HubSpot tracking script loads.
 - [ ] Verify HubSpot custom behavioral events are appearing (form view, submit attempt, submit success, submit error, CTA clicks).
 - [ ] Configure HubSpot lifecycle/source mapping for: Facebook Lead, Instagram Lead, Organic Lead.
 - [ ] Add HubSpot deal automation for new leads after contact creation.
@@ -113,9 +113,9 @@ This section is reserved for new tasks identified during build sessions.
 - [x] Active deployment succeeded: `c37554f3-7538-4422-92f2-7d341ab214dc`.
 - [x] Live DigitalOcean URL: `https://seroocool-rjml7.ondigitalocean.app`.
 - [x] Hosting decision: keep DigitalOcean App Platform (no fresh Droplet required for Cloudflare domain setup).
-- [ ] Domain DNS plan: use Cloudflare CNAME/flattening to `seroocool-rjml7.ondigitalocean.app` after adding custom domain in App Platform.
-- [ ] Only use a Droplet if a fixed server IP or full server-level control is required.
-- [ ] Domain registration note: DigitalOcean does not sell domains; purchase domain from a registrar first (Cloudflare Registrar, Namecheap, Porkbun, etc.).
+- [x] Domain DNS plan: use Cloudflare CNAME/flattening to `seroocool-rjml7.ondigitalocean.app` after adding custom domain in App Platform.
+- [x] Only use a Droplet if a fixed server IP or full server-level control is required (decision documented: not needed now).
+- [x] Domain registration note: DigitalOcean does not sell domains; purchase domain from a registrar first (Cloudflare Registrar, Namecheap, Porkbun, etc.).
 - [x] After purchase, add domain in DigitalOcean App Platform and copy required DNS records.
 - [x] In DNS provider, point `www` CNAME to `seroocool-rjml7.ondigitalocean.app`.
 - [x] In DNS provider, point apex/root domain via CNAME flattening or ANAME/ALIAS to `seroocool-rjml7.ondigitalocean.app`.
@@ -134,9 +134,9 @@ Track this section as you complete Cloudflare onboarding.
 
 ### 10.2 If Domain Is New at Another Registrar
 
-- [ ] In Cloudflare, copy the two assigned nameservers.
-- [ ] In your registrar, replace current nameservers with Cloudflare nameservers.
-- [ ] Wait for Cloudflare zone to become Active.
+- [~] In Cloudflare, copy the two assigned nameservers (not needed: domain is registered in Cloudflare).
+- [~] In your registrar, replace current nameservers with Cloudflare nameservers (not needed: domain is registered in Cloudflare).
+- [~] Wait for Cloudflare zone to become Active (not needed: zone already active).
 
 ### 10.3 Create Least-Privilege API Token (Recommended)
 
@@ -167,7 +167,7 @@ Create token in Cloudflare: Profile -> API Tokens -> Create Token -> Custom Toke
 
 - [x] Confirm https://zerocool-development.com loads successfully.
 - [x] Confirm https://www.zerocool-development.com loads successfully.
-- [ ] Submit live lead form and confirm email + HubSpot contact creation.
+- [~] Submit live lead form and confirm email + HubSpot contact creation (re-verified live lead + HubSpot contact; inbox confirmation pending).
 
 ## 9) Terminal-Only Runbook (PowerShell)
 
@@ -195,21 +195,21 @@ Use this runbook to do everything from terminal.
 ### 9.4 DigitalOcean App Setup from Terminal
 
 - [x] Install doctl: `winget install DigitalOcean.doctl`
-- [ ] Authenticate: `doctl auth init --access-token <your_do_token>`
-- [ ] Create app from spec: `doctl apps create --spec app.json`
-- [ ] Capture app id: `doctl apps list`
-- [ ] Trigger deployment manually (optional): `doctl apps create-deployment <app-id>`
+- [x] Authenticate: `doctl auth init --access-token <your_do_token>`
+- [x] Create app from spec: `doctl apps create --spec app.json`
+- [x] Capture app id: `doctl apps list`
+- [x] Trigger deployment manually (optional): `doctl apps create-deployment <app-id>`
 
 ### 9.5 Configure App Environment Variables via doctl
 
-- [ ] Prepare env values in your shell/session.
+- [x] Prepare env values in your shell/session.
 - [x] Update app spec envs in `app.json` then run:
 - [x] `doctl apps update <app-id> --spec app.json`
 
 Required env values to include:
 
 - [x] `NEXT_PUBLIC_SITE_URL`
-- [ ] `NEXT_PUBLIC_FACEBOOK_PAGE_URL`
+- [x] `NEXT_PUBLIC_FACEBOOK_PAGE_URL`
 - [ ] `NEXT_PUBLIC_INSTAGRAM_PROFILE_URL`
 - [ ] `NEXT_PUBLIC_META_PIXEL_ID`
 - [ ] `FACEBOOK_DOMAIN_VERIFICATION`
@@ -226,9 +226,10 @@ Required env values to include:
 - [x] Submit lead form from site URL
 - [x] Confirm API response success in browser/network logs
 - [ ] Confirm inbox receives lead email
+- [ ] Inbox verification note: Resend list-emails API returned 401 with current key, so confirm delivery manually in mailbox or Resend dashboard.
 - [x] Confirm contact appears in HubSpot
 - [ ] Confirm behavioral events are visible in HubSpot tracking tools
-- [ ] Set remaining production vars: `NEXT_PUBLIC_FACEBOOK_PAGE_URL`, `NEXT_PUBLIC_INSTAGRAM_PROFILE_URL`, `NEXT_PUBLIC_META_PIXEL_ID`, `FACEBOOK_DOMAIN_VERIFICATION`.
+- [ ] Set remaining production vars: `NEXT_PUBLIC_INSTAGRAM_PROFILE_URL`, `NEXT_PUBLIC_META_PIXEL_ID`, `FACEBOOK_DOMAIN_VERIFICATION`.
 - [~] After deployment becomes ACTIVE, run a live lead submit and verify HubSpot contact creation + inbox email delivery (contact verified; inbox confirmation pending).
 
 ## 5) Performance and SEO Add-ons
