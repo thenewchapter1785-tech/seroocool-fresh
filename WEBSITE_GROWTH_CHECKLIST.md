@@ -167,7 +167,7 @@ Create token in Cloudflare: Profile -> API Tokens -> Create Token -> Custom Toke
 
 - [x] Confirm https://zerocool-development.com loads successfully.
 - [x] Confirm https://www.zerocool-development.com loads successfully.
-- [~] Submit live lead form and confirm email + HubSpot contact creation (re-verified live lead + HubSpot contact; inbox confirmation pending).
+- [x] Submit live lead form and confirm email + HubSpot contact creation (Gmail inbox confirmed + HubSpot contact verified).
 
 ## 9) Terminal-Only Runbook (PowerShell)
 
@@ -225,19 +225,19 @@ Required env values to include:
 - [x] Add one-command health check script: `.\scripts\verify-production.ps1`.
 - [x] Submit lead form from site URL
 - [x] Confirm API response success in browser/network logs
-- [ ] Confirm inbox receives lead email
-- [ ] Inbox verification note: Resend list-emails API returned 401 with current key, so confirm delivery manually in mailbox or Resend dashboard.
+- [x] Confirm inbox receives lead email
+- [x] Inbox verification note: Resend API log lookup was unavailable with current key; delivery confirmed in Gmail manually.
 - [x] Confirm contact appears in HubSpot
 - [ ] Confirm behavioral events are visible in HubSpot tracking tools
 - [ ] Set remaining production vars: `NEXT_PUBLIC_INSTAGRAM_PROFILE_URL`, `NEXT_PUBLIC_META_PIXEL_ID`, `FACEBOOK_DOMAIN_VERIFICATION`.
-- [~] After deployment becomes ACTIVE, run a live lead submit and verify HubSpot contact creation + inbox email delivery (contact verified; inbox confirmation pending).
+- [x] After deployment becomes ACTIVE, run a live lead submit and verify HubSpot contact creation + inbox email delivery.
 
 ## 5) Performance and SEO Add-ons
 
-- [ ] Add Open Graph image for social shares
-- [ ] Add Twitter/X card metadata
-- [ ] Add structured data (Person + ProfessionalService)
-- [ ] Add sitemap and robots configuration
+- [x] Add Open Graph image for social shares
+- [x] Add Twitter/X card metadata
+- [x] Add structured data (Person + ProfessionalService)
+- [x] Add sitemap and robots configuration
 - [ ] Compress and optimize media assets
 - [ ] Run Lighthouse and improve performance score to 90+
 

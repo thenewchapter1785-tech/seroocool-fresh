@@ -17,28 +17,64 @@ const jetBrainsMono = JetBrains_Mono({
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
 const facebookDomainVerification =
   process.env.FACEBOOK_DOMAIN_VERIFICATION ?? "";
+const siteName = "$erocool";
+const defaultTitle = "$erocool | Full-Stack Developer";
+const defaultDescription =
+  "Business websites, web apps, and automation by $erocool. Full-stack delivery from idea to launch.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "$erocool | Full-Stack Developer",
-  description:
-    "Professional portfolio and resume for $erocool, showcasing web, mobile, and software development services.",
+  title: {
+    default: defaultTitle,
+    template: "%s | $erocool",
+  },
+  description: defaultDescription,
+  manifest: "/manifest.webmanifest",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   keywords: [
     "$erocool",
-    "programming",
-    "hacker name",
+    "full-stack developer",
+    "software developer portfolio",
+    "business website development",
+    "web app development",
+    "API integrations",
     "full-stack developer",
     "web design",
-    "android apps",
-    "digital creator",
+    "automation",
   ],
   openGraph: {
-    title: "$erocool | Full-Stack Developer",
-    description:
-      "Programming name: $erocool. Full-stack web, mobile, and software solutions for modern businesses.",
-    siteName: "$erocool",
+    title: defaultTitle,
+    description: defaultDescription,
+    siteName,
     url: "/",
     type: "website",
+    images: [
+      {
+        url: "/og-image.svg",
+        width: 1200,
+        height: 630,
+        alt: "$erocool full-stack developer profile card",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: ["/og-image.svg"],
   },
   verification: facebookDomainVerification
     ? {

@@ -2,8 +2,36 @@ import LeadForm from "./lead-form";
 import TrackedLink from "./tracked-link";
 
 export default function Home() {
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-development.com";
   const facebookPageUrl =
     process.env.NEXT_PUBLIC_FACEBOOK_PAGE_URL ?? "https://facebook.com/";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        name: "Corey Derosiers",
+        alternateName: "$erocool",
+        url: siteUrl,
+        email: "mailto:thenewchapter1785@gmail.com",
+        telephone: "+1-401-786-2811",
+        sameAs: [facebookPageUrl],
+      },
+      {
+        "@type": "ProfessionalService",
+        name: "$erocool Development",
+        url: siteUrl,
+        areaServed: "US",
+        serviceType: [
+          "Business Website Development",
+          "Web Application Development",
+          "API Integrations",
+          "Android App Development",
+        ],
+      },
+    ],
+  };
 
   const capabilities = [
     "Business Websites That Convert",
@@ -72,6 +100,10 @@ export default function Home() {
   return (
     <div className="site-shell">
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-8 md:gap-8 md:px-10 md:py-12">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <header className="glass-panel animate-rise relative overflow-hidden rounded-3xl p-7 md:p-10">
           <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-[radial-gradient(circle_at_center,rgba(0,255,198,0.25)_0%,rgba(0,255,198,0)_65%)]" />
           <p className="label-chip mb-5 inline-flex">Tag: $erocool</p>
