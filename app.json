@@ -29,6 +29,18 @@
           "value": "https://zerocool-development.com"
         },
         {
+          "key": "NEXT_PUBLIC_FACEBOOK_PAGE_URL",
+          "value": "https://www.facebook.com/profile.php?id=61591762771267"
+        },
+        {
+          "key": "GOOGLE_SITE_VERIFICATION",
+          "value": "cRX_4UMB9i2Ziz6QgHMxDWNoIpPufnDzxWjjSFrwMXQ"
+        },
+        {
+          "key": "NEXT_PUBLIC_HUBSPOT_PORTAL_ID",
+          "value": "246703501"
+        },
+        {
           "key": "LEAD_TO_EMAIL",
           "value": "thenewchapter1785@gmail.com"
         },
