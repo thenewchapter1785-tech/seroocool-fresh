@@ -287,6 +287,14 @@ body {
   line-height: 1.5;
 }
 
+.hidden-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .direct-contact-card {
   display: flex;
   flex-direction: column;

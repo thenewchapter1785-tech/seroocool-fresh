@@ -6,6 +6,8 @@ type LeadPayload = {
   projectType?: string;
   budgetRange?: string;
   timeline?: string;
+  website?: string;
+  submittedAt?: number;
   source?: string;
   utmSource?: string;
   utmCampaign?: string;
@@ -122,6 +124,20 @@ async function upsertHubSpotContact(body: LeadPayload) {
 
 export async function POST(request: Request) {
   const body = (await request.json()) as LeadPayload;
+
+  if (body.website && body.website.trim().length > 0) {
+    return NextResponse.json({ ok: true });
+  }
+
+  if (typeof body.submittedAt === "number") {
+    const elapsedMs = Date.now() - body.submittedAt;
+    if (elapsedMs >= 0 && elapsedMs < 1200) {
+      return NextResponse.json(
+        { error: "Submission failed spam checks" },
+        { status: 400 }
+      );
+    }
+  }
 
   if (!body?.name || !body?.email || !body?.message) {
     return NextResponse.json(

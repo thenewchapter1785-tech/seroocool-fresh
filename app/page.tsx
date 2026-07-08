@@ -35,6 +35,35 @@ export default function Home() {
           "Android App Development",
         ],
       },
+      {
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "I am not technical. Can I still work with you?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes. You explain your idea in plain language and I handle planning, design, and build from start to finish.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Can you build a full custom product?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yes. I build websites, web apps, Android apps, APIs, and full product ecosystems for business goals.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "How quickly can we start?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "After your intake form is submitted, you get a follow-up with next steps and timeline options.",
+            },
+          },
+        ],
+      },
     ],
   };
 
@@ -117,6 +146,24 @@ export default function Home() {
       href: "/services/automation-integrations",
       title: "Automation + APIs",
       copy: "Connect systems and remove repetitive admin tasks across your stack.",
+    },
+  ];
+
+  const insightLinks = [
+    {
+      href: "/insights/how-to-get-more-leads-from-your-website",
+      title: "How to Get More Leads From Your Website",
+      copy: "Practical improvements that increase inquiries without increasing ad spend.",
+    },
+    {
+      href: "/insights/business-website-cost-breakdown",
+      title: "Business Website Cost Breakdown",
+      copy: "Understand where budget goes and how to scope a site that actually performs.",
+    },
+    {
+      href: "/insights/automation-for-small-business-operations",
+      title: "Automation for Small Business Operations",
+      copy: "Find high-impact process bottlenecks you can automate first.",
     },
   ];
 
@@ -329,6 +376,24 @@ export default function Home() {
                 <h3 className="faq-question mt-2">{item.title}</h3>
                 <p className="faq-answer">{item.copy}</p>
               </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section-stack animate-rise-delayed-3 grid gap-4">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="section-heading">Free Guides</h2>
+            <Link href="/insights" className="cta-secondary inline-flex">
+              View All Guides
+            </Link>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {insightLinks.map((insight) => (
+              <Link key={insight.href} href={insight.href} className="faq-card">
+                <p className="project-tag">Guide</p>
+                <h3 className="faq-question mt-2">{insight.title}</h3>
+                <p className="faq-answer">{insight.copy}</p>
+              </Link>
             ))}
           </div>
         </section>

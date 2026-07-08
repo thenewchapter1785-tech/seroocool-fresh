@@ -49,6 +49,7 @@ export default function LeadForm() {
   const router = useRouter();
   const [trackingData] = useState(getInitialTrackingData);
   const [source] = useState(trackingData.source);
+  const [formStartAt] = useState(() => Date.now());
   const [state, setState] = useState<SubmitState>("idle");
 
   useEffect(() => {
@@ -67,6 +68,7 @@ export default function LeadForm() {
       projectType: "website",
       budgetRange: "not_sure",
       timeline: "asap",
+      website: "",
       message: "",
     }),
     []
@@ -93,6 +95,7 @@ export default function LeadForm() {
         },
         body: JSON.stringify({
           ...formData,
+          submittedAt: formStartAt,
           source,
           utmSource: trackingData.utmSource,
           utmCampaign: trackingData.utmCampaign,
@@ -232,6 +235,20 @@ export default function LeadForm() {
           setFormData((current) => ({ ...current, message: event.target.value }))
         }
       />
+
+      <div className="hidden-field" aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={formData.website}
+          onChange={(event) =>
+            setFormData((current) => ({ ...current, website: event.target.value }))
+          }
+        />
+      </div>
 
       <button type="submit" className="cta-primary" disabled={state === "sending"}>
         {state === "sending" ? "Sending..." : "Get My Project Estimate"}
