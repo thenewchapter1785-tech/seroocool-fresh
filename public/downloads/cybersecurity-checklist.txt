@@ -1,0 +1,8 @@
+Cybersecurity Checklist
+
+- Enable multi-factor authentication everywhere possible
+- Keep devices and software patched
+- Use endpoint protection and regular malware scans
+- Maintain tested backups and restore procedures
+- Limit admin privileges and shared credentials
+- Run phishing awareness training and response drills

@@ -24,10 +24,17 @@ type LeadDetails = {
   timeline?: string;
   company?: string;
   problemDescription?: string;
+  appointmentType?: string;
+};
+
+type ChatTurn = {
+  role?: "user" | "assistant";
+  content?: string;
 };
 
 type AiRequestPayload = {
   prompt?: string;
+  history?: ChatTurn[];
   lead?: LeadDetails;
 };
 
@@ -78,6 +85,7 @@ function normalizeLead(input?: LeadDetails) {
     timeline: sanitizeText(input?.timeline, 80),
     company: sanitizeText(input?.company, 120),
     problemDescription: sanitizeText(input?.problemDescription, 1500),
+    appointmentType: sanitizeText(input?.appointmentType, 80),
   };
 
   return normalized;
@@ -122,6 +130,7 @@ async function sendQualifiedLeadEmail(params: {
     `Budget: ${params.lead.budgetRange}`,
     `Timeline: ${params.lead.timeline}`,
     `Problem Description: ${params.lead.problemDescription}`,
+    `Preferred Appointment Type: ${params.lead.appointmentType}`,
     "",
     "User question:",
     params.prompt,
@@ -241,7 +250,17 @@ export async function POST(request: Request) {
     `Timeline: ${lead.timeline || "missing"}`,
     `Company: ${lead.company || "not provided"}`,
     `Problem Description: ${lead.problemDescription || "not provided"}`,
+    `Preferred Appointment Type: ${lead.appointmentType || "not provided"}`,
   ].join("\n");
+
+  const conversationSummary = (payload.history ?? [])
+    .slice(-8)
+    .map((turn) => {
+      const role = turn.role === "assistant" ? "Assistant" : "User";
+      const content = sanitizeText(turn.content, 500);
+      return `${role}: ${content || "(empty)"}`;
+    })
+    .join("\n");
 
   const systemPrompt = [
     "You are ZeroCool Development's AI lead assistant.",
@@ -249,7 +268,10 @@ export async function POST(request: Request) {
     "Common user questions include: 'my computer is slow', 'my laptop will not turn on', 'I think I have a virus', 'my phone keeps freezing', 'I need a website', 'how do I show up on Google', and 'how can AI automate my business'.",
     "Cover services like repair, troubleshooting, website development, mobile apps, AI automation, business automation, HubSpot CRM integration, Cloudflare security, and DigitalOcean hosting.",
     "Keep responses concise, practical, beginner-friendly, and jargon-free.",
-    "Always recommend a free consultation as next step.",
+    "Ask troubleshooting questions when the issue is unclear, then provide likely causes and next best actions.",
+    "Estimate urgency as low, medium, or high based on user symptoms and business impact.",
+    "Recommend matching services and offer booking options: Phone Call, Video Call, Remote Support, Computer Repair Drop-Off, Website Consultation, AI Automation Consultation, Business Tech Review, or Emergency Support.",
+    "Always recommend booking a free estimate as next step.",
     "If lead details are missing, explicitly request only the missing fields.",
     "Required lead fields are: name, email, phone, project type, preferred contact method, audience type, urgency, budget, timeline.",
   ].join(" ");
@@ -272,7 +294,7 @@ export async function POST(request: Request) {
             role: "user",
             content: `Lead detail snapshot:\n${leadSummary}\n\nMissing fields: ${
               missingFields.length ? missingFields.join(", ") : "none"
-            }\n\nUser question: ${prompt}`,
+            }\n\nRecent conversation:\n${conversationSummary || "No prior conversation."}\n\nUser question: ${prompt}`,
           },
         ],
         max_output_tokens: 500,
@@ -319,10 +341,12 @@ export async function POST(request: Request) {
         timeline: lead.timeline,
         notes: [
           `AI assistant question: ${prompt}`,
+          `Conversation Summary: ${conversationSummary || "No prior conversation"}`,
           `Preferred Contact Method: ${lead.preferredContactMethod || "not provided"}`,
           `Audience Type: ${lead.audienceType || "not provided"}`,
           `Urgency: ${lead.urgency || "not provided"}`,
           `Problem Description: ${lead.problemDescription || "not provided"}`,
+          `Preferred Appointment Type: ${lead.appointmentType || "not provided"}`,
         ].join("\n"),
         formType: "ai_assistant",
       });

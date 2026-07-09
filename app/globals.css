@@ -23,6 +23,10 @@ body {
   font-family: var(--font-space-grotesk), sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .site-shell {
   min-height: 100vh;
   background:
@@ -41,6 +45,126 @@ body {
     linear-gradient(90deg, rgba(152, 179, 230, 0.08) 1px, transparent 1px);
   background-size: 58px 58px;
   mask-image: radial-gradient(circle at center, black 45%, transparent 95%);
+}
+
+.site-shell::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 84%, rgba(86, 128, 222, 0.14), transparent 42%),
+    radial-gradient(circle at 82% 16%, rgba(74, 117, 210, 0.14), transparent 42%);
+  animation: atmosphereShift 16s ease-in-out infinite alternate;
+}
+
+.hero-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-tech-visual {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(1px);
+  opacity: 0.65;
+}
+
+.orb-a {
+  width: 240px;
+  height: 240px;
+  top: -70px;
+  right: -40px;
+  background: radial-gradient(circle, rgba(108, 164, 255, 0.45), rgba(58, 114, 205, 0.08));
+  animation: orbFloatA 9s ease-in-out infinite;
+}
+
+.orb-b {
+  width: 190px;
+  height: 190px;
+  bottom: -30px;
+  left: 8%;
+  background: radial-gradient(circle, rgba(112, 171, 255, 0.32), rgba(50, 95, 175, 0.08));
+  animation: orbFloatB 12s ease-in-out infinite;
+}
+
+.orb-c {
+  width: 110px;
+  height: 110px;
+  top: 36%;
+  left: 48%;
+  background: radial-gradient(circle, rgba(157, 196, 255, 0.25), rgba(40, 82, 160, 0.05));
+  animation: orbFloatC 10s ease-in-out infinite;
+}
+
+.node {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: rgba(191, 219, 255, 0.85);
+  box-shadow: 0 0 20px rgba(124, 173, 255, 0.66);
+  animation: nodePulse 4.5s ease-in-out infinite;
+}
+
+.node-a { top: 22%; left: 16%; }
+.node-b { top: 62%; left: 22%; animation-delay: 650ms; }
+.node-c { top: 28%; right: 23%; animation-delay: 240ms; }
+.node-d { bottom: 20%; right: 16%; animation-delay: 900ms; }
+
+.assistant-chat {
+  display: grid;
+  gap: 0.65rem;
+  max-height: 21rem;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+
+.assistant-bubble {
+  border-radius: 0.9rem;
+  border: 1px solid rgba(167, 196, 249, 0.28);
+  padding: 0.75rem 0.85rem;
+}
+
+.assistant-bubble.is-assistant {
+  background: rgba(20, 37, 60, 0.76);
+}
+
+.assistant-bubble.is-user {
+  background: rgba(18, 31, 49, 0.86);
+}
+
+.request-help-fab {
+  position: fixed;
+  right: 1rem;
+  bottom: 6.1rem;
+  z-index: 55;
+  border-radius: 9999px;
+  border: 1px solid rgba(167, 196, 249, 0.38);
+  background: linear-gradient(120deg, rgba(48, 103, 215, 0.95), rgba(125, 175, 255, 0.92));
+  color: #071121;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  padding: 0.78rem 1rem;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.36);
+  transform: translateY(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.request-help-fab.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .glass-panel {
@@ -459,6 +583,44 @@ body {
   }
 }
 
+@keyframes orbFloatA {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-18px, 16px, 0); }
+}
+
+@keyframes orbFloatB {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(20px, -12px, 0); }
+}
+
+@keyframes orbFloatC {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-14px, -16px, 0); }
+}
+
+@keyframes nodePulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.22);
+  }
+}
+
+@keyframes atmosphereShift {
+  0% {
+    transform: translateY(0);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 640px) {
   .section-heading {
     font-size: 1.18rem;
@@ -474,6 +636,13 @@ body {
 
   .sticky-mobile-cta {
     display: flex;
+  }
+
+  .request-help-fab {
+    right: 0.55rem;
+    bottom: 5.4rem;
+    font-size: 0.67rem;
+    padding: 0.64rem 0.8rem;
   }
 
   .contact-row {
@@ -536,6 +705,10 @@ body {
     font-size: 0.68rem;
     letter-spacing: 0.08em;
     padding-inline: 0.7rem;
+  }
+
+  .request-help-fab {
+    bottom: 5.05rem;
   }
 
   main {

@@ -1,4 +1,6 @@
 import type { MetadataRoute } from "next";
+import { blogPosts } from "@/lib/blog";
+import { localSeoPages } from "@/lib/local-seo-pages";
 import { serviceCatalog } from "@/lib/services";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-development.com";
@@ -10,6 +12,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: now,
     changeFrequency: "weekly",
     priority: 0.82,
+  }));
+  const dynamicLocalLandingEntries: MetadataRoute.Sitemap = localSeoPages.map((location) => ({
+    url: `${siteUrl}/${location.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.84,
+  }));
+  const dynamicBlogEntries: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `${siteUrl}/blog/${post.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.76,
   }));
 
   return [
@@ -74,6 +88,48 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.92,
     },
     {
+      url: `${siteUrl}/book-service`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.94,
+    },
+    {
+      url: `${siteUrl}/estimate`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/emergency-tech-support`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${siteUrl}/plans`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.87,
+    },
+    {
+      url: `${siteUrl}/free-guides`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.86,
+    },
+    {
+      url: `${siteUrl}/blog`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
+      url: `${siteUrl}/client-portal`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.45,
+    },
+    {
       url: `${siteUrl}/insights`,
       lastModified: now,
       changeFrequency: "weekly",
@@ -98,5 +154,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.75,
     },
     ...dynamicServiceEntries,
+    ...dynamicLocalLandingEntries,
+    ...dynamicBlogEntries,
   ];
 }

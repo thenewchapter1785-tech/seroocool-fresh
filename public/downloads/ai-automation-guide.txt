@@ -1,0 +1,10 @@
+AI Automation Guide
+
+Use AI for high-volume repeatable workflows:
+- Lead qualification and intake triage
+- Follow-up reminders and outreach consistency
+- FAQ response and support handoff preparation
+- Internal summary generation for CRM records
+- Reporting and dashboard narrative drafts
+
+Start with one workflow, measure outcomes, then expand.

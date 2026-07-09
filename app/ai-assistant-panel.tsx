@@ -1,17 +1,53 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type AssistantState = "idle" | "sending" | "error";
 
+type ChatMessage = {
+  role: "user" | "assistant";
+  content: string;
+};
+
+type LeadState = {
+  name: string;
+  email: string;
+  phone: string;
+  projectType: string;
+  preferredContactMethod: string;
+  audienceType: string;
+  urgency: string;
+  budgetRange: string;
+  timeline: string;
+  company: string;
+  problemDescription: string;
+  appointmentType: (typeof appointmentOptions)[number];
+};
+
+const appointmentOptions = [
+  "phone call",
+  "video call",
+  "remote support",
+  "on-site consultation",
+  "website consultation",
+  "AI consultation",
+  "computer repair drop-off",
+] as const;
+
 export default function AiAssistantPanel() {
   const [prompt, setPrompt] = useState("");
-  const [answer, setAnswer] = useState("");
   const [state, setState] = useState<AssistantState>("idle");
   const [errorText, setErrorText] = useState("");
   const [missingFields, setMissingFields] = useState<string[]>([]);
   const [qualifiedCaptured, setQualifiedCaptured] = useState(false);
-  const [lead, setLead] = useState({
+  const [conversation, setConversation] = useState<ChatMessage[]>([
+    {
+      role: "assistant",
+      content:
+        "Tell me what is happening and I will help diagnose the issue. I can also recommend the right service and booking option.",
+    },
+  ]);
+  const [lead, setLead] = useState<LeadState>({
     name: "",
     email: "",
     phone: "",
@@ -23,7 +59,13 @@ export default function AiAssistantPanel() {
     timeline: "",
     company: "",
     problemDescription: "",
+    appointmentType: appointmentOptions[0],
   });
+
+  const lastAssistantMessage = useMemo(() => {
+    const reversed = [...conversation].reverse();
+    return reversed.find((message) => message.role === "assistant")?.content ?? "";
+  }, [conversation]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -33,6 +75,16 @@ export default function AiAssistantPanel() {
       return;
     }
 
+    const nextConversation: ChatMessage[] = [
+      ...conversation,
+      {
+        role: "user",
+        content: trimmedPrompt,
+      },
+    ];
+
+    setConversation(nextConversation);
+    setPrompt("");
     setState("sending");
     setErrorText("");
     setQualifiedCaptured(false);
@@ -45,6 +97,7 @@ export default function AiAssistantPanel() {
         },
         body: JSON.stringify({
           prompt: trimmedPrompt,
+          history: nextConversation,
           lead,
         }),
       });
@@ -63,15 +116,20 @@ export default function AiAssistantPanel() {
         throw new Error(responseBody?.error ?? "Assistant request failed");
       }
 
-      setAnswer(responseBody.answer ?? "");
+      setConversation((current) => [
+        ...current,
+        {
+          role: "assistant",
+          content: responseBody.answer ?? "I can help with that. Tell me more details.",
+        },
+      ]);
       setMissingFields(responseBody.missingLeadFields ?? []);
       setQualifiedCaptured(Boolean(responseBody.qualifiedLeadCaptured));
-      setPrompt("");
       setState("idle");
     } catch (error) {
       setState("error");
       setErrorText(
-        error instanceof Error ? error.message : "Unable to process request"
+        error instanceof Error ? error.message : "Unable to process assistant request"
       );
     }
   }
@@ -79,20 +137,32 @@ export default function AiAssistantPanel() {
   return (
     <section className="glass-panel rounded-3xl p-6 md:p-8" aria-labelledby="ai-assistant-title">
       <h2 id="ai-assistant-title" className="section-title">
-        AI Lead Assistant
+        AI Diagnostic Assistant
       </h2>
       <p className="section-copy mt-3">
-        Ask service questions and optionally provide lead details so we can qualify your request
-        and recommend a free consultation.
+        Ask troubleshooting questions, get service recommendations, and prepare for scheduling in
+        one conversation.
       </p>
 
+      <div className="assistant-chat mt-4" aria-live="polite">
+        {conversation.map((message, index) => (
+          <article
+            key={`${message.role}-${index}`}
+            className={`assistant-bubble ${message.role === "assistant" ? "is-assistant" : "is-user"}`}
+          >
+            <p className="response-note">{message.role === "assistant" ? "Assistant" : "You"}</p>
+            <p className="section-copy mt-1">{message.content}</p>
+          </article>
+        ))}
+      </div>
+
       <form className="lead-form mt-4" onSubmit={handleSubmit}>
-        <label htmlFor="assistantPrompt">Your Question</label>
+        <label htmlFor="assistantPrompt">Your Message</label>
         <textarea
           id="assistantPrompt"
           name="assistantPrompt"
           rows={4}
-          placeholder="Example: What is the fastest way to automate lead follow-up with HubSpot and AI?"
+          placeholder="Example: My computer is very slow and keeps freezing when I open email and browser tabs."
           value={prompt}
           onChange={(event) => setPrompt(event.target.value)}
           required
@@ -132,14 +202,14 @@ export default function AiAssistantPanel() {
             />
           </div>
           <div>
-            <label htmlFor="assistant-project-type">Project Type</label>
+            <label htmlFor="assistant-project-type">Service Needed</label>
             <input
               id="assistant-project-type"
               value={lead.projectType}
               onChange={(event) =>
                 setLead((current) => ({ ...current, projectType: event.target.value }))
               }
-              placeholder="Web development, AI automation, etc."
+              placeholder="Computer repair, website, AI automation, etc."
             />
           </div>
           <div>
@@ -156,7 +226,7 @@ export default function AiAssistantPanel() {
             >
               <option value="email">Email</option>
               <option value="phone">Phone</option>
-              <option value="text">Text Message</option>
+              <option value="text">Text</option>
             </select>
           </div>
           <div>
@@ -182,8 +252,8 @@ export default function AiAssistantPanel() {
               }
             >
               <option value="normal">Normal</option>
-              <option value="soon">Soon (1-3 days)</option>
-              <option value="urgent">Urgent (same day)</option>
+              <option value="soon">Soon</option>
+              <option value="urgent">Urgent</option>
             </select>
           </div>
           <div>
@@ -194,7 +264,7 @@ export default function AiAssistantPanel() {
               onChange={(event) =>
                 setLead((current) => ({ ...current, budgetRange: event.target.value }))
               }
-              placeholder="$2k-$5k"
+              placeholder="$500-$2k"
             />
           </div>
           <div>
@@ -205,10 +275,38 @@ export default function AiAssistantPanel() {
               onChange={(event) =>
                 setLead((current) => ({ ...current, timeline: event.target.value }))
               }
-              placeholder="1-2 months"
+              placeholder="ASAP, 1-2 weeks, 1-2 months"
             />
           </div>
+          <div>
+            <label htmlFor="assistant-appointment">Preferred Appointment Type</label>
+            <select
+              id="assistant-appointment"
+              value={lead.appointmentType}
+              onChange={(event) =>
+                setLead((current) => ({
+                  ...current,
+                  appointmentType: event.target.value as (typeof appointmentOptions)[number],
+                }))
+              }
+            >
+              {appointmentOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
+
+        <label htmlFor="assistant-company">Business Name (optional)</label>
+        <input
+          id="assistant-company"
+          value={lead.company}
+          onChange={(event) =>
+            setLead((current) => ({ ...current, company: event.target.value }))
+          }
+        />
 
         <label htmlFor="assistant-problem-description">Problem Description (optional)</label>
         <textarea
@@ -218,31 +316,31 @@ export default function AiAssistantPanel() {
           onChange={(event) =>
             setLead((current) => ({ ...current, problemDescription: event.target.value }))
           }
-          placeholder="Example: My laptop is slow and freezes when I open multiple tabs."
+          placeholder="Share any context you want included in your consultation summary."
         />
 
         <button type="submit" className="cta-secondary" disabled={state === "sending"}>
-          {state === "sending" ? "Thinking..." : "Ask Assistant"}
+          {state === "sending" ? "Thinking..." : "Send Message"}
         </button>
       </form>
 
-      {answer ? (
-        <article className="assistant-answer mt-4" aria-live="polite">
-          <h3 className="section-heading">Response</h3>
-          <p className="section-copy mt-2">{answer}</p>
-        </article>
-      ) : null}
-
       {missingFields.length > 0 ? (
         <p className="response-note mt-3">
-          Missing lead fields for qualification: {missingFields.join(", ")}.
+          Missing qualification fields: {missingFields.join(", ")}. Add these details for faster
+          scheduling.
         </p>
       ) : null}
 
       {qualifiedCaptured ? (
         <p className="lead-status success mt-3">
-          Qualified lead captured and sent for consultation follow-up.
+          Qualified lead captured and summary sent for follow-up scheduling.
         </p>
+      ) : null}
+
+      {lastAssistantMessage ? (
+        <a href="/book-service" className="cta-primary mt-4 inline-flex">
+          Book This Recommendation
+        </a>
       ) : null}
 
       {state === "error" ? (

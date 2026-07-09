@@ -9,6 +9,13 @@ import {
   isValidEmail,
   sanitizeText,
 } from "@/lib/api-security";
+import {
+  bookingConfirmation as sendBookingConfirmation,
+  emergencyRequestNotification as sendEmergencyRequestNotification,
+  estimateRequestNotification as sendEstimateRequestNotification,
+  guideDownloadNotification as sendGuideDownloadNotification,
+  newLeadNotification as sendNewLeadNotification,
+} from "@/lib/email-notifications";
 import { getContactEmail, getLeadSenderEmail, readOptionalEnv } from "@/lib/env";
 import { upsertHubSpotLead } from "@/lib/hubspot";
 
@@ -36,6 +43,30 @@ type ContactPayload = {
 
 const ROUTE_KEY = "api:contact";
 const EXTERNAL_REQUEST_TIMEOUT_MS = 8000;
+
+function buildLeadNurtureKickoffEmail(params: {
+  name: string;
+  projectType: string;
+}) {
+  return [
+    `Hi ${params.name || "there"},`,
+    "",
+    "Thanks for contacting ZeroCool Development.",
+    "",
+    "Here is what happens next:",
+    "1) Welcome: We review your request and respond with a tailored action plan.",
+    "2) Helpful Tips: We send practical guidance related to your issue.",
+    "3) Free Consultation Reminder: We follow up with booking options.",
+    "4) Testimonials: We share relevant outcome examples.",
+    "5) Service Offers: We provide right-fit service options and next steps.",
+    "",
+    `Current request focus: ${params.projectType || "General technology support"}`,
+    "",
+    "If this is urgent, reply directly to this email and include URGENT in the subject.",
+    "",
+    "ZeroCool Development",
+  ].join("\n");
+}
 
 async function fetchWithTimeout(
   input: RequestInfo | URL,
@@ -283,6 +314,74 @@ export async function POST(request: Request) {
       },
       { headers: corsHeaders }
     );
+  }
+
+  try {
+    await fetchWithTimeout("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: fromEmail,
+        to: [email],
+        subject: "Welcome to ZeroCool Development - Next Steps",
+        text: buildLeadNurtureKickoffEmail({
+          name,
+          projectType,
+        }),
+      }),
+    });
+  } catch (error) {
+    console.error("Lead nurture kickoff email failed", error);
+  }
+
+  try {
+    if (formType === "live_estimate") {
+      await sendEstimateRequestNotification({
+        leadName: name,
+        leadEmail: email,
+        leadPhone: phone,
+        serviceType: projectType || "Technology estimate",
+        estimateRange: budgetRange || "not provided",
+        details: message,
+      });
+    } else if (formType === "appointment_booking") {
+      await sendBookingConfirmation({
+        leadName: name,
+        leadEmail: email,
+        leadPhone: phone,
+        appointmentType: projectType || "Consultation",
+        preferredDateTime: timeline || "not provided",
+        urgency: urgency || "normal",
+        details: message,
+      });
+    } else if (formType === "lead_magnet_download") {
+      await sendGuideDownloadNotification({
+        leadName: name,
+        leadEmail: email,
+        guideTitle: projectType || "Guide download",
+      });
+    } else if (formType === "emergency_support") {
+      await sendEmergencyRequestNotification({
+        leadName: name,
+        leadEmail: email,
+        leadPhone: phone,
+        emergencyType: projectType || "Emergency support",
+        details: message,
+      });
+    } else {
+      await sendNewLeadNotification({
+        leadName: name,
+        leadEmail: email,
+        leadPhone: phone,
+        projectType,
+        message,
+      });
+    }
+  } catch (error) {
+    console.error("Form-type notification helper failed", error);
   }
 
   await hubspotTask;

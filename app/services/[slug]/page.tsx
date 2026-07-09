@@ -41,6 +41,20 @@ export default async function ServicePage(props: ServicePageProps) {
   }
 
   const siteUrl = getSiteUrl();
+  const defaultRecommendations = serviceCatalog
+    .filter((item) => item.slug !== service.slug && item.category === service.category)
+    .slice(0, 3);
+  const recommendationMap: Record<string, string[]> = {
+    "computer-repair": ["data-backup-recovery", "computer-upgrades", "virus-malware-removal"],
+    "website-development": ["seo-optimization", "website-design", "crm-integration"],
+    "ai-automation": ["crm-integration", "business-automation", "business-technology-consulting"],
+  };
+  const mappedRecommendations = (recommendationMap[service.slug] ?? [])
+    .map((relatedSlug) => serviceCatalog.find((item) => item.slug === relatedSlug))
+    .filter((item): item is (typeof serviceCatalog)[number] => Boolean(item));
+  const recommendations = mappedRecommendations.length
+    ? mappedRecommendations
+    : defaultRecommendations;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -123,6 +137,27 @@ export default async function ServicePage(props: ServicePageProps) {
               <span key={keyword} className="stack-chip">
                 {keyword}
               </span>
+            ))}
+          </div>
+        </section>
+
+        <section className="glass-panel rounded-3xl p-6 md:p-8">
+          <h2 className="section-title">Recommended Add-On Services</h2>
+          <p className="section-copy mt-3">
+            Most clients bundle this service with related upgrades for stronger outcomes and fewer
+            repeat issues.
+          </p>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            {recommendations.map((relatedService) => (
+              <Link
+                key={relatedService.slug}
+                href={`/services/${relatedService.slug}`}
+                className="project-card"
+              >
+                <p className="project-tag">Upsell Recommendation</p>
+                <h3 className="project-title">{relatedService.name}</h3>
+                <p className="project-copy">{relatedService.shortDescription}</p>
+              </Link>
             ))}
           </div>
         </section>

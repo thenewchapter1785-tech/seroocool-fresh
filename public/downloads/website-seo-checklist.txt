@@ -1,0 +1,8 @@
+Website SEO Checklist
+
+- Unique title and description on every key page
+- Fast mobile performance and compressed media
+- Clear internal links to services and conversion pages
+- Local landing pages for target towns and regions
+- Structured data for business, services, and articles
+- Conversion-focused CTAs above the fold and in-page

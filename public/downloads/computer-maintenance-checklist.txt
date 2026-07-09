@@ -1,0 +1,16 @@
+Computer Maintenance Checklist
+
+Weekly
+- Restart device and close unused background apps
+- Install pending operating system updates
+- Verify antivirus protection is active
+
+Monthly
+- Remove unused software and browser extensions
+- Review storage usage and clear temporary files
+- Confirm cloud and local backups completed
+
+Quarterly
+- Change important account passwords
+- Review multi-factor authentication settings
+- Run full malware and health diagnostics

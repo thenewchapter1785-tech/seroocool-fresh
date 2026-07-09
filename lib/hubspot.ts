@@ -13,7 +13,16 @@ export type HubSpotLeadInput = {
   websiteUrl?: string;
 };
 
-const HUBSPOT_API_BASE = "https://api.hubapi.com/crm/v3/objects/contacts";
+type HubSpotContactInput = {
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+  websiteUrl?: string;
+};
+
+const HUBSPOT_CONTACTS_API = "https://api.hubapi.com/crm/v3/objects/contacts";
+const HUBSPOT_DEALS_API = "https://api.hubapi.com/crm/v3/objects/deals";
 const EXTERNAL_REQUEST_TIMEOUT_MS = 8000;
 
 async function fetchWithTimeout(
@@ -34,6 +43,13 @@ async function fetchWithTimeout(
   }
 }
 
+function getHubSpotHeaders(token: string) {
+  return {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+}
+
 function splitName(fullName: string) {
   const trimmed = fullName.trim();
 
@@ -48,21 +64,10 @@ function splitName(fullName: string) {
   return { firstName, lastName };
 }
 
-export async function upsertHubSpotLead(input: HubSpotLeadInput) {
-  const hubspotToken = readOptionalEnv("HUBSPOT_ACCESS_TOKEN");
-
-  if (!hubspotToken || !input.email || !input.name) {
-    return { ok: false, reason: "missing-config-or-fields" as const };
-  }
-
-  const { firstName, lastName } = splitName(input.name);
-
-  const searchResponse = await fetchWithTimeout(`${HUBSPOT_API_BASE}/search`, {
+async function searchContactByEmail(email: string, token: string) {
+  const response = await fetchWithTimeout(`${HUBSPOT_CONTACTS_API}/search`, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${hubspotToken}`,
-      "Content-Type": "application/json",
-    },
+    headers: getHubSpotHeaders(token),
     body: JSON.stringify({
       filterGroups: [
         {
@@ -70,7 +75,7 @@ export async function upsertHubSpotLead(input: HubSpotLeadInput) {
             {
               propertyName: "email",
               operator: "EQ",
-              value: input.email,
+              value: email,
             },
           ],
         },
@@ -80,15 +85,27 @@ export async function upsertHubSpotLead(input: HubSpotLeadInput) {
     }),
   });
 
-  if (!searchResponse.ok) {
-    const errorText = await searchResponse.text();
+  if (!response.ok) {
+    const errorText = await response.text();
     throw new Error(`HubSpot search failed: ${errorText}`);
   }
 
-  const searchJson = (await searchResponse.json()) as {
+  const json = (await response.json()) as {
     results?: Array<{ id: string }>;
   };
-  const contactId = searchJson.results?.[0]?.id;
+
+  return json.results?.[0]?.id ?? null;
+}
+
+export async function createOrUpdateContact(input: HubSpotContactInput) {
+  const hubspotToken = readOptionalEnv("HUBSPOT_ACCESS_TOKEN");
+
+  if (!hubspotToken || !input.email || !input.name) {
+    return { ok: false, reason: "missing-config-or-fields" as const };
+  }
+
+  const contactId = await searchContactByEmail(input.email, hubspotToken);
+  const { firstName, lastName } = splitName(input.name);
 
   const payload = {
     properties: {
@@ -103,36 +120,197 @@ export async function upsertHubSpotLead(input: HubSpotLeadInput) {
   };
 
   if (contactId) {
-    const updateResponse = await fetchWithTimeout(`${HUBSPOT_API_BASE}/${contactId}`, {
+    const response = await fetchWithTimeout(`${HUBSPOT_CONTACTS_API}/${contactId}`, {
       method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${hubspotToken}`,
-        "Content-Type": "application/json",
-      },
+      headers: getHubSpotHeaders(hubspotToken),
       body: JSON.stringify(payload),
     });
 
-    if (!updateResponse.ok) {
-      const errorText = await updateResponse.text();
+    if (!response.ok) {
+      const errorText = await response.text();
       throw new Error(`HubSpot update failed: ${errorText}`);
     }
 
-    return { ok: true, action: "updated" as const };
+    return { ok: true, action: "updated" as const, contactId };
   }
 
-  const createResponse = await fetchWithTimeout(HUBSPOT_API_BASE, {
+  const response = await fetchWithTimeout(HUBSPOT_CONTACTS_API, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${hubspotToken}`,
-      "Content-Type": "application/json",
-    },
+    headers: getHubSpotHeaders(hubspotToken),
     body: JSON.stringify(payload),
   });
 
-  if (!createResponse.ok) {
-    const errorText = await createResponse.text();
+  if (!response.ok) {
+    const errorText = await response.text();
     throw new Error(`HubSpot create failed: ${errorText}`);
   }
 
-  return { ok: true, action: "created" as const };
+  const createdJson = (await response.json()) as { id?: string };
+
+  return {
+    ok: true,
+    action: "created" as const,
+    contactId: createdJson.id ?? null,
+  };
+}
+
+export async function addNoteToContact(params: {
+  contactId?: string | null;
+  email?: string;
+  note: string;
+}) {
+  const hubspotToken = readOptionalEnv("HUBSPOT_ACCESS_TOKEN");
+
+  if (!hubspotToken || !params.note) {
+    return { ok: false, reason: "missing-config-or-fields" as const };
+  }
+
+  let contactId = params.contactId ?? null;
+
+  if (!contactId && params.email) {
+    contactId = await searchContactByEmail(params.email, hubspotToken);
+  }
+
+  if (!contactId) {
+    return { ok: false, reason: "contact-not-found" as const };
+  }
+
+  const response = await fetchWithTimeout("https://api.hubapi.com/crm/v3/objects/notes", {
+    method: "POST",
+    headers: getHubSpotHeaders(hubspotToken),
+    body: JSON.stringify({
+      properties: {
+        hs_note_body: params.note,
+        hs_timestamp: new Date().toISOString(),
+      },
+      associations: [
+        {
+          to: {
+            id: contactId,
+          },
+          types: [
+            {
+              associationCategory: "HUBSPOT_DEFINED",
+              associationTypeId: 202,
+            },
+          ],
+        },
+      ],
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HubSpot note create failed: ${errorText}`);
+  }
+
+  return { ok: true, contactId };
+}
+
+export async function createDealPlaceholder(params: {
+  contactId?: string | null;
+  email?: string;
+  dealName: string;
+  amount?: string;
+  details?: string;
+}) {
+  const hubspotToken = readOptionalEnv("HUBSPOT_ACCESS_TOKEN");
+
+  if (!hubspotToken || !params.dealName) {
+    return { ok: false, reason: "missing-config-or-fields" as const };
+  }
+
+  let contactId = params.contactId ?? null;
+  if (!contactId && params.email) {
+    contactId = await searchContactByEmail(params.email, hubspotToken);
+  }
+
+  const payload: {
+    properties: Record<string, string>;
+    associations?: Array<{
+      to: { id: string };
+      types: Array<{ associationCategory: string; associationTypeId: number }>;
+    }>;
+  } = {
+    properties: {
+      dealname: params.dealName,
+      pipeline: "default",
+      dealstage: "appointmentscheduled",
+      amount: params.amount ?? "0",
+      closedate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      description: params.details ?? "Lead-generated deal placeholder",
+    },
+  };
+
+  if (contactId) {
+    payload.associations = [
+      {
+        to: { id: contactId },
+        types: [
+          {
+            associationCategory: "HUBSPOT_DEFINED",
+            associationTypeId: 3,
+          },
+        ],
+      },
+    ];
+  }
+
+  const response = await fetchWithTimeout(HUBSPOT_DEALS_API, {
+    method: "POST",
+    headers: getHubSpotHeaders(hubspotToken),
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`HubSpot deal create failed: ${errorText}`);
+  }
+
+  const json = (await response.json()) as { id?: string };
+  return { ok: true, dealId: json.id ?? null, contactId };
+}
+
+export async function createLead(input: HubSpotLeadInput) {
+  const contact = await createOrUpdateContact({
+    name: input.name,
+    email: input.email,
+    phone: input.phone,
+    company: input.company,
+    websiteUrl: input.websiteUrl,
+  });
+
+  if (!contact.ok) {
+    return contact;
+  }
+
+  const noteParts = [
+    `Form Type: ${input.formType || "contact_form"}`,
+    `Project Type: ${input.projectType || "not provided"}`,
+    `Budget Range: ${input.budgetRange || "not provided"}`,
+    `Timeline: ${input.timeline || "not provided"}`,
+    `Notes: ${input.notes || "not provided"}`,
+  ];
+
+  await addNoteToContact({
+    contactId: contact.contactId,
+    email: input.email,
+    note: noteParts.join("\n"),
+  });
+
+  await createDealPlaceholder({
+    contactId: contact.contactId,
+    email: input.email,
+    dealName: `${input.projectType || "Technology"} Inquiry - ${input.name}`,
+    amount: input.budgetRange?.replace(/[^0-9]/g, "") || "0",
+    details: input.notes,
+  }).catch((error) => {
+    console.error("HubSpot deal placeholder failed", error);
+  });
+
+  return { ok: true, action: contact.action, contactId: contact.contactId };
+}
+
+export async function upsertHubSpotLead(input: HubSpotLeadInput) {
+  return createLead(input);
 }

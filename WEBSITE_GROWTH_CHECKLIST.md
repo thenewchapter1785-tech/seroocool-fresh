@@ -126,6 +126,14 @@ This section is reserved for new tasks identified during build sessions.
 - [ ] Verify `/api/ai-assistant` responds correctly with a short prompt and returns 429 after repeated rapid requests.
 - [ ] Create HubSpot custom contact properties for `preferred_contact_method`, `audience_type`, and `urgency`, then map API fields directly to those properties.
 - [ ] Decide canonical SEO strategy for legacy landing pages (`/web-development`, `/mobile-app-development`, etc.) versus new dynamic service pages to avoid intent overlap.
+- [ ] Replace placeholder emergency phone number in `/emergency-support` with the production support line.
+- [ ] Add authentication for `/dashboard` before exposing it on production.
+- [ ] Connect real Google Reviews and Facebook Reviews widgets/APIs (currently CTA links only).
+- [ ] Implement true delayed email nurture sequence automation (welcome/tips/reminder/testimonials/offers) via queue or CRM workflow.
+- [ ] Add real project screenshots for before/after cards to increase trust and referral conversion.
+- [ ] Replace placeholder review text in reusable components with verified Google/Facebook testimonials.
+- [ ] Set `ADMIN_ACCESS_CODE` in production environment before exposing `/admin` links.
+- [ ] Configure HubSpot custom properties or custom object mappings for estimate-specific and booking-specific metadata.
 
 ## 10) Cloudflare Account + API Token Setup (Step-by-Step)
 

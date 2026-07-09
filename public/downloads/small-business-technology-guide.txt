@@ -1,0 +1,8 @@
+Small Business Technology Guide
+
+1) Prioritize uptime before adding new tools
+2) Standardize email, file storage, and communication systems
+3) Document onboarding and support processes
+4) Automate repetitive admin and lead follow-up tasks
+5) Review cybersecurity controls every quarter
+6) Measure website leads, appointment rates, and response times
