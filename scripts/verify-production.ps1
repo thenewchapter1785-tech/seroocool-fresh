@@ -89,6 +89,66 @@ foreach ($url in $urls) {
   }
 }
 
+try {
+  $wwwProbe = Invoke-WebRequest -UseBasicParsing -Uri "https://www.$Domain" -MaximumRedirection 0 -TimeoutSec 25
+  $wwwStatus = [int]$wwwProbe.StatusCode
+  $wwwLocation = $wwwProbe.Headers["Location"]
+  $wwwCanonical = (
+    $wwwStatus -ge 300 -and
+    $wwwStatus -lt 400 -and
+    -not [string]::IsNullOrWhiteSpace($wwwLocation) -and
+    (
+      $wwwLocation -eq "https://$Domain" -or
+      $wwwLocation -eq "https://$Domain/" -or
+      $wwwLocation.StartsWith("https://$Domain/")
+    )
+  )
+  $results.Add((New-CheckResult -Name "Canonical redirect (www -> apex)" -Passed $wwwCanonical -Details "Status $wwwStatus -> $wwwLocation"))
+}
+catch {
+  $webResponse = $_.Exception.Response
+  if ($webResponse) {
+    $wwwStatus = [int]$webResponse.StatusCode
+    $wwwLocation = $webResponse.Headers["Location"]
+    $wwwCanonical = (
+      $wwwStatus -ge 300 -and
+      $wwwStatus -lt 400 -and
+      -not [string]::IsNullOrWhiteSpace($wwwLocation) -and
+      (
+        $wwwLocation -eq "https://$Domain" -or
+        $wwwLocation -eq "https://$Domain/" -or
+        $wwwLocation.StartsWith("https://$Domain/")
+      )
+    )
+    $results.Add((New-CheckResult -Name "Canonical redirect (www -> apex)" -Passed $wwwCanonical -Details "Status $wwwStatus -> $wwwLocation"))
+  }
+  else {
+    $results.Add((New-CheckResult -Name "Canonical redirect (www -> apex)" -Passed $false -Details $_.Exception.Message))
+  }
+}
+
+try {
+  $headerResponse = Invoke-WebRequest -UseBasicParsing -Uri "https://$Domain" -TimeoutSec 25
+  $requiredHeaders = @(
+    "content-security-policy",
+    "strict-transport-security",
+    "x-content-type-options",
+    "x-frame-options",
+    "referrer-policy",
+    "permissions-policy"
+  )
+
+  foreach ($headerName in $requiredHeaders) {
+    $headerValue = $headerResponse.Headers[$headerName]
+    $present = -not [string]::IsNullOrWhiteSpace($headerValue)
+    $details = if ($present) { "$headerName present" } else { "$headerName missing" }
+    $results.Add((New-CheckResult -Name "Security header: $headerName" -Passed $present -Details $details))
+  }
+}
+catch {
+  $results.Add((New-CheckResult -Name "Security headers check" -Passed $false -Details $_.Exception.Message))
+}
+
 if ($RunLiveLeadCheck) {
   $testEmail = "leadcheck+" + [DateTime]::UtcNow.ToString("yyyyMMddHHmmss") + "@zerocool-development.com"
   $leadPayload = @{

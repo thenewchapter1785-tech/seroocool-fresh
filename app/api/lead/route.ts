@@ -147,7 +147,7 @@ export async function POST(request: Request) {
   }
 
   const toEmail =
-    process.env.LEAD_TO_EMAIL ?? "thenewchapter1785@gmail.com";
+    process.env.LEAD_TO_EMAIL ?? "zerocool.development.project@gmail.com";
   const fromEmail =
     process.env.LEAD_FROM_EMAIL ?? "onboarding@resend.dev";
   const resendApiKey = process.env.RESEND_API_KEY;
