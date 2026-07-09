@@ -1,3 +1,5 @@
+import { getSiteUrl, readOptionalEnv } from "@/lib/env";
+
 type RateLimitBucket = {
   count: number;
   resetAt: number;
@@ -6,14 +8,14 @@ type RateLimitBucket = {
 const buckets = new Map<string, RateLimitBucket>();
 
 export function getBaseSiteUrl() {
-  return process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-development.com";
+  return getSiteUrl();
 }
 
 export function getAllowedOrigins() {
   const siteUrl = getBaseSiteUrl();
   const origins = new Set<string>([siteUrl]);
 
-  if (process.env.NODE_ENV !== "production") {
+  if (readOptionalEnv("NODE_ENV", "development") !== "production") {
     origins.add("http://localhost:3000");
     origins.add("http://127.0.0.1:3000");
   }

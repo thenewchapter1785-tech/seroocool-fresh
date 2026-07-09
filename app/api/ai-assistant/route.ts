@@ -6,20 +6,130 @@ import {
   getClientIp,
   getRequestOrigin,
   isAllowedOrigin,
+  isValidEmail,
   sanitizeText,
 } from "@/lib/api-security";
+import { getContactEmail, getLeadSenderEmail, readOptionalEnv } from "@/lib/env";
+import { upsertHubSpotLead } from "@/lib/hubspot";
+
+type LeadDetails = {
+  name?: string;
+  email?: string;
+  phone?: string;
+  projectType?: string;
+  budgetRange?: string;
+  timeline?: string;
+  company?: string;
+};
 
 type AiRequestPayload = {
   prompt?: string;
+  lead?: LeadDetails;
 };
 
 const OPENAI_API_URL = "https://api.openai.com/v1/responses";
 const ROUTE_KEY = "api:ai-assistant";
+const EXTERNAL_REQUEST_TIMEOUT_MS = 8000;
 
-export async function POST(request: Request) {
+async function fetchWithTimeout(
+  input: RequestInfo | URL,
+  init: RequestInit,
+  timeoutMs = EXTERNAL_REQUEST_TIMEOUT_MS
+) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(input, {
+      ...init,
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+function withCors(request: Request) {
   const allowedOrigins = getAllowedOrigins();
   const origin = getRequestOrigin(request);
   const corsHeaders = buildCorsHeaders(origin, allowedOrigins);
+
+  return {
+    allowedOrigins,
+    origin,
+    corsHeaders,
+  };
+}
+
+function normalizeLead(input?: LeadDetails) {
+  const normalized = {
+    name: sanitizeText(input?.name, 100),
+    email: sanitizeText(input?.email, 160).toLowerCase(),
+    phone: sanitizeText(input?.phone, 40),
+    projectType: sanitizeText(input?.projectType, 120),
+    budgetRange: sanitizeText(input?.budgetRange, 80),
+    timeline: sanitizeText(input?.timeline, 80),
+    company: sanitizeText(input?.company, 120),
+  };
+
+  return normalized;
+}
+
+function getMissingLeadFields(lead: ReturnType<typeof normalizeLead>) {
+  const required = [
+    ["name", lead.name],
+    ["email", lead.email],
+    ["phone", lead.phone],
+    ["project type", lead.projectType],
+    ["budget", lead.budgetRange],
+    ["timeline", lead.timeline],
+  ] as const;
+
+  return required.filter((item) => !item[1]).map((item) => item[0]);
+}
+
+async function sendQualifiedLeadEmail(params: {
+  lead: ReturnType<typeof normalizeLead>;
+  prompt: string;
+}) {
+  const resendApiKey = readOptionalEnv("RESEND_API_KEY");
+  if (!resendApiKey) {
+    return;
+  }
+
+  const emailText = [
+    "New AI Assistant Qualified Lead",
+    "",
+    `Name: ${params.lead.name}`,
+    `Email: ${params.lead.email}`,
+    `Phone: ${params.lead.phone}`,
+    `Company: ${params.lead.company}`,
+    `Project Type: ${params.lead.projectType}`,
+    `Budget: ${params.lead.budgetRange}`,
+    `Timeline: ${params.lead.timeline}`,
+    "",
+    "User question:",
+    params.prompt,
+  ].join("\n");
+
+  await fetchWithTimeout("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${resendApiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: getLeadSenderEmail(),
+      to: [getContactEmail()],
+      reply_to: params.lead.email,
+      subject: `AI Qualified Lead: ${params.lead.projectType || "Consultation"}`,
+      text: emailText,
+    }),
+  });
+}
+
+export async function POST(request: Request) {
+  const { allowedOrigins, origin, corsHeaders } = withCors(request);
 
   if (!isAllowedOrigin(origin, allowedOrigins)) {
     return NextResponse.json(
@@ -51,7 +161,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const openaiApiKey = process.env.OPENAI_API_KEY;
+  const openaiApiKey = readOptionalEnv("OPENAI_API_KEY");
 
   if (!openaiApiKey) {
     return NextResponse.json(
@@ -64,6 +174,7 @@ export async function POST(request: Request) {
   }
 
   let payload: AiRequestPayload;
+
   try {
     payload = (await request.json()) as AiRequestPayload;
   } catch {
@@ -88,7 +199,39 @@ export async function POST(request: Request) {
     );
   }
 
+  const lead = normalizeLead(payload.lead);
+  const missingFields = getMissingLeadFields(lead);
+
+  if (lead.email && !isValidEmail(lead.email)) {
+    return NextResponse.json(
+      { error: "Lead email appears invalid" },
+      {
+        status: 400,
+        headers: corsHeaders,
+      }
+    );
+  }
+
   let upstreamResponse: Response;
+
+  const leadSummary = [
+    `Name: ${lead.name || "missing"}`,
+    `Email: ${lead.email || "missing"}`,
+    `Phone: ${lead.phone || "missing"}`,
+    `Project Type: ${lead.projectType || "missing"}`,
+    `Budget: ${lead.budgetRange || "missing"}`,
+    `Timeline: ${lead.timeline || "missing"}`,
+    `Company: ${lead.company || "not provided"}`,
+  ].join("\n");
+
+  const systemPrompt = [
+    "You are ZeroCool Development's AI lead assistant.",
+    "Answer questions about website development, mobile apps, AI automation, business automation, HubSpot CRM integration, Cloudflare security, and DigitalOcean hosting.",
+    "Keep responses concise, practical, and business-focused.",
+    "Always recommend a free consultation as next step.",
+    "If lead details are missing, explicitly request only the missing fields.",
+    "Required lead fields are: name, email, phone, project type, budget, timeline.",
+  ].join(" ");
 
   try {
     upstreamResponse = await fetch(OPENAI_API_URL, {
@@ -102,15 +245,16 @@ export async function POST(request: Request) {
         input: [
           {
             role: "system",
-            content:
-              "You are the ZeroCool Development assistant. Keep responses concise, technical, and useful for business owners.",
+            content: systemPrompt,
           },
           {
             role: "user",
-            content: prompt,
+            content: `Lead detail snapshot:\n${leadSummary}\n\nMissing fields: ${
+              missingFields.length ? missingFields.join(", ") : "none"
+            }\n\nUser question: ${prompt}`,
           },
         ],
-        max_output_tokens: 350,
+        max_output_tokens: 500,
       }),
     });
   } catch {
@@ -140,10 +284,34 @@ export async function POST(request: Request) {
     output_text?: string;
   };
 
+  const isQualified = missingFields.length === 0;
+
+  if (isQualified) {
+    try {
+      await upsertHubSpotLead({
+        name: lead.name,
+        email: lead.email,
+        phone: lead.phone,
+        company: lead.company,
+        projectType: lead.projectType,
+        budgetRange: lead.budgetRange,
+        timeline: lead.timeline,
+        notes: `AI assistant question: ${prompt}`,
+        formType: "ai_assistant",
+      });
+
+      await sendQualifiedLeadEmail({ lead, prompt });
+    } catch (error) {
+      console.error("Failed to process qualified AI lead", error);
+    }
+  }
+
   return NextResponse.json(
     {
       ok: true,
       answer: upstreamJson.output_text ?? "",
+      missingLeadFields: missingFields,
+      qualifiedLeadCaptured: isQualified,
     },
     {
       headers: corsHeaders,
@@ -152,9 +320,7 @@ export async function POST(request: Request) {
 }
 
 export async function OPTIONS(request: Request) {
-  const allowedOrigins = getAllowedOrigins();
-  const origin = getRequestOrigin(request);
-  const corsHeaders = buildCorsHeaders(origin, allowedOrigins);
+  const { allowedOrigins, origin, corsHeaders } = withCors(request);
 
   if (!isAllowedOrigin(origin, allowedOrigins)) {
     return new NextResponse(null, {

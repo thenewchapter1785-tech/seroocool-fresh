@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import AnalyticsPlaceholders from "./analytics-placeholders";
 import MetaPixel from "./meta-pixel";
 import HubSpotTracking from "./hubspot-tracking";
 import "./globals.css";
@@ -15,7 +16,10 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-development.com";
-const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION ?? "";
+const googleSiteVerification =
+  process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ??
+  process.env.GOOGLE_SITE_VERIFICATION ??
+  "";
 const facebookDomainVerification =
   process.env.FACEBOOK_DOMAIN_VERIFICATION ?? "";
 const siteName = "ZeroCool Development";
@@ -117,6 +121,7 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${jetBrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <AnalyticsPlaceholders />
         <HubSpotTracking />
         <MetaPixel />
         {children}

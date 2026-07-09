@@ -289,6 +289,13 @@ body {
   color: #ffc3c3;
 }
 
+.assistant-answer {
+  border-radius: 0.9rem;
+  border: 1px solid rgba(167, 196, 249, 0.3);
+  background: rgba(17, 30, 49, 0.72);
+  padding: 0.9rem;
+}
+
 .response-note {
   color: rgba(188, 210, 251, 0.84);
   font-size: 0.8rem;
@@ -306,6 +313,10 @@ body {
 .direct-contact-card {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .direct-contact-list {
@@ -323,6 +334,9 @@ body {
   border-radius: 0.75rem;
   padding: 0.55rem 0.68rem;
   background: rgba(12, 22, 38, 0.58);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .contact-key {
@@ -334,16 +348,29 @@ body {
 
 .contact-value {
   min-width: 0;
+  max-width: 100%;
   color: rgba(231, 239, 255, 0.96);
   font-size: 0.92rem;
 }
 
 .contact-link {
+  display: block;
+  max-width: 100%;
   color: #b8d0ff;
   font-family: var(--font-jetbrains-mono), monospace;
   font-size: 0.84rem;
   letter-spacing: 0.02em;
   border-bottom: 1px solid rgba(172, 200, 252, 0.38);
+}
+
+.email,
+.contact-email,
+.direct-contact a,
+.contact-card a,
+.contact-link {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
 }
 
 .contact-link:hover {

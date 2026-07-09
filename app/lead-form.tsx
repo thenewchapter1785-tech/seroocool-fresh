@@ -89,7 +89,7 @@ export default function LeadForm() {
     ]);
 
     try {
-      const response = await fetch("/api/lead", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

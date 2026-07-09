@@ -1,200 +1,149 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import AiAssistantPanel from "./ai-assistant-panel";
 import LeadForm from "./lead-form";
+import QuickLeadForm from "./quick-lead-form";
 import TrackedLink from "./tracked-link";
+import { getContactEmail, getSiteUrl } from "@/lib/env";
+import { buildPageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "ZeroCool Development | Website, Apps, AI Automation, CRM Integration",
+  description:
+    "ZeroCool Development helps small businesses grow with website and app development, AI automation, HubSpot CRM integration, Cloudflare security, and DigitalOcean hosting.",
+  path: "/",
+});
 
 export default function Home() {
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-development.com";
-  const bookingUrl =
-    process.env.NEXT_PUBLIC_BOOKING_URL ??
-    "mailto:zerocool.development.project@gmail.com?subject=Project%20Consultation%20-%20ZeroCool%20Development";
-  const contactEmail =
-    process.env.CONTACT_EMAIL ?? "zerocool.development.project@gmail.com";
+  const siteUrl = getSiteUrl();
+  const contactEmail = getContactEmail();
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "ProfessionalService",
-        name: "ZeroCool Development",
-        description:
-          "Web development, app development, automation, AI integration, and technology consulting for growing businesses.",
-        url: siteUrl,
-        areaServed: "US",
-        serviceType: [
-          "Web Development",
-          "Application Development",
-          "Business Process Automation",
-          "AI Integration",
-          "Technology Consulting",
-        ],
-      },
-      {
-        "@type": "LocalBusiness",
-        name: "ZeroCool Development",
-        url: siteUrl,
-        image: `${siteUrl}/logo.png`,
-        email: contactEmail,
-        areaServed: "US",
-        knowsAbout: [
-          "Web development",
-          "Mobile app development",
-          "Business automation",
-          "AI integration",
-          "Technical consulting",
-        ],
-      },
-      {
-        "@type": "FAQPage",
-        mainEntity: [
-          {
-            "@type": "Question",
-            name: "Do you work with both individuals and businesses?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Yes. ZeroCool Development provides one-on-one support for individuals and scalable technology solutions for businesses.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "What services does ZeroCool Development provide?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Services include web development, app development, business automation, AI integration, and technical consulting for operations and growth.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "How quickly can we start?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Most requests receive a response within one business day with practical next steps and realistic timing.",
-            },
-          },
-        ],
-      },
-    ],
-  };
-
-  const capabilities = [
-    "Conversion-focused web development",
-    "Custom app development",
-    "Automation architecture and implementation",
-    "AI integration for customer and internal workflows",
-    "API integrations across business systems",
-    "Technical discovery and consulting",
+  const trustItems = [
+    "Free Consultation",
+    "Website & App Development",
+    "AI Automation",
+    "CRM Integration",
+    "Fast Response",
+    "Secure Deployment",
+    "Built for Small Businesses",
+    "Serving Rhode Island and remote clients",
   ];
 
-  const techStack = [
-    "TypeScript",
-    "React",
-    "Next.js",
-    "Python",
-    "Node.js",
-    "PostgreSQL",
-    "OpenAI API",
-    "HubSpot CRM",
-    "Cloudflare",
-    "DigitalOcean",
-    "Automation APIs",
+  const servicePages = [
+    { href: "/web-development", title: "Web Development" },
+    { href: "/mobile-app-development", title: "Mobile App Development" },
+    { href: "/ai-automation", title: "AI Automation" },
+    { href: "/business-automation", title: "Business Automation" },
+    { href: "/hubspot-integration", title: "HubSpot Integration" },
+    { href: "/cloudflare-security", title: "Cloudflare Security" },
+    { href: "/digitalocean-hosting", title: "DigitalOcean Hosting" },
+    { href: "/free-consultation", title: "Free Consultation" },
   ];
 
-  const trustStats = [
-    { label: "Response Window", value: "< 1 Business Day" },
-    { label: "Delivery Model", value: "Consult + Build" },
-    { label: "Focus", value: "Growth Through Tech" },
-  ];
-
-  const deliveryStandards = [
+  const portfolioPreview = [
     {
-      title: "Architecture with outcomes",
+      title: "Lead-focused website rebuild",
       copy:
-        "Every engagement starts with business goals, then maps to measurable technical execution.",
+        "Modernized a small business site with conversion-focused UX and improved inquiry flow.",
     },
     {
-      title: "Senior-level communication",
+      title: "Automation workflow rollout",
       copy:
-        "Clear status updates, scoped milestones, and practical trade-off guidance keep projects on track.",
+        "Reduced repetitive operations by integrating automated lead and onboarding triggers.",
     },
     {
-      title: "Secure by default",
+      title: "AI-assisted qualification",
       copy:
-        "Security, performance, and maintainability are treated as baseline requirements, not add-ons.",
-    },
-  ];
-
-  const processSteps = [
-    {
-      step: "01",
-      title: "Discovery and scope",
-      copy: "We clarify goals, constraints, and the highest-impact technical opportunities.",
-    },
-    {
-      step: "02",
-      title: "Build and integrate",
-      copy: "Implementation ships in practical stages, with integrations and quality checks in each phase.",
-    },
-    {
-      step: "03",
-      title: "Launch and optimize",
-      copy: "After release, we tune performance, automation flow, and lead conversion signals.",
-    },
-  ];
-
-  const servicePaths = [
-    {
-      href: "/services/business-websites",
-      title: "Web Development",
-      copy: "Modern, conversion-focused websites designed to build trust and generate qualified leads.",
-    },
-    {
-      href: "/services/custom-web-apps",
-      title: "App Development",
-      copy: "Custom software, portals, and tools built around your real operations and growth goals.",
-    },
-    {
-      href: "/services/automation-integrations",
-      title: "Automation + AI Integration",
-      copy: "Automate repetitive tasks and connect systems so your team can focus on high-value work.",
-    },
-  ];
-
-  const insightLinks = [
-    {
-      href: "/insights/how-to-get-more-leads-from-your-website",
-      title: "How to Get More Leads From Your Website",
-      copy: "Practical improvements that increase inquiries without increasing ad spend.",
-    },
-    {
-      href: "/insights/business-website-cost-breakdown",
-      title: "Business Website Cost Breakdown",
-      copy: "Understand where budget goes and how to scope a site that actually performs.",
-    },
-    {
-      href: "/insights/automation-for-small-business-operations",
-      title: "Automation for Small Business Operations",
-      copy: "Find high-impact process bottlenecks you can automate first.",
+        "Implemented secure backend AI routing for practical pre-consultation lead triage.",
     },
   ];
 
   const faqItems = [
     {
-      question: "Do you work with both individuals and businesses?",
+      question: "What can ZeroCool Development help us with first?",
       answer:
-        "Yes. ZeroCool Development supports both solo operators and growing teams with right-sized technology solutions.",
+        "Most clients start with either website conversion upgrades or workflow automation opportunities with immediate impact.",
     },
     {
-      question: "Do you offer AI integration for existing software?",
+      question: "Do you work with Rhode Island businesses and remote clients?",
       answer:
-        "Yes. We can connect OpenAI-powered workflows to your website, CRM, internal tools, and customer support systems.",
+        "Yes. We serve Rhode Island businesses directly and support remote clients across broader regions.",
     },
     {
-      question: "How quickly can we start?",
+      question: "Can we start with a free consultation?",
       answer:
-        "Most requests receive a response within one business day with clear next steps and timeline options.",
+        "Yes. We provide a free consultation to review goals, constraints, and the fastest path to implementation.",
     },
   ];
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        name: "ZeroCool Development",
+        url: siteUrl,
+        email: contactEmail,
+        logo: `${siteUrl}/logo.png`,
+      },
+      {
+        "@type": "ProfessionalService",
+        name: "ZeroCool Development",
+        url: siteUrl,
+        description:
+          "Website and app development, AI automation, CRM integration, and secure cloud deployment support for small businesses.",
+        serviceType: [
+          "Website Development",
+          "Mobile App Development",
+          "AI Automation",
+          "Business Automation",
+          "HubSpot Integration",
+          "Cloudflare Security",
+          "DigitalOcean Hosting",
+        ],
+      },
+      {
+        "@type": "LocalBusiness",
+        name: "ZeroCool Development",
+        areaServed: ["Rhode Island", "Remote"],
+        url: siteUrl,
+        email: contactEmail,
+      },
+      {
+        "@type": "WebSite",
+        name: "ZeroCool Development",
+        url: siteUrl,
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${siteUrl}/insights`,
+          "query-input": "required name=search_term_string",
+        },
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: faqItems.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer,
+          },
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: siteUrl,
+          },
+        ],
+      },
+    ],
+  };
 
   return (
     <div className="site-shell">
@@ -204,8 +153,7 @@ export default function Home() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
 
-        <header className="glass-panel animate-rise relative overflow-hidden rounded-3xl p-7 md:p-10">
-          <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-[radial-gradient(circle_at_center,rgba(71,133,255,0.28)_0%,rgba(71,133,255,0)_70%)]" />
+        <header className="glass-panel animate-rise rounded-3xl p-7 md:p-10">
           <div className="mb-5 flex items-center justify-between gap-3">
             <Image
               src="/logo.png"
@@ -215,223 +163,140 @@ export default function Home() {
               className="brand-logo"
               priority
             />
-            <div className="flex gap-2">
-              <Link href="/services" className="label-chip inline-flex">
-                Services
-              </Link>
-              <Link href="/insights" className="label-chip inline-flex">
-                Insights
-              </Link>
-            </div>
+            <p className="label-chip inline-flex">Free Consultation Available</p>
           </div>
-
-          <div className="grid gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-end">
-            <div>
-              <h1 className="text-4xl leading-tight font-semibold tracking-tight md:text-6xl">
-                ZeroCool Development builds secure digital systems for growth.
-                <span className="text-blue-300">
-                  {" "}
-                  Websites, apps, automation, and AI integration.
-                </span>
-              </h1>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-slate-200/85 md:text-lg">
-                Partner with a technical team that can design, build, and optimize digital
-                products tied to real business outcomes. From lead generation websites to custom
-                applications and AI-enabled automation, every project is scoped for measurable
-                impact.
-              </p>
-              <div className="hero-actions mt-6 flex flex-wrap gap-3">
-                <TrackedLink
-                  href="#contact"
-                  className="cta-primary"
-                  eventName="hero_project_estimate_click"
-                >
-                  Start a Project
-                </TrackedLink>
-                <TrackedLink
-                  href={bookingUrl}
-                  className="cta-secondary"
-                  eventName="hero_consult_click"
-                >
-                  Schedule Consultation
-                </TrackedLink>
+          <h1 className="text-4xl leading-tight font-semibold tracking-tight md:text-6xl">
+            Grow faster with secure websites, apps, automation, and AI workflows.
+          </h1>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-200/85 md:text-lg">
+            ZeroCool Development helps small businesses generate more leads, automate operations,
+            and deploy with confidence on Cloudflare and DigitalOcean.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <TrackedLink
+              href="#contact"
+              className="cta-primary"
+              eventName="hero_free_consultation_click"
+            >
+              Free Consultation
+            </TrackedLink>
+            <TrackedLink href="/free-consultation" className="cta-secondary" eventName="hero_form_click">
+              Request Strategy Session
+            </TrackedLink>
+          </div>
+          <div className="mt-6 grid gap-2 sm:grid-cols-4">
+            {trustItems.map((item) => (
+              <div key={item} className="proof-chip">
+                {item}
               </div>
-              <div className="hero-proof-grid mt-6 grid gap-2 sm:grid-cols-3">
-                <div className="proof-chip">Backend security built-in</div>
-                <div className="proof-chip">SEO and conversion foundations</div>
-                <div className="proof-chip">Automation-ready architecture</div>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-blue-200/20 bg-slate-950/60 p-5">
-              <p className="text-xs font-medium tracking-[0.25em] text-blue-200/80 uppercase">
-                Ideal Engagements
-              </p>
-              <ul className="mt-3 space-y-2 text-sm text-slate-100/90">
-                <li>Businesses modernizing lead generation and conversion paths</li>
-                <li>Teams replacing manual operations with automation</li>
-                <li>Organizations integrating AI into existing workflows</li>
-                <li>Founders building MVPs and production web apps</li>
-              </ul>
-            </div>
+            ))}
           </div>
         </header>
 
-        <section className="section-stack animate-rise-delayed grid gap-4 md:grid-cols-2">
-          <article className="glass-panel rounded-3xl p-6 md:p-8">
-            <h2 className="section-title">Services</h2>
-            <p className="section-copy mt-3">
-              Full-stack delivery for modern business software. Every engagement combines
-              strategy, implementation, and operational follow-through.
-            </p>
-            <ul className="mt-5 grid gap-2 text-sm text-slate-100/90 sm:grid-cols-2">
-              {capabilities.map((skill) => (
-                <li key={skill} className="tech-pill">
-                  {skill}
-                </li>
-              ))}
-            </ul>
-          </article>
-
-          <article className="glass-panel rounded-3xl p-6 md:p-8">
-            <h2 className="section-title">Approach</h2>
-            <p className="section-copy mt-3">
-              ZeroCool Development combines product thinking, engineering execution, and
-              automation design so your technology decisions stay aligned with revenue,
-              efficiency, and customer experience.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {techStack.map((item) => (
-                <span key={item} className="stack-chip">
-                  {item}
-                </span>
-              ))}
-            </div>
-            <div className="mt-5 grid gap-2 sm:grid-cols-3">
-              {trustStats.map((stat) => (
-                <div key={stat.label} className="stat-card">
-                  <p className="stat-value">{stat.value}</p>
-                  <p className="stat-label">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </article>
-        </section>
-
-        <section className="section-stack animate-rise-delayed-2 grid gap-4 md:grid-cols-3">
-          {servicePaths.map((service) => (
-            <Link key={service.href} href={service.href} className="project-card">
-              <p className="project-tag">Service Path</p>
-              <h2 className="project-title">{service.title}</h2>
-              <p className="project-copy">{service.copy}</p>
-            </Link>
-          ))}
-        </section>
-
-        <section className="section-stack animate-rise-delayed-2 grid gap-4 md:grid-cols-3">
-          {deliveryStandards.map((item) => (
-            <article key={item.title} className="glass-panel rounded-3xl p-6 md:p-8">
-              <h2 className="section-heading">{item.title}</h2>
-              <p className="section-copy mt-3">{item.copy}</p>
-            </article>
-          ))}
-        </section>
-
-        <section className="section-stack animate-rise-delayed-2 grid gap-4 md:grid-cols-[0.72fr_1.28fr]">
-          <article className="glass-panel rounded-3xl p-6 md:p-8">
-            <h2 className="section-title">Delivery Process</h2>
-            <div className="mt-5 grid gap-3">
-              {processSteps.map((item) => (
-                <div key={item.step} className="faq-card">
-                  <p className="project-tag">Step {item.step}</p>
-                  <h3 className="section-heading mt-1">{item.title}</h3>
-                  <p className="section-copy mt-2">{item.copy}</p>
-                </div>
-              ))}
-            </div>
-          </article>
-
-          <article className="glass-panel rounded-3xl p-6 md:p-8" id="contact">
-            <h2 className="section-title">Contact ZeroCool Development</h2>
-            <p className="section-copy mt-3 section-intro">
-              Use this intake form for web development, app development, automation, AI
-              integration, or consulting requests. Most responses are sent within one
-              business day.
-            </p>
-            <div className="mt-5 grid gap-6 md:grid-cols-[1.05fr_0.95fr] md:items-start">
-              <LeadForm />
-              <aside className="direct-contact-card">
-                <h3 className="section-heading">Direct Contact</h3>
-                <div className="direct-contact-list">
-                  <div className="contact-row">
-                    <p className="contact-key">Email</p>
-                    <p className="contact-value">
-                      <a href={`mailto:${contactEmail}`} className="contact-link">
-                        {contactEmail}
-                      </a>
-                    </p>
-                  </div>
-                  <div className="contact-row">
-                    <p className="contact-key">Consult</p>
-                    <p className="contact-value">
-                      <a href={bookingUrl} className="contact-link">
-                        Request Consultation
-                      </a>
-                    </p>
-                  </div>
-                  <div className="contact-row">
-                    <p className="contact-key">Focus</p>
-                    <p className="contact-value">Web • Apps • Automation • AI</p>
-                  </div>
-                </div>
-              </aside>
-            </div>
-          </article>
-        </section>
-
-        <section className="section-stack animate-rise-delayed-3 glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Insights</h2>
-          <p className="section-copy mt-3 section-intro">
-            Explore conversion, technology planning, and automation guides for growth-focused
-            teams.
+        <section className="glass-panel rounded-3xl p-6 md:p-8">
+          <h2 className="section-title">Services Overview</h2>
+          <p className="section-copy mt-3">
+            Explore dedicated landing pages for each service line and conversion path.
           </p>
-          <div className="mt-5 grid gap-4 md:grid-cols-3">
-            {insightLinks.map((insight) => (
-              <Link key={insight.href} href={insight.href} className="project-card">
-                <p className="project-tag">Guide</p>
-                <h3 className="project-title">{insight.title}</h3>
-                <p className="project-copy">{insight.copy}</p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {servicePages.map((item) => (
+              <Link key={item.href} href={item.href} className="tech-pill">
+                {item.title}
               </Link>
             ))}
           </div>
         </section>
 
-        <section className="section-stack animate-rise-delayed-3 grid gap-4 md:grid-cols-3">
+        <section className="grid gap-4 md:grid-cols-3">
+          <article className="glass-panel rounded-3xl p-6 md:p-8">
+            <h2 className="section-heading">Why choose ZeroCool Development</h2>
+            <p className="section-copy mt-3">
+              We blend technical implementation with lead-generation outcomes so your investment
+              improves both operations and revenue.
+            </p>
+          </article>
+          <article className="glass-panel rounded-3xl p-6 md:p-8">
+            <h2 className="section-heading">AI and business automation</h2>
+            <p className="section-copy mt-3">
+              Identify repetitive manual steps, then automate them with secure integrations and
+              practical governance.
+            </p>
+          </article>
+          <article className="glass-panel rounded-3xl p-6 md:p-8">
+            <h2 className="section-heading">Secure deployment</h2>
+            <p className="section-copy mt-3">
+              Production-ready architecture with security headers, CSP, rate limiting, CORS,
+              and validated input handling.
+            </p>
+          </article>
+        </section>
+
+        <section className="grid gap-4 md:grid-cols-3">
+          <QuickLeadForm
+            title="Free Consultation Form"
+            description="Start with a no-cost strategy consultation to define next steps."
+            projectType="free_consultation"
+            formType="free_consultation"
+            ctaLabel="Request Consultation"
+          />
+          <QuickLeadForm
+            title="Website Audit Request"
+            description="Request a website audit for SEO, speed, and conversion opportunities."
+            projectType="website_audit"
+            formType="website_audit_request"
+            ctaLabel="Request Audit"
+          />
+          <article className="glass-panel rounded-3xl p-6 md:p-8" id="contact">
+            <h2 className="section-title">Contact Form</h2>
+            <p className="section-copy mt-3">
+              Share your project goals and get a fast response from ZeroCool Development.
+            </p>
+            <div className="mt-4">
+              <LeadForm />
+            </div>
+          </article>
+        </section>
+
+        <section className="glass-panel rounded-3xl p-6 md:p-8">
+          <h2 className="section-title">Portfolio and Case Study Preview</h2>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            {portfolioPreview.map((item) => (
+              <article key={item.title} className="project-card">
+                <p className="project-tag">Case Study Preview</p>
+                <h3 className="project-title">{item.title}</h3>
+                <p className="project-copy">{item.copy}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="grid gap-4 md:grid-cols-3">
           {faqItems.map((item) => (
             <article key={item.question} className="faq-card">
-              <h3 className="faq-question">{item.question}</h3>
+              <h2 className="faq-question">{item.question}</h2>
               <p className="faq-answer">{item.answer}</p>
             </article>
           ))}
         </section>
-      </main>
 
-      <div className="sticky-mobile-cta">
-        <TrackedLink
-          href="#contact"
-          className="cta-primary"
-          eventName="mobile_estimate_click"
-        >
-          Start Project
-        </TrackedLink>
-        <TrackedLink
-          href={bookingUrl}
-          className="cta-secondary"
-          eventName="mobile_consult_click"
-        >
-          Consult
-        </TrackedLink>
-      </div>
+        <AiAssistantPanel />
+
+        <section className="glass-panel rounded-3xl p-7 text-center md:p-10">
+          <h2 className="section-title">Final Contact CTA</h2>
+          <p className="section-copy mt-3">
+            Ready to improve lead generation and operational efficiency? Let&apos;s plan your next
+            release with a free consultation.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link href="/free-consultation" className="cta-primary inline-flex">
+              Book Free Consultation
+            </Link>
+            <Link href="#contact" className="cta-secondary inline-flex">
+              Submit Project Details
+            </Link>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
