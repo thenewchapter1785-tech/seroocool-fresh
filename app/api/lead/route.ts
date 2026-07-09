@@ -14,6 +14,26 @@ type LeadPayload = {
   message?: string;
 };
 
+const EXTERNAL_REQUEST_TIMEOUT_MS = 8000;
+
+async function fetchWithTimeout(
+  input: RequestInfo | URL,
+  init: RequestInit,
+  timeoutMs = EXTERNAL_REQUEST_TIMEOUT_MS
+) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(input, {
+      ...init,
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 function splitName(fullName: string) {
   const trimmed = fullName.trim();
 
@@ -37,7 +57,10 @@ async function upsertHubSpotContact(body: LeadPayload) {
 
   const { firstName, lastName } = splitName(body.name);
 
-  const searchResponse = await fetch(
+  let searchResponse: Response;
+
+  try {
+    searchResponse = await fetchWithTimeout(
     "https://api.hubapi.com/crm/v3/objects/contacts/search",
     {
       method: "POST",
@@ -61,7 +84,11 @@ async function upsertHubSpotContact(body: LeadPayload) {
         limit: 1,
       }),
     }
-  );
+    );
+  } catch (error) {
+    console.error("HubSpot search request failed", error);
+    return;
+  }
 
   if (!searchResponse.ok) {
     const searchError = await searchResponse.text();
@@ -84,7 +111,10 @@ async function upsertHubSpotContact(body: LeadPayload) {
   };
 
   if (contactId) {
-    const updateResponse = await fetch(
+    let updateResponse: Response;
+
+    try {
+      updateResponse = await fetchWithTimeout(
       `https://api.hubapi.com/crm/v3/objects/contacts/${contactId}`,
       {
         method: "PATCH",
@@ -94,7 +124,11 @@ async function upsertHubSpotContact(body: LeadPayload) {
         },
         body: JSON.stringify(hubspotPayload),
       }
-    );
+      );
+    } catch (error) {
+      console.error("HubSpot update request failed", error);
+      return;
+    }
 
     if (!updateResponse.ok) {
       const updateError = await updateResponse.text();
@@ -104,7 +138,10 @@ async function upsertHubSpotContact(body: LeadPayload) {
     return;
   }
 
-  const createResponse = await fetch(
+  let createResponse: Response;
+
+  try {
+    createResponse = await fetchWithTimeout(
     "https://api.hubapi.com/crm/v3/objects/contacts",
     {
       method: "POST",
@@ -114,7 +151,11 @@ async function upsertHubSpotContact(body: LeadPayload) {
       },
       body: JSON.stringify(hubspotPayload),
     }
-  );
+    );
+  } catch (error) {
+    console.error("HubSpot create request failed", error);
+    return;
+  }
 
   if (!createResponse.ok) {
     const createError = await createResponse.text();
@@ -163,7 +204,9 @@ export async function POST(request: Request) {
     utmCampaign: body.utmCampaign,
   });
 
-  await upsertHubSpotContact(body);
+  const hubspotTask = upsertHubSpotContact(body).catch((error) => {
+    console.error("HubSpot upsert task failed", error);
+  });
 
   if (!resendApiKey) {
     return NextResponse.json({
@@ -189,30 +232,47 @@ export async function POST(request: Request) {
     `${body.message}`,
   ].join("\n");
 
-  const sendResponse = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${resendApiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: fromEmail,
-      to: [toEmail],
-      reply_to: body.email,
-      subject: `New Lead: ${body.projectType ?? "Project Inquiry"}`,
-      text: emailText,
-    }),
-  });
+  let sendResponse: Response;
+
+  try {
+    sendResponse = await fetchWithTimeout("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: fromEmail,
+        to: [toEmail],
+        reply_to: body.email,
+        subject: `New Lead: ${body.projectType ?? "Project Inquiry"}`,
+        text: emailText,
+      }),
+    });
+  } catch (error) {
+    await hubspotTask;
+    console.error("Resend request failed", error);
+
+    return NextResponse.json({
+      ok: true,
+      warning:
+        "Lead captured but email delivery timed out. Please verify RESEND_API_KEY and sender domain.",
+    });
+  }
 
   if (!sendResponse.ok) {
+    await hubspotTask;
     const sendError = await sendResponse.text();
     console.error("Resend send failure", sendError);
 
-    return NextResponse.json(
-      { error: "Lead captured but failed to send inbox email" },
-      { status: 502 }
-    );
+    return NextResponse.json({
+      ok: true,
+      warning:
+        "Lead captured but failed to send inbox email. Check RESEND_API_KEY and LEAD_FROM_EMAIL sender configuration.",
+    });
   }
+
+  await hubspotTask;
 
   return NextResponse.json({ ok: true });
 }
