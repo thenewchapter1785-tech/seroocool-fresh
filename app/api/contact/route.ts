@@ -20,6 +20,10 @@ type ContactPayload = {
   websiteUrl?: string;
   formType?: string;
   projectType?: string;
+  preferredContactMethod?: string;
+  clientType?: string;
+  audienceType?: string;
+  urgency?: string;
   budgetRange?: string;
   timeline?: string;
   website?: string;
@@ -134,6 +138,9 @@ export async function POST(request: Request) {
   const websiteUrl = sanitizeText(body?.websiteUrl, 240);
   const formType = sanitizeText(body?.formType, 80) || "contact_form";
   const projectType = sanitizeText(body?.projectType, 120);
+  const preferredContactMethod = sanitizeText(body?.preferredContactMethod, 40);
+  const audienceType = sanitizeText(body?.audienceType ?? body?.clientType, 40);
+  const urgency = sanitizeText(body?.urgency, 40);
   const budgetRange = sanitizeText(body?.budgetRange, 80);
   const timeline = sanitizeText(body?.timeline, 80);
   const message = sanitizeText(body?.message, 5000);
@@ -179,7 +186,15 @@ export async function POST(request: Request) {
     projectType,
     budgetRange,
     timeline,
-    notes: message,
+    notes: [
+      `Message: ${message}`,
+      `Preferred Contact Method: ${preferredContactMethod || "not provided"}`,
+      `Audience Type: ${audienceType || "not provided"}`,
+      `Urgency: ${urgency || "not provided"}`,
+      `Source: ${source || "not provided"}`,
+      `UTM Source: ${utmSource || "not provided"}`,
+      `UTM Campaign: ${utmCampaign || "not provided"}`,
+    ].join("\n"),
     formType,
     websiteUrl,
   }).catch((error) => {
@@ -212,6 +227,9 @@ export async function POST(request: Request) {
     `Form Type: ${formType}`,
     `Website URL: ${websiteUrl}`,
     `Project Type: ${projectType}`,
+    `Preferred Contact Method: ${preferredContactMethod}`,
+    `Audience Type: ${audienceType}`,
+    `Urgency: ${urgency}`,
     `Budget Range: ${budgetRange}`,
     `Timeline: ${timeline}`,
     `Source: ${source}`,

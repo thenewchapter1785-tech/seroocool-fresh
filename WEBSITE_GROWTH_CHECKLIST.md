@@ -124,6 +124,8 @@ This section is reserved for new tasks identified during build sessions.
 - [ ] Set `CONTACT_EMAIL` and `OPENAI_API_KEY` in DigitalOcean App Platform env vars after next deployment.
 - [ ] Verify `/api/lead` CORS and rate limiting behavior from production domain and from disallowed origins.
 - [ ] Verify `/api/ai-assistant` responds correctly with a short prompt and returns 429 after repeated rapid requests.
+- [ ] Create HubSpot custom contact properties for `preferred_contact_method`, `audience_type`, and `urgency`, then map API fields directly to those properties.
+- [ ] Decide canonical SEO strategy for legacy landing pages (`/web-development`, `/mobile-app-development`, etc.) versus new dynamic service pages to avoid intent overlap.
 
 ## 10) Cloudflare Account + API Token Setup (Step-by-Step)
 

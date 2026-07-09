@@ -16,9 +16,13 @@ export default function AiAssistantPanel() {
     email: "",
     phone: "",
     projectType: "",
+    preferredContactMethod: "email",
+    audienceType: "personal",
+    urgency: "normal",
     budgetRange: "",
     timeline: "",
     company: "",
+    problemDescription: "",
   });
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -139,6 +143,50 @@ export default function AiAssistantPanel() {
             />
           </div>
           <div>
+            <label htmlFor="assistant-contact-method">Preferred Contact Method</label>
+            <select
+              id="assistant-contact-method"
+              value={lead.preferredContactMethod}
+              onChange={(event) =>
+                setLead((current) => ({
+                  ...current,
+                  preferredContactMethod: event.target.value,
+                }))
+              }
+            >
+              <option value="email">Email</option>
+              <option value="phone">Phone</option>
+              <option value="text">Text Message</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="assistant-audience-type">Business or Personal</label>
+            <select
+              id="assistant-audience-type"
+              value={lead.audienceType}
+              onChange={(event) =>
+                setLead((current) => ({ ...current, audienceType: event.target.value }))
+              }
+            >
+              <option value="personal">Personal</option>
+              <option value="business">Business</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="assistant-urgency">Urgency</label>
+            <select
+              id="assistant-urgency"
+              value={lead.urgency}
+              onChange={(event) =>
+                setLead((current) => ({ ...current, urgency: event.target.value }))
+              }
+            >
+              <option value="normal">Normal</option>
+              <option value="soon">Soon (1-3 days)</option>
+              <option value="urgent">Urgent (same day)</option>
+            </select>
+          </div>
+          <div>
             <label htmlFor="assistant-budget">Budget</label>
             <input
               id="assistant-budget"
@@ -161,6 +209,17 @@ export default function AiAssistantPanel() {
             />
           </div>
         </div>
+
+        <label htmlFor="assistant-problem-description">Problem Description (optional)</label>
+        <textarea
+          id="assistant-problem-description"
+          rows={3}
+          value={lead.problemDescription}
+          onChange={(event) =>
+            setLead((current) => ({ ...current, problemDescription: event.target.value }))
+          }
+          placeholder="Example: My laptop is slow and freezes when I open multiple tabs."
+        />
 
         <button type="submit" className="cta-secondary" disabled={state === "sending"}>
           {state === "sending" ? "Thinking..." : "Ask Assistant"}

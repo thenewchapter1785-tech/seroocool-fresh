@@ -4,14 +4,14 @@ import Link from "next/link";
 import AiAssistantPanel from "./ai-assistant-panel";
 import LeadForm from "./lead-form";
 import QuickLeadForm from "./quick-lead-form";
-import TrackedLink from "./tracked-link";
 import { getContactEmail, getSiteUrl } from "@/lib/env";
 import { buildPageMetadata } from "@/lib/seo";
+import { businessServices, primaryServices } from "@/lib/services";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "ZeroCool Development | Website, Apps, AI Automation, CRM Integration",
+  title: "Technology Solutions for Home, Business, and Everything In Between",
   description:
-    "ZeroCool Development helps small businesses grow with website and app development, AI automation, HubSpot CRM integration, Cloudflare security, and DigitalOcean hosting.",
+    "ZeroCool Development delivers computer repair, phone troubleshooting, custom PCs, website development, business software, AI automation, and friendly tech support for Rhode Island and remote clients.",
   path: "/",
 });
 
@@ -19,61 +19,54 @@ export default function Home() {
   const siteUrl = getSiteUrl();
   const contactEmail = getContactEmail();
 
-  const trustItems = [
-    "Free Consultation",
-    "Website & App Development",
-    "AI Automation",
-    "CRM Integration",
-    "Fast Response",
-    "Secure Deployment",
-    "Built for Small Businesses",
-    "Serving Rhode Island and remote clients",
+  const trustPoints = [
+    "Building computers since age 12",
+    "Honest pricing",
+    "Fast turnaround",
+    "Local Rhode Island support",
+    "Remote support available nationwide",
+    "Friendly service",
+    "No confusing technical language",
+    "Personalized solutions",
+    "Free estimates",
+    "Professional communication",
   ];
 
-  const servicePages = [
-    { href: "/web-development", title: "Web Development" },
-    { href: "/mobile-app-development", title: "Mobile App Development" },
-    { href: "/ai-automation", title: "AI Automation" },
-    { href: "/business-automation", title: "Business Automation" },
-    { href: "/hubspot-integration", title: "HubSpot Integration" },
-    { href: "/cloudflare-security", title: "Cloudflare Security" },
-    { href: "/digitalocean-hosting", title: "DigitalOcean Hosting" },
-    { href: "/free-consultation", title: "Free Consultation" },
-  ];
-
-  const portfolioPreview = [
-    {
-      title: "Lead-focused website rebuild",
-      copy:
-        "Modernized a small business site with conversion-focused UX and improved inquiry flow.",
-    },
-    {
-      title: "Automation workflow rollout",
-      copy:
-        "Reduced repetitive operations by integrating automated lead and onboarding triggers.",
-    },
-    {
-      title: "AI-assisted qualification",
-      copy:
-        "Implemented secure backend AI routing for practical pre-consultation lead triage.",
-    },
+  const serviceCards = [
+    { title: "Computer Repair", href: "/services/computer-repair" },
+    { title: "Phone Help", href: "/services/phone-troubleshooting" },
+    { title: "Virus Removal", href: "/services/virus-malware-removal" },
+    { title: "Gaming PCs", href: "/services/gaming-pc-builds" },
+    { title: "Website Development", href: "/services/website-development" },
+    { title: "Mobile Apps", href: "/services/mobile-app-development" },
+    { title: "Business Software", href: "/services/custom-business-software" },
+    { title: "AI Automation", href: "/services/ai-automation" },
+    { title: "Tech Support", href: "/services/remote-tech-support" },
+    { title: "Networking", href: "/services/network-troubleshooting" },
+    { title: "Business IT", href: "/services/business-technology-consulting" },
+    { title: "Cloud Services", href: "/services/cloud-infrastructure" },
   ];
 
   const faqItems = [
     {
-      question: "What can ZeroCool Development help us with first?",
+      question: "I am not tech savvy. Can I still get help?",
       answer:
-        "Most clients start with either website conversion upgrades or workflow automation opportunities with immediate impact.",
+        "Absolutely. We explain everything in plain language, recommend practical options, and keep the process stress-free.",
     },
     {
-      question: "Do you work with Rhode Island businesses and remote clients?",
+      question: "Do you only work with businesses?",
       answer:
-        "Yes. We serve Rhode Island businesses directly and support remote clients across broader regions.",
+        "No. We support home users, students, elderly clients, families, gamers, and businesses of all sizes.",
     },
     {
-      question: "Can we start with a free consultation?",
+      question: "Are you local to Rhode Island?",
       answer:
-        "Yes. We provide a free consultation to review goals, constraints, and the fastest path to implementation.",
+        "Yes. ZeroCool Development serves Rhode Island directly and also provides remote support for clients nationwide.",
+    },
+    {
+      question: "Can you help with both everyday tech issues and advanced software?",
+      answer:
+        "Yes. We handle everything from slow computers and Wi-Fi issues to websites, apps, CRM integrations, and AI automation.",
     },
   ];
 
@@ -86,27 +79,23 @@ export default function Home() {
         url: siteUrl,
         email: contactEmail,
         logo: `${siteUrl}/logo.png`,
+        slogan: "Technology made simple. Fast. Honest. Affordable.",
       },
       {
         "@type": "ProfessionalService",
         name: "ZeroCool Development",
         url: siteUrl,
         description:
-          "Website and app development, AI automation, CRM integration, and secure cloud deployment support for small businesses.",
+          "Full-service technology company for home users and small businesses including computer repair, custom PCs, websites, software, and AI automation.",
         serviceType: [
-          "Website Development",
-          "Mobile App Development",
-          "AI Automation",
-          "Business Automation",
-          "HubSpot Integration",
-          "Cloudflare Security",
-          "DigitalOcean Hosting",
+          ...primaryServices.map((service) => service.name),
+          ...businessServices.map((service) => service.name),
         ],
       },
       {
         "@type": "LocalBusiness",
         name: "ZeroCool Development",
-        areaServed: ["Rhode Island", "Remote"],
+        areaServed: ["Rhode Island", "United States"],
         url: siteUrl,
         email: contactEmail,
       },
@@ -116,7 +105,7 @@ export default function Home() {
         url: siteUrl,
         potentialAction: {
           "@type": "SearchAction",
-          target: `${siteUrl}/insights`,
+          target: `${siteUrl}/services`,
           "query-input": "required name=search_term_string",
         },
       },
@@ -163,136 +152,143 @@ export default function Home() {
               className="brand-logo"
               priority
             />
-            <p className="label-chip inline-flex">Free Consultation Available</p>
+            <p className="label-chip inline-flex">Serving Rhode Island + Remote Clients</p>
           </div>
+
           <h1 className="text-4xl leading-tight font-semibold tracking-tight md:text-6xl">
-            Grow faster with secure websites, apps, automation, and AI workflows.
+            Technology Solutions for Home, Business, and Everything In Between
           </h1>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-200/85 md:text-lg">
-            ZeroCool Development helps small businesses generate more leads, automate operations,
-            and deploy with confidence on Cloudflare and DigitalOcean.
+
+          <p className="mt-4 max-w-4xl text-base leading-7 text-slate-200/90 md:text-lg">
+            From fixing slow computers and troubleshooting phones to building custom websites,
+            AI automation, and business software, ZeroCool Development is your one-stop
+            technology partner.
           </p>
+
+          <p className="mt-4 max-w-4xl text-base leading-7 text-slate-200/85">
+            I&apos;ve been building computers since I was 12 years old. Technology isn&apos;t just my
+            career, it&apos;s my passion. My goal is to provide honest, affordable, professional
+            technology solutions without the confusing jargon or overpriced services offered by
+            big box stores.
+          </p>
+
+          <p className="mt-4 text-sm font-semibold tracking-[0.25em] text-blue-200 uppercase">
+            FAST. HONEST. AFFORDABLE.
+          </p>
+
           <div className="mt-6 flex flex-wrap gap-3">
-            <TrackedLink
-              href="#contact"
-              className="cta-primary"
-              eventName="hero_free_consultation_click"
-            >
-              Free Consultation
-            </TrackedLink>
-            <TrackedLink href="/free-consultation" className="cta-secondary" eventName="hero_form_click">
-              Request Strategy Session
-            </TrackedLink>
+            <Link href="#estimate" className="cta-primary inline-flex">
+              Request a Free Estimate
+            </Link>
+            <Link href="#ai-assistant" className="cta-secondary inline-flex">
+              Talk With Our AI Assistant
+            </Link>
           </div>
-          <div className="mt-6 grid gap-2 sm:grid-cols-4">
-            {trustItems.map((item) => (
+        </header>
+
+        <section className="glass-panel rounded-3xl p-6 md:p-8">
+          <h2 className="section-title">Why Choose ZeroCool Development</h2>
+          <p className="section-copy mt-3">
+            Skip the big box stores. Get reliable tech solutions at prices that won&apos;t break the
+            bank, with personalized service from someone who genuinely enjoys helping people.
+          </p>
+          <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {trustPoints.map((item) => (
               <div key={item} className="proof-chip">
                 {item}
               </div>
             ))}
           </div>
-        </header>
+        </section>
 
         <section className="glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Services Overview</h2>
+          <h2 className="section-title">Tech Help Without the Headache</h2>
           <p className="section-copy mt-3">
-            Explore dedicated landing pages for each service line and conversion path.
+            You do not need to know technical terms to get help. Whether your computer won&apos;t
+            start, your Wi-Fi keeps disconnecting, your phone is acting up, or your business
+            needs a professional website, we&apos;re here to help.
           </p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {servicePages.map((item) => (
-              <Link key={item.href} href={item.href} className="tech-pill">
-                {item.title}
+        </section>
+
+        <section className="glass-panel rounded-3xl p-6 md:p-8">
+          <h2 className="section-title">Services We Offer</h2>
+          <p className="section-copy mt-3">
+            Full-service support for home users, families, gamers, students, startups,
+            contractors, restaurants, retail stores, and professional offices.
+          </p>
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {serviceCards.map((service) => (
+              <Link key={service.title} href={service.href} className="project-card">
+                <p className="project-tag">Service</p>
+                <h3 className="project-title">{service.title}</h3>
+                <p className="project-copy">Technology made simple and approachable.</p>
               </Link>
             ))}
           </div>
-        </section>
-
-        <section className="grid gap-4 md:grid-cols-3">
-          <article className="glass-panel rounded-3xl p-6 md:p-8">
-            <h2 className="section-heading">Why choose ZeroCool Development</h2>
-            <p className="section-copy mt-3">
-              We blend technical implementation with lead-generation outcomes so your investment
-              improves both operations and revenue.
-            </p>
-          </article>
-          <article className="glass-panel rounded-3xl p-6 md:p-8">
-            <h2 className="section-heading">AI and business automation</h2>
-            <p className="section-copy mt-3">
-              Identify repetitive manual steps, then automate them with secure integrations and
-              practical governance.
-            </p>
-          </article>
-          <article className="glass-panel rounded-3xl p-6 md:p-8">
-            <h2 className="section-heading">Secure deployment</h2>
-            <p className="section-copy mt-3">
-              Production-ready architecture with security headers, CSP, rate limiting, CORS,
-              and validated input handling.
-            </p>
-          </article>
-        </section>
-
-        <section className="grid gap-4 md:grid-cols-3">
-          <QuickLeadForm
-            title="Free Consultation Form"
-            description="Start with a no-cost strategy consultation to define next steps."
-            projectType="free_consultation"
-            formType="free_consultation"
-            ctaLabel="Request Consultation"
-          />
-          <QuickLeadForm
-            title="Website Audit Request"
-            description="Request a website audit for SEO, speed, and conversion opportunities."
-            projectType="website_audit"
-            formType="website_audit_request"
-            ctaLabel="Request Audit"
-          />
-          <article className="glass-panel rounded-3xl p-6 md:p-8" id="contact">
-            <h2 className="section-title">Contact Form</h2>
-            <p className="section-copy mt-3">
-              Share your project goals and get a fast response from ZeroCool Development.
-            </p>
-            <div className="mt-4">
-              <LeadForm />
-            </div>
-          </article>
-        </section>
-
-        <section className="glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Portfolio and Case Study Preview</h2>
-          <div className="mt-5 grid gap-4 md:grid-cols-3">
-            {portfolioPreview.map((item) => (
-              <article key={item.title} className="project-card">
-                <p className="project-tag">Case Study Preview</p>
-                <h3 className="project-title">{item.title}</h3>
-                <p className="project-copy">{item.copy}</p>
-              </article>
-            ))}
+          <div className="mt-6">
+            <Link href="/services" className="cta-secondary inline-flex">
+              View All Services
+            </Link>
           </div>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-3">
-          {faqItems.map((item) => (
-            <article key={item.question} className="faq-card">
-              <h2 className="faq-question">{item.question}</h2>
-              <p className="faq-answer">{item.answer}</p>
-            </article>
-          ))}
+        <section className="grid gap-4 md:grid-cols-2" id="estimate">
+          <QuickLeadForm
+            title="Free Computer Diagnostic"
+            description="Not sure what is wrong with your device? Start with a free diagnostic request."
+            projectType="computer_diagnostic"
+            formType="free_computer_diagnostic"
+            ctaLabel="Request Free Computer Diagnostic"
+          />
+          <QuickLeadForm
+            title="Free Website Consultation"
+            description="Need a better website or online presence? Request a free website consultation."
+            projectType="website_consultation"
+            formType="free_website_consultation"
+            ctaLabel="Request Free Website Consultation"
+          />
+          <QuickLeadForm
+            title="Free Business Technology Review"
+            description="Get practical recommendations for software, automation, and operations."
+            projectType="business_technology_review"
+            formType="free_business_technology_review"
+            ctaLabel="Request Technology Review"
+          />
+          <QuickLeadForm
+            title="Free AI Automation Consultation"
+            description="Explore how AI can save time and improve consistency in your business."
+            projectType="ai_automation_consultation"
+            formType="free_ai_automation_consultation"
+            ctaLabel="Request AI Consultation"
+          />
         </section>
 
-        <AiAssistantPanel />
+        <section className="glass-panel rounded-3xl p-6 md:p-8" id="contact">
+          <h2 className="section-title">Request a Free Estimate</h2>
+          <p className="section-copy mt-3">
+            Tell us what you need. We&apos;ll respond quickly with clear next steps and honest pricing.
+          </p>
+          <div className="mt-4">
+            <LeadForm />
+          </div>
+        </section>
+
+        <div id="ai-assistant">
+          <AiAssistantPanel />
+        </div>
 
         <section className="glass-panel rounded-3xl p-7 text-center md:p-10">
           <h2 className="section-title">Final Contact CTA</h2>
           <p className="section-copy mt-3">
-            Ready to improve lead generation and operational efficiency? Let&apos;s plan your next
-            release with a free consultation.
+            Reliable tech solutions at prices that won&apos;t break the bank. Free estimates.
+            Serving Rhode Island and remote clients.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link href="/free-consultation" className="cta-primary inline-flex">
-              Book Free Consultation
+            <Link href="#estimate" className="cta-primary inline-flex">
+              Request a Free Estimate
             </Link>
-            <Link href="#contact" className="cta-secondary inline-flex">
-              Submit Project Details
+            <Link href="/free-consultation" className="cta-secondary inline-flex">
+              Book Free Consultation
             </Link>
           </div>
         </section>

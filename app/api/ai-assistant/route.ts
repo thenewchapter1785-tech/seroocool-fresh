@@ -17,9 +17,13 @@ type LeadDetails = {
   email?: string;
   phone?: string;
   projectType?: string;
+  preferredContactMethod?: string;
+  audienceType?: string;
+  urgency?: string;
   budgetRange?: string;
   timeline?: string;
   company?: string;
+  problemDescription?: string;
 };
 
 type AiRequestPayload = {
@@ -67,9 +71,13 @@ function normalizeLead(input?: LeadDetails) {
     email: sanitizeText(input?.email, 160).toLowerCase(),
     phone: sanitizeText(input?.phone, 40),
     projectType: sanitizeText(input?.projectType, 120),
+    preferredContactMethod: sanitizeText(input?.preferredContactMethod, 40),
+    audienceType: sanitizeText(input?.audienceType, 40),
+    urgency: sanitizeText(input?.urgency, 40),
     budgetRange: sanitizeText(input?.budgetRange, 80),
     timeline: sanitizeText(input?.timeline, 80),
     company: sanitizeText(input?.company, 120),
+    problemDescription: sanitizeText(input?.problemDescription, 1500),
   };
 
   return normalized;
@@ -81,6 +89,9 @@ function getMissingLeadFields(lead: ReturnType<typeof normalizeLead>) {
     ["email", lead.email],
     ["phone", lead.phone],
     ["project type", lead.projectType],
+    ["preferred contact method", lead.preferredContactMethod],
+    ["audience type", lead.audienceType],
+    ["urgency", lead.urgency],
     ["budget", lead.budgetRange],
     ["timeline", lead.timeline],
   ] as const;
@@ -105,8 +116,12 @@ async function sendQualifiedLeadEmail(params: {
     `Phone: ${params.lead.phone}`,
     `Company: ${params.lead.company}`,
     `Project Type: ${params.lead.projectType}`,
+    `Preferred Contact Method: ${params.lead.preferredContactMethod}`,
+    `Audience Type: ${params.lead.audienceType}`,
+    `Urgency: ${params.lead.urgency}`,
     `Budget: ${params.lead.budgetRange}`,
     `Timeline: ${params.lead.timeline}`,
+    `Problem Description: ${params.lead.problemDescription}`,
     "",
     "User question:",
     params.prompt,
@@ -219,18 +234,24 @@ export async function POST(request: Request) {
     `Email: ${lead.email || "missing"}`,
     `Phone: ${lead.phone || "missing"}`,
     `Project Type: ${lead.projectType || "missing"}`,
+    `Preferred Contact Method: ${lead.preferredContactMethod || "missing"}`,
+    `Audience Type: ${lead.audienceType || "missing"}`,
+    `Urgency: ${lead.urgency || "missing"}`,
     `Budget: ${lead.budgetRange || "missing"}`,
     `Timeline: ${lead.timeline || "missing"}`,
     `Company: ${lead.company || "not provided"}`,
+    `Problem Description: ${lead.problemDescription || "not provided"}`,
   ].join("\n");
 
   const systemPrompt = [
     "You are ZeroCool Development's AI lead assistant.",
-    "Answer questions about website development, mobile apps, AI automation, business automation, HubSpot CRM integration, Cloudflare security, and DigitalOcean hosting.",
-    "Keep responses concise, practical, and business-focused.",
+    "Answer questions for both individuals and small businesses.",
+    "Common user questions include: 'my computer is slow', 'my laptop will not turn on', 'I think I have a virus', 'my phone keeps freezing', 'I need a website', 'how do I show up on Google', and 'how can AI automate my business'.",
+    "Cover services like repair, troubleshooting, website development, mobile apps, AI automation, business automation, HubSpot CRM integration, Cloudflare security, and DigitalOcean hosting.",
+    "Keep responses concise, practical, beginner-friendly, and jargon-free.",
     "Always recommend a free consultation as next step.",
     "If lead details are missing, explicitly request only the missing fields.",
-    "Required lead fields are: name, email, phone, project type, budget, timeline.",
+    "Required lead fields are: name, email, phone, project type, preferred contact method, audience type, urgency, budget, timeline.",
   ].join(" ");
 
   try {
@@ -296,7 +317,13 @@ export async function POST(request: Request) {
         projectType: lead.projectType,
         budgetRange: lead.budgetRange,
         timeline: lead.timeline,
-        notes: `AI assistant question: ${prompt}`,
+        notes: [
+          `AI assistant question: ${prompt}`,
+          `Preferred Contact Method: ${lead.preferredContactMethod || "not provided"}`,
+          `Audience Type: ${lead.audienceType || "not provided"}`,
+          `Urgency: ${lead.urgency || "not provided"}`,
+          `Problem Description: ${lead.problemDescription || "not provided"}`,
+        ].join("\n"),
         formType: "ai_assistant",
       });
 

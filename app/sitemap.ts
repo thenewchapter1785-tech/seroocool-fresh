@@ -1,9 +1,16 @@
 import type { MetadataRoute } from "next";
+import { serviceCatalog } from "@/lib/services";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-development.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
+  const dynamicServiceEntries: MetadataRoute.Sitemap = serviceCatalog.map((service) => ({
+    url: `${siteUrl}/services/${service.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.82,
+  }));
 
   return [
     {
@@ -17,24 +24,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,
-    },
-    {
-      url: `${siteUrl}/services/business-websites`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.85,
-    },
-    {
-      url: `${siteUrl}/services/custom-web-apps`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.85,
-    },
-    {
-      url: `${siteUrl}/services/automation-integrations`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.85,
     },
     {
       url: `${siteUrl}/web-development`,
@@ -108,5 +97,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.75,
     },
+    ...dynamicServiceEntries,
   ];
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { serviceCatalog } from "@/lib/services";
 
 declare global {
   interface Window {
@@ -65,12 +66,16 @@ export default function LeadForm() {
     () => ({
       name: "",
       email: "",
-      company: "",
-      projectType: "custom_website_development",
+      phone: "",
+      preferredContactMethod: "email",
+      clientType: "personal",
+      serviceNeeded: "computer-repair",
+      urgency: "normal",
       budgetRange: "not_sure",
       timeline: "asap",
+      company: "",
+      problemDescription: "",
       website: "",
-      message: "",
     }),
     []
   );
@@ -89,13 +94,28 @@ export default function LeadForm() {
     ]);
 
     try {
+      const selectedService = serviceCatalog.find(
+        (service) => service.slug === formData.serviceNeeded
+      );
+
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ...formData,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          projectType: selectedService?.name ?? formData.serviceNeeded,
+          preferredContactMethod: formData.preferredContactMethod,
+          clientType: formData.clientType,
+          urgency: formData.urgency,
+          budgetRange: formData.budgetRange,
+          timeline: formData.timeline,
+          message: formData.problemDescription,
+          website: formData.website,
           submittedAt: formStartAt,
           source,
           utmSource: trackingData.utmSource,
@@ -128,9 +148,7 @@ export default function LeadForm() {
 
       setState("success");
       setFormData(initial);
-      router.push(
-        `/thank-you?source=${encodeURIComponent(source)}&projectType=${encodeURIComponent(formData.projectType)}`
-      );
+      router.push("/thank-you");
     } catch (error) {
       window._hsq?.push([
         "trackCustomBehavioralEvent",
@@ -146,16 +164,14 @@ export default function LeadForm() {
   return (
     <form className="lead-form" onSubmit={handleSubmit}>
       <p className="form-kicker">
-        Share your goals for web development, app development, automation, AI
-        integration, or consulting. You will get a practical response with
-        scope and next steps.
+        Technology made simple. Tell us what is happening and we will guide you with clear,
+        jargon-free recommendations and a free estimate.
       </p>
 
       <label htmlFor="name">Name</label>
       <input
         id="name"
         name="name"
-        placeholder="Your name"
         required
         value={formData.name}
         onChange={(event) =>
@@ -168,7 +184,6 @@ export default function LeadForm() {
         id="email"
         type="email"
         name="email"
-        placeholder="you@company.com"
         required
         value={formData.email}
         onChange={(event) =>
@@ -176,95 +191,122 @@ export default function LeadForm() {
         }
       />
 
-      <label htmlFor="company">Company</label>
+      <label htmlFor="phone">Phone</label>
+      <input
+        id="phone"
+        type="tel"
+        name="phone"
+        required
+        value={formData.phone}
+        onChange={(event) =>
+          setFormData((current) => ({ ...current, phone: event.target.value }))
+        }
+      />
+
+      <label htmlFor="preferredContactMethod">Preferred Contact Method</label>
+      <select
+        id="preferredContactMethod"
+        value={formData.preferredContactMethod}
+        onChange={(event) =>
+          setFormData((current) => ({
+            ...current,
+            preferredContactMethod: event.target.value,
+          }))
+        }
+      >
+        <option value="email">Email</option>
+        <option value="phone">Phone</option>
+        <option value="text">Text Message</option>
+      </select>
+
+      <label htmlFor="clientType">Business or Personal</label>
+      <select
+        id="clientType"
+        value={formData.clientType}
+        onChange={(event) =>
+          setFormData((current) => ({ ...current, clientType: event.target.value }))
+        }
+      >
+        <option value="personal">Personal</option>
+        <option value="business">Business</option>
+      </select>
+
+      <label htmlFor="company">Business Name (optional)</label>
       <input
         id="company"
-        name="company"
-        placeholder="Company name (optional)"
         value={formData.company}
         onChange={(event) =>
           setFormData((current) => ({ ...current, company: event.target.value }))
         }
       />
 
-      <label htmlFor="projectType">Project Type</label>
+      <label htmlFor="serviceNeeded">Service Needed</label>
       <select
-        id="projectType"
-        name="projectType"
-        value={formData.projectType}
+        id="serviceNeeded"
+        value={formData.serviceNeeded}
         onChange={(event) =>
-          setFormData((current) => ({
-            ...current,
-            projectType: event.target.value,
-          }))
+          setFormData((current) => ({ ...current, serviceNeeded: event.target.value }))
         }
       >
-        <option value="custom_website_development">Custom Website Development</option>
-        <option value="mobile_application_development">Mobile Application Development (Android / iOS)</option>
-        <option value="custom_business_software">Custom Business Software</option>
-        <option value="software_automation">Software Automation</option>
-        <option value="ai_integration">AI Integration</option>
-        <option value="technology_consulting">Technology Consulting</option>
-        <option value="ui_ux_design">UI/UX Design</option>
-        <option value="computer_repair">Computer Repair</option>
-        <option value="custom_pc_builds">Custom PC Builds</option>
-        <option value="hardware_diagnostics_repair">Hardware Diagnostics & Repair</option>
-        <option value="computer_upgrades">Computer Upgrades</option>
-        <option value="virus_malware_removal">Virus & Malware Removal</option>
-        <option value="performance_optimization">Performance Optimization</option>
-        <option value="phone_troubleshooting">Phone Troubleshooting</option>
-        <option value="network_wifi_troubleshooting">Network & Wi-Fi Troubleshooting</option>
-        <option value="general_technical_support">General Technical Support</option>
-        <option value="other">Other</option>
+        {serviceCatalog.map((service) => (
+          <option key={service.slug} value={service.slug}>
+            {service.name}
+          </option>
+        ))}
       </select>
 
-      <label htmlFor="budgetRange">Budget Range</label>
+      <label htmlFor="urgency">Urgency</label>
+      <select
+        id="urgency"
+        value={formData.urgency}
+        onChange={(event) =>
+          setFormData((current) => ({ ...current, urgency: event.target.value }))
+        }
+      >
+        <option value="normal">Normal</option>
+        <option value="soon">Soon (1-3 days)</option>
+        <option value="urgent">Urgent (same day)</option>
+      </select>
+
+      <label htmlFor="budgetRange">Budget (optional)</label>
       <select
         id="budgetRange"
-        name="budgetRange"
         value={formData.budgetRange}
         onChange={(event) =>
-          setFormData((current) => ({
-            ...current,
-            budgetRange: event.target.value,
-          }))
+          setFormData((current) => ({ ...current, budgetRange: event.target.value }))
         }
       >
         <option value="not_sure">Not sure yet</option>
-        <option value="under_2k">Under $2k</option>
+        <option value="under_500">Under $500</option>
+        <option value="500_2k">$500 - $2k</option>
         <option value="2k_5k">$2k - $5k</option>
         <option value="5k_10k">$5k - $10k</option>
         <option value="10k_plus">$10k+</option>
       </select>
 
-      <label htmlFor="timeline">Desired Timeline</label>
+      <label htmlFor="timeline">Timeline</label>
       <select
         id="timeline"
-        name="timeline"
         value={formData.timeline}
         onChange={(event) =>
-          setFormData((current) => ({
-            ...current,
-            timeline: event.target.value,
-          }))
+          setFormData((current) => ({ ...current, timeline: event.target.value }))
         }
       >
         <option value="asap">As soon as possible</option>
+        <option value="1_2_weeks">1-2 weeks</option>
         <option value="1_2_months">1-2 months</option>
-        <option value="this_quarter">This quarter</option>
         <option value="exploring">Just exploring options</option>
       </select>
 
-      <label htmlFor="message">Project Details</label>
+      <label htmlFor="problemDescription">Problem Description</label>
       <textarea
-        id="message"
-        name="message"
+        id="problemDescription"
         rows={5}
-        placeholder="What do you need built, fixed, optimized, or automated?"
         required
-        value={formData.message}
+        placeholder="Tell us what is happening in plain language."
+        value={formData.problemDescription}
         onChange={(event) =>
-          setFormData((current) => ({ ...current, message: event.target.value }))
+          setFormData((current) => ({ ...current, problemDescription: event.target.value }))
         }
       />
 
@@ -272,7 +314,6 @@ export default function LeadForm() {
         <label htmlFor="website">Website</label>
         <input
           id="website"
-          name="website"
           tabIndex={-1}
           autoComplete="off"
           value={formData.website}
@@ -283,7 +324,7 @@ export default function LeadForm() {
       </div>
 
       <button type="submit" className="cta-primary" disabled={state === "sending"}>
-        {state === "sending" ? "Sending..." : "Get My Technology Plan"}
+        {state === "sending" ? "Sending..." : "Request a Free Estimate"}
       </button>
 
       <p className="response-note">Most replies go out within one business day.</p>
