@@ -39,10 +39,11 @@ $requiredEnvKeys = @(
   "NODE_ENV",
   "NEXT_PUBLIC_SITE_URL",
   "RESEND_API_KEY",
-  "LEAD_TO_EMAIL",
+  "CONTACT_EMAIL",
   "LEAD_FROM_EMAIL",
   "HUBSPOT_ACCESS_TOKEN",
-  "NEXT_PUBLIC_HUBSPOT_PORTAL_ID"
+  "NEXT_PUBLIC_HUBSPOT_PORTAL_ID",
+  "OPENAI_API_KEY"
 )
 
 $envEntries = @($app.spec.services[0].envs)

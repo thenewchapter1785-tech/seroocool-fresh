@@ -53,22 +53,23 @@ function Add-EnvBlock {
   $Lines.Add("    value: `"$escapedValue`"")
 }
 
-Write-Host "Configure HubSpot + lead env vars for DigitalOcean App Platform" -ForegroundColor Cyan
+Write-Host "Configure HubSpot + lead + OpenAI env vars for DigitalOcean App Platform" -ForegroundColor Cyan
 Write-Host "App ID: $AppId" -ForegroundColor DarkGray
 Write-Host "Domain: $Domain" -ForegroundColor DarkGray
 
 $hubspotPortalId = Read-RequiredPlainText -Prompt "NEXT_PUBLIC_HUBSPOT_PORTAL_ID"
 $hubspotAccessToken = Read-RequiredPlainText -Prompt "HUBSPOT_ACCESS_TOKEN" -Secret
 $resendApiKey = Read-RequiredPlainText -Prompt "RESEND_API_KEY" -Secret
+$openAiApiKey = Read-RequiredPlainText -Prompt "OPENAI_API_KEY" -Secret
 
 $facebookPageUrl = Read-Host "NEXT_PUBLIC_FACEBOOK_PAGE_URL (optional)"
 $instagramProfileUrl = Read-Host "NEXT_PUBLIC_INSTAGRAM_PROFILE_URL (optional)"
 $metaPixelId = Read-Host "NEXT_PUBLIC_META_PIXEL_ID (optional)"
 $facebookDomainVerification = Read-Host "FACEBOOK_DOMAIN_VERIFICATION (optional)"
 
-$leadToEmail = Read-Host "LEAD_TO_EMAIL [thenewchapter1785@gmail.com]"
-if ([string]::IsNullOrWhiteSpace($leadToEmail)) {
-  $leadToEmail = "thenewchapter1785@gmail.com"
+$contactEmail = Read-Host "CONTACT_EMAIL [zerocool.development.project@gmail.com]"
+if ([string]::IsNullOrWhiteSpace($contactEmail)) {
+  $contactEmail = "zerocool.development.project@gmail.com"
 }
 
 $leadFromEmail = Read-Host "LEAD_FROM_EMAIL [onboarding@resend.dev]"
@@ -110,10 +111,11 @@ Add-EnvBlock -Lines $lines -Key "NEXT_PUBLIC_INSTAGRAM_PROFILE_URL" -Value $inst
 Add-EnvBlock -Lines $lines -Key "NEXT_PUBLIC_META_PIXEL_ID" -Value $metaPixelId
 Add-EnvBlock -Lines $lines -Key "FACEBOOK_DOMAIN_VERIFICATION" -Value $facebookDomainVerification
 Add-EnvBlock -Lines $lines -Key "RESEND_API_KEY" -Value $resendApiKey
-Add-EnvBlock -Lines $lines -Key "LEAD_TO_EMAIL" -Value $leadToEmail
+Add-EnvBlock -Lines $lines -Key "CONTACT_EMAIL" -Value $contactEmail
 Add-EnvBlock -Lines $lines -Key "LEAD_FROM_EMAIL" -Value $leadFromEmail
 Add-EnvBlock -Lines $lines -Key "HUBSPOT_ACCESS_TOKEN" -Value $hubspotAccessToken
 Add-EnvBlock -Lines $lines -Key "NEXT_PUBLIC_HUBSPOT_PORTAL_ID" -Value $hubspotPortalId
+Add-EnvBlock -Lines $lines -Key "OPENAI_API_KEY" -Value $openAiApiKey
 
 $specYaml = ($lines -join "`n")
 

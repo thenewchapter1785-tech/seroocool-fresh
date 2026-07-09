@@ -14,8 +14,10 @@ Set these in DigitalOcean App Settings (or local `.env.local`):
 
 - `HUBSPOT_ACCESS_TOKEN`
 - `RESEND_API_KEY`
-- `LEAD_TO_EMAIL`
+- `CONTACT_EMAIL` (`zerocool.development.project@gmail.com`)
 - `LEAD_FROM_EMAIL`
+- `NEXT_PUBLIC_HUBSPOT_PORTAL_ID`
+- `OPENAI_API_KEY` (required for `/api/ai-assistant`)
 
 Optional website/social settings:
 
@@ -41,6 +43,13 @@ Optional website/social settings:
 3. Verify:
    - Email arrives in your inbox.
    - Contact appears in HubSpot.
+
+## Production Validation
+
+1. Run `./scripts/verify-production.ps1` after each deploy.
+2. Optionally run `./scripts/verify-production.ps1 -RunLiveLeadCheck` to submit a live synthetic lead.
+3. Confirm the synthetic lead appears in HubSpot and an inbox notification is delivered.
+4. Confirm `CONTACT_EMAIL` in DigitalOcean is set to `zerocool.development.project@gmail.com`.
 
 ## Notes
 

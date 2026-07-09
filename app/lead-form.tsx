@@ -65,7 +65,8 @@ export default function LeadForm() {
     () => ({
       name: "",
       email: "",
-      projectType: "website",
+      company: "",
+      projectType: "custom_website_development",
       budgetRange: "not_sure",
       timeline: "asap",
       website: "",
@@ -103,7 +104,10 @@ export default function LeadForm() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit lead form");
+        const responseBody = (await response.json().catch(() => null)) as
+          | { error?: string }
+          | null;
+        throw new Error(responseBody?.error ?? "Failed to submit lead form");
       }
 
       window._hsq?.push([
@@ -127,20 +131,25 @@ export default function LeadForm() {
       router.push(
         `/thank-you?source=${encodeURIComponent(source)}&projectType=${encodeURIComponent(formData.projectType)}`
       );
-    } catch {
+    } catch (error) {
       window._hsq?.push([
         "trackCustomBehavioralEvent",
         {
           name: "intake_form_submit_error",
         },
       ]);
+      console.error("Lead form submission failed", error);
       setState("error");
     }
   }
 
   return (
     <form className="lead-form" onSubmit={handleSubmit}>
-      <p className="form-kicker">Get a reply with scope, next steps, and timing.</p>
+      <p className="form-kicker">
+        Share your goals for web development, app development, automation, AI
+        integration, or consulting. You will get a practical response with
+        scope and next steps.
+      </p>
 
       <label htmlFor="name">Name</label>
       <input
@@ -167,6 +176,17 @@ export default function LeadForm() {
         }
       />
 
+      <label htmlFor="company">Company</label>
+      <input
+        id="company"
+        name="company"
+        placeholder="Company name (optional)"
+        value={formData.company}
+        onChange={(event) =>
+          setFormData((current) => ({ ...current, company: event.target.value }))
+        }
+      />
+
       <label htmlFor="projectType">Project Type</label>
       <select
         id="projectType"
@@ -179,10 +199,22 @@ export default function LeadForm() {
           }))
         }
       >
-        <option value="website">Business Website</option>
-        <option value="webapp">Custom Web App</option>
-        <option value="android">Android App</option>
-        <option value="automation">Automation / API Project</option>
+        <option value="custom_website_development">Custom Website Development</option>
+        <option value="mobile_application_development">Mobile Application Development (Android / iOS)</option>
+        <option value="custom_business_software">Custom Business Software</option>
+        <option value="software_automation">Software Automation</option>
+        <option value="ai_integration">AI Integration</option>
+        <option value="technology_consulting">Technology Consulting</option>
+        <option value="ui_ux_design">UI/UX Design</option>
+        <option value="computer_repair">Computer Repair</option>
+        <option value="custom_pc_builds">Custom PC Builds</option>
+        <option value="hardware_diagnostics_repair">Hardware Diagnostics & Repair</option>
+        <option value="computer_upgrades">Computer Upgrades</option>
+        <option value="virus_malware_removal">Virus & Malware Removal</option>
+        <option value="performance_optimization">Performance Optimization</option>
+        <option value="phone_troubleshooting">Phone Troubleshooting</option>
+        <option value="network_wifi_troubleshooting">Network & Wi-Fi Troubleshooting</option>
+        <option value="general_technical_support">General Technical Support</option>
         <option value="other">Other</option>
       </select>
 
@@ -228,7 +260,7 @@ export default function LeadForm() {
         id="message"
         name="message"
         rows={5}
-        placeholder="What do you need built, fixed, or automated?"
+        placeholder="What do you need built, fixed, optimized, or automated?"
         required
         value={formData.message}
         onChange={(event) =>
@@ -251,7 +283,7 @@ export default function LeadForm() {
       </div>
 
       <button type="submit" className="cta-primary" disabled={state === "sending"}>
-        {state === "sending" ? "Sending..." : "Get My Project Estimate"}
+        {state === "sending" ? "Sending..." : "Get My Technology Plan"}
       </button>
 
       <p className="response-note">Most replies go out within one business day.</p>
@@ -261,7 +293,9 @@ export default function LeadForm() {
       ) : null}
 
       {state === "error" ? (
-        <p className="lead-status error">Something went wrong. Please try again.</p>
+        <p className="lead-status error">
+          Something went wrong. Please verify your details and try again.
+        </p>
       ) : null}
     </form>
   );

@@ -12,7 +12,9 @@ export const metadata: Metadata = {
 export default function ThankYouPage() {
   const bookingUrl =
     process.env.NEXT_PUBLIC_BOOKING_URL ??
-    "mailto:zerocool.development.project@gmail.com?subject=Strategy%20Call%20-%20ZeroCool%20Development";
+    "mailto:zerocool.development.project@gmail.com?subject=Project%20Consultation%20-%20ZeroCool%20Development";
+  const contactEmail =
+    process.env.CONTACT_EMAIL ?? "zerocool.development.project@gmail.com";
 
   return (
     <div className="site-shell">
@@ -23,15 +25,15 @@ export default function ThankYouPage() {
             Thank you. Your message has been sent.
           </h1>
           <p className="section-copy mt-4 max-w-2xl">
-            Corey will review your request and follow up with practical next steps.
-            If your project is urgent, call 401-786-2811.
+            ZeroCool Development will review your request and follow up with practical next
+            steps. For urgent follow-up, send a direct email.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <a href={bookingUrl} className="cta-primary inline-flex">
               Book a Strategy Call
             </a>
-            <a href="tel:+14017862811" className="cta-secondary inline-flex">
-              Call Now
+            <a href={`mailto:${contactEmail}`} className="cta-secondary inline-flex">
+              Email Directly
             </a>
             <Link href="/" className="cta-secondary inline-flex">
               Back to Homepage

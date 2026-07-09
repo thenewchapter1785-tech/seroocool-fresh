@@ -6,44 +6,28 @@ import TrackedLink from "./tracked-link";
 export default function Home() {
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-development.com";
-  const facebookPageUrl =
-    process.env.NEXT_PUBLIC_FACEBOOK_PAGE_URL ?? "https://facebook.com/";
   const bookingUrl =
     process.env.NEXT_PUBLIC_BOOKING_URL ??
-    "mailto:zerocool.development.project@gmail.com?subject=Strategy%20Call%20-%20ZeroCool%20Development";
-  const phoneHref = "tel:+14017862811";
+    "mailto:zerocool.development.project@gmail.com?subject=Project%20Consultation%20-%20ZeroCool%20Development";
+  const contactEmail =
+    process.env.CONTACT_EMAIL ?? "zerocool.development.project@gmail.com";
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Person",
-        name: "Corey Derosiers",
-        alternateName: "ZeroCool",
-        url: siteUrl,
-        email: "mailto:zerocool.development.project@gmail.com",
-        telephone: "+1-401-786-2811",
-        sameAs: [facebookPageUrl],
-      },
-      {
         "@type": "ProfessionalService",
         name: "ZeroCool Development",
+        description:
+          "Web development, app development, automation, AI integration, and technology consulting for growing businesses.",
         url: siteUrl,
         areaServed: "US",
         serviceType: [
-          "Custom Website Development",
-          "Mobile Application Development",
-          "Custom Business Software",
-          "Software Automation",
-          "UI/UX Design",
-          "Computer Repair",
-          "Custom PC Builds",
-          "Hardware Diagnostics and Repair",
-          "Computer Upgrades",
-          "Virus and Malware Removal",
-          "Performance Optimization",
-          "Phone Troubleshooting",
-          "Network and Wi-Fi Troubleshooting",
-          "General Technical Support",
+          "Web Development",
+          "Application Development",
+          "Business Process Automation",
+          "AI Integration",
+          "Technology Consulting",
         ],
       },
       {
@@ -51,16 +35,14 @@ export default function Home() {
         name: "ZeroCool Development",
         url: siteUrl,
         image: `${siteUrl}/logo.png`,
-        email: "zerocool.development.project@gmail.com",
-        telephone: "+1-401-786-2811",
+        email: contactEmail,
         areaServed: "US",
         knowsAbout: [
           "Web development",
           "Mobile app development",
-          "Computer repair",
-          "Custom PC builds",
-          "Business software",
-          "Technical support",
+          "Business automation",
+          "AI integration",
+          "Technical consulting",
         ],
       },
       {
@@ -76,10 +58,10 @@ export default function Home() {
           },
           {
             "@type": "Question",
-            name: "Can you help with both software and hardware issues?",
+            name: "What services does ZeroCool Development provide?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Yes. Services include custom websites, mobile apps, automation, software development, repairs, upgrades, diagnostics, and ongoing technical support.",
+              text: "Services include web development, app development, business automation, AI integration, and technical consulting for operations and growth.",
             },
           },
           {
@@ -96,91 +78,84 @@ export default function Home() {
   };
 
   const capabilities = [
-    "Custom Website Development",
-    "Mobile Application Development (Android and iOS)",
-    "Custom Business Software",
-    "Software Automation",
-    "UI/UX Design",
-    "Computer Repair",
-    "Custom PC Builds",
-    "Hardware Diagnostics and Repair",
-    "Computer Upgrades",
-    "Virus and Malware Removal",
-    "Performance Optimization",
-    "Phone Troubleshooting",
-    "Network and Wi-Fi Troubleshooting",
-    "General Technical Support",
+    "Conversion-focused web development",
+    "Custom app development",
+    "Automation architecture and implementation",
+    "AI integration for customer and internal workflows",
+    "API integrations across business systems",
+    "Technical discovery and consulting",
   ];
 
   const techStack = [
     "TypeScript",
     "React",
     "Next.js",
+    "Python",
     "Node.js",
-    "Tailwind CSS",
-    "Android",
-    "Firebase",
     "PostgreSQL",
-    "REST APIs",
-    "AI Integrations",
+    "OpenAI API",
+    "HubSpot CRM",
+    "Cloudflare",
+    "DigitalOcean",
+    "Automation APIs",
   ];
 
   const trustStats = [
-    { label: "Response Window", value: "1 Business Day" },
-    { label: "Service Model", value: "One-on-One Support" },
-    { label: "Pricing", value: "Honest + Affordable" },
+    { label: "Response Window", value: "< 1 Business Day" },
+    { label: "Delivery Model", value: "Consult + Build" },
+    { label: "Focus", value: "Growth Through Tech" },
   ];
 
   const deliveryStandards = [
     {
-      title: "Real-world experience",
+      title: "Architecture with outcomes",
       copy:
-        "I have been building computers since I was 12, and that hands-on experience shapes every recommendation and build decision.",
+        "Every engagement starts with business goals, then maps to measurable technical execution.",
     },
     {
-      title: "Professional communication",
+      title: "Senior-level communication",
       copy:
-        "You get clear updates, practical options, and transparent scope so projects move forward without confusion.",
+        "Clear status updates, scoped milestones, and practical trade-off guidance keep projects on track.",
     },
     {
-      title: "Craftsmanship with speed",
+      title: "Secure by default",
       copy:
-        "High-quality execution and fast turnaround are priorities, whether you need software delivery or technical repair.",
+        "Security, performance, and maintainability are treated as baseline requirements, not add-ons.",
     },
   ];
 
   const processSteps = [
     {
       step: "01",
-      title: "Share the issue or goal",
-      copy: "Tell me what you need built, fixed, upgraded, or automated in plain language.",
+      title: "Discovery and scope",
+      copy: "We clarify goals, constraints, and the highest-impact technical opportunities.",
     },
     {
       step: "02",
-      title: "Get a clear plan",
-      copy: "You get practical recommendations, honest pricing, and a focused path to the right outcome.",
+      title: "Build and integrate",
+      copy: "Implementation ships in practical stages, with integrations and quality checks in each phase.",
     },
     {
       step: "03",
-      title: "Execute and deliver",
-      copy: "I handle implementation with care, quality control, and communication from kickoff through completion.",
+      title: "Launch and optimize",
+      copy: "After release, we tune performance, automation flow, and lead conversion signals.",
     },
   ];
 
   const servicePaths = [
     {
       href: "/services/business-websites",
-      title: "Business Websites",
+      title: "Web Development",
       copy: "Modern, conversion-focused websites designed to build trust and generate qualified leads.",
     },
     {
       href: "/services/custom-web-apps",
-      title: "Custom Web Apps",
+      title: "App Development",
       copy: "Custom software, portals, and tools built around your real operations and growth goals.",
     },
     {
       href: "/services/automation-integrations",
-      title: "Automation + APIs",
+      title: "Automation + AI Integration",
       copy: "Automate repetitive tasks and connect systems so your team can focus on high-value work.",
     },
   ];
@@ -207,12 +182,12 @@ export default function Home() {
     {
       question: "Do you work with both individuals and businesses?",
       answer:
-        "Yes. I provide one-on-one technical support for individuals and professional technology services for businesses.",
+        "Yes. ZeroCool Development supports both solo operators and growing teams with right-sized technology solutions.",
     },
     {
-      question: "Are your services more affordable than big retail tech support?",
+      question: "Do you offer AI integration for existing software?",
       answer:
-        "In most cases, yes. You get personalized service, honest pricing, and high-quality work without paying big-box overhead.",
+        "Yes. We can connect OpenAI-powered workflows to your website, CRM, internal tools, and customer support systems.",
     },
     {
       question: "How quickly can we start?",
@@ -228,9 +203,10 @@ export default function Home() {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+
         <header className="glass-panel animate-rise relative overflow-hidden rounded-3xl p-7 md:p-10">
           <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-[radial-gradient(circle_at_center,rgba(71,133,255,0.28)_0%,rgba(71,133,255,0)_70%)]" />
-          <div className="mb-5 flex items-center gap-3">
+          <div className="mb-5 flex items-center justify-between gap-3">
             <Image
               src="/logo.png"
               alt="ZeroCool Development logo"
@@ -239,19 +215,30 @@ export default function Home() {
               className="brand-logo"
               priority
             />
-            <p className="label-chip inline-flex">ZeroCool Development</p>
+            <div className="flex gap-2">
+              <Link href="/services" className="label-chip inline-flex">
+                Services
+              </Link>
+              <Link href="/insights" className="label-chip inline-flex">
+                Insights
+              </Link>
+            </div>
           </div>
+
           <div className="grid gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-end">
             <div>
               <h1 className="text-4xl leading-tight font-semibold tracking-tight md:text-6xl">
-                Technology is my passion.
-                <span className="text-blue-300"> I have been building computers since I was 12.</span>
+                ZeroCool Development builds secure digital systems for growth.
+                <span className="text-blue-300">
+                  {" "}
+                  Websites, apps, automation, and AI integration.
+                </span>
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-7 text-slate-200/85 md:text-lg">
-                ZeroCool Development helps individuals and businesses with
-                professional, affordable technology solutions including websites,
-                mobile apps, business software, automation, repair, upgrades,
-                and ongoing technical support.
+                Partner with a technical team that can design, build, and optimize digital
+                products tied to real business outcomes. From lead generation websites to custom
+                applications and AI-enabled automation, every project is scoped for measurable
+                impact.
               </p>
               <div className="hero-actions mt-6 flex flex-wrap gap-3">
                 <TrackedLink
@@ -259,31 +246,32 @@ export default function Home() {
                   className="cta-primary"
                   eventName="hero_project_estimate_click"
                 >
-                  Get a Project Estimate
+                  Start a Project
                 </TrackedLink>
                 <TrackedLink
-                  href={phoneHref}
+                  href={bookingUrl}
                   className="cta-secondary"
-                  eventName="hero_call_click"
+                  eventName="hero_consult_click"
                 >
-                  Call 401-786-2811
+                  Schedule Consultation
                 </TrackedLink>
               </div>
               <div className="hero-proof-grid mt-6 grid gap-2 sm:grid-cols-3">
-                <div className="proof-chip">Personalized one-on-one service</div>
-                <div className="proof-chip">Fast turnaround times</div>
-                <div className="proof-chip">Professional craftsmanship</div>
+                <div className="proof-chip">Backend security built-in</div>
+                <div className="proof-chip">SEO and conversion foundations</div>
+                <div className="proof-chip">Automation-ready architecture</div>
               </div>
             </div>
+
             <div className="rounded-2xl border border-blue-200/20 bg-slate-950/60 p-5">
               <p className="text-xs font-medium tracking-[0.25em] text-blue-200/80 uppercase">
-                Best Fit
+                Ideal Engagements
               </p>
               <ul className="mt-3 space-y-2 text-sm text-slate-100/90">
-                <li>Need: Personalized support instead of generic retail service</li>
-                <li>Need: Honest pricing with practical recommendations</li>
-                <li>Need: Reliable help across software, hardware, and networking</li>
-                <li>Need: Technology that helps your business grow</li>
+                <li>Businesses modernizing lead generation and conversion paths</li>
+                <li>Teams replacing manual operations with automation</li>
+                <li>Organizations integrating AI into existing workflows</li>
+                <li>Founders building MVPs and production web apps</li>
               </ul>
             </div>
           </div>
@@ -293,9 +281,8 @@ export default function Home() {
           <article className="glass-panel rounded-3xl p-6 md:p-8">
             <h2 className="section-title">Services</h2>
             <p className="section-copy mt-3">
-              Full-service support for digital products, systems, and devices.
-              Every service is delivered with practical communication and
-              results-focused execution.
+              Full-stack delivery for modern business software. Every engagement combines
+              strategy, implementation, and operational follow-through.
             </p>
             <ul className="mt-5 grid gap-2 text-sm text-slate-100/90 sm:grid-cols-2">
               {capabilities.map((skill) => (
@@ -307,12 +294,11 @@ export default function Home() {
           </article>
 
           <article className="glass-panel rounded-3xl p-6 md:p-8">
-            <h2 className="section-title">About Me</h2>
+            <h2 className="section-title">Approach</h2>
             <p className="section-copy mt-3">
-              I started building computers at 12 and turned that passion into a
-              professional service business. Today, I help people solve real
-              technology problems with clean execution, honest guidance, and
-              high-quality work.
+              ZeroCool Development combines product thinking, engineering execution, and
+              automation design so your technology decisions stay aligned with revenue,
+              efficiency, and customer experience.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               {techStack.map((item) => (
@@ -321,226 +307,131 @@ export default function Home() {
                 </span>
               ))}
             </div>
-          </article>
-        </section>
-
-        <section className="section-stack animate-rise-delayed grid gap-4">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="section-heading">Choose Your Service Path</h2>
-            <Link href="/services" className="cta-secondary inline-flex">
-              View All Services
-            </Link>
-          </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {servicePaths.map((service) => (
-              <Link key={service.href} href={service.href} className="project-card">
-                <p className="project-tag">Service</p>
-                <h3 className="project-title">{service.title}</h3>
-                <p className="project-copy">{service.copy}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className="section-stack animate-rise-delayed-2 grid gap-4 md:grid-cols-2">
-          <article className="glass-panel rounded-3xl p-6 md:p-8">
-            <h2 className="section-title">For Individuals</h2>
-            <p className="section-copy mt-3">
-              You do not need technical jargon to get strong results. From
-              repairs and upgrades to troubleshooting and optimization, you get
-              straightforward one-on-one support.
-            </p>
-            <ul className="mt-4 space-y-2 text-sm text-slate-100/90">
-              <li className="audience-point">1. Clear diagnosis and honest recommendations.</li>
-              <li className="audience-point">2. Affordable alternatives to big retail support.</li>
-              <li className="audience-point">3. Fast turnaround and reliable communication.</li>
-            </ul>
-          </article>
-
-          <article className="glass-panel rounded-3xl p-6 md:p-8">
-            <h2 className="section-title">For Businesses</h2>
-            <p className="section-copy mt-3">
-              Grow your business with better websites, apps, automation, and
-              process improvements. I build systems that look professional,
-              perform well, and support long-term operations.
-            </p>
-            <ul className="mt-4 space-y-2 text-sm text-slate-100/90">
-              <li className="audience-point">Lead-focused websites and UX design</li>
-              <li className="audience-point">Custom software and mobile app development</li>
-              <li className="audience-point">Automation and technical support that scales</li>
-            </ul>
-          </article>
-        </section>
-
-        <section className="section-stack animate-rise-delayed-2 grid gap-4">
-          <h2 className="section-heading">Popular Engagements</h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            <article className="project-card">
-              <p className="project-tag">Website + Growth</p>
-              <h3 className="project-title">Business Website Buildouts</h3>
-              <p className="project-copy">
-                Professional websites with strong messaging, fast performance,
-                and clear calls to action designed to increase qualified leads.
-              </p>
-            </article>
-
-            <article className="project-card">
-              <p className="project-tag">Automation + Support</p>
-              <h3 className="project-title">Operations and Device Optimization</h3>
-              <p className="project-copy">
-                From workflow automation to diagnostics and performance tuning,
-                this service reduces friction and keeps teams and systems running smoothly.
-              </p>
-            </article>
-          </div>
-        </section>
-
-        <section className="section-stack animate-rise-delayed-2 grid gap-4">
-          <h2 className="section-heading">Why Choose ZeroCool Development</h2>
-          <div className="grid gap-4 md:grid-cols-3">
-            {trustStats.map((stat) => (
-              <article key={stat.label} className="stat-card">
-                <p className="stat-value">{stat.value}</p>
-                <p className="stat-label">{stat.label}</p>
-              </article>
-            ))}
-          </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {deliveryStandards.map((item) => (
-              <article key={item.title} className="testimonial-card">
-                <p className="testimonial-author">{item.title}</p>
-                <p className="testimonial-quote mt-3">{item.copy}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="section-stack animate-rise-delayed-3 grid gap-4">
-          <h2 className="section-heading">What Happens Next</h2>
-          <div className="grid gap-4 md:grid-cols-3">
-            {processSteps.map((item) => (
-              <article key={item.step} className="faq-card">
-                <p className="project-tag">Step {item.step}</p>
-                <h3 className="faq-question mt-2">{item.title}</h3>
-                <p className="faq-answer">{item.copy}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="section-stack animate-rise-delayed-3 grid gap-4">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="section-heading">Free Guides</h2>
-            <Link href="/insights" className="cta-secondary inline-flex">
-              View All Guides
-            </Link>
-          </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {insightLinks.map((insight) => (
-              <Link key={insight.href} href={insight.href} className="faq-card">
-                <p className="project-tag">Guide</p>
-                <h3 className="faq-question mt-2">{insight.title}</h3>
-                <p className="faq-answer">{insight.copy}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className="section-stack animate-rise-delayed-3 grid gap-4">
-          <h2 className="section-heading">Frequently Asked Questions</h2>
-          <div className="grid gap-3 md:grid-cols-3">
-            {faqItems.map((item) => (
-              <article key={item.question} className="faq-card">
-                <h3 className="faq-question">{item.question}</h3>
-                <p className="faq-answer">{item.answer}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section
-          id="contact"
-          className="glass-panel animate-rise-delayed-3 rounded-3xl p-6 md:p-8"
-        >
-          <h2 className="section-title">Contact ZeroCool Development</h2>
-          <p className="section-copy section-intro mt-3 max-w-4xl">
-            Tell me what you need built, fixed, optimized, or automated.
-            You will get a practical response with next steps that fit your
-            goals, budget, and timeline.
-          </p>
-          <div className="mt-6 grid gap-6 md:grid-cols-[1.05fr_0.95fr]">
-            <LeadForm />
-            <div className="direct-contact-card rounded-2xl border border-blue-200/20 bg-slate-950/55 p-5">
-              <h3 className="text-lg font-semibold text-blue-100">Direct Contact</h3>
-              <p className="section-copy mt-3 text-sm">
-                Reach out directly to start a one-on-one conversation about your needs.
-              </p>
-              <dl className="direct-contact-list">
-                <div className="contact-row">
-                  <dt className="contact-key">Name</dt>
-                  <dd className="contact-value">Corey Derosiers</dd>
+            <div className="mt-5 grid gap-2 sm:grid-cols-3">
+              {trustStats.map((stat) => (
+                <div key={stat.label} className="stat-card">
+                  <p className="stat-value">{stat.value}</p>
+                  <p className="stat-label">{stat.label}</p>
                 </div>
-                <div className="contact-row">
-                  <dt className="contact-key">Phone</dt>
-                  <dd className="contact-value">
-                    <a href="tel:+14017862811" className="contact-link">
-                      401-786-2811
-                    </a>
-                  </dd>
-                </div>
-                <div className="contact-row">
-                  <dt className="contact-key">Email</dt>
-                  <dd className="contact-value">
-                    <a href="mailto:zerocool.development.project@gmail.com" className="contact-link">
-                      zerocool.development.project@gmail.com
-                    </a>
-                  </dd>
-                </div>
-              </dl>
-              <div className="mt-5 flex flex-wrap gap-3">
-                <a href={bookingUrl} className="cta-primary inline-flex">
-                  Book a Strategy Call
-                </a>
-                <a href={phoneHref} className="cta-secondary inline-flex">
-                  Call Now
-                </a>
-              </div>
+              ))}
             </div>
+          </article>
+        </section>
+
+        <section className="section-stack animate-rise-delayed-2 grid gap-4 md:grid-cols-3">
+          {servicePaths.map((service) => (
+            <Link key={service.href} href={service.href} className="project-card">
+              <p className="project-tag">Service Path</p>
+              <h2 className="project-title">{service.title}</h2>
+              <p className="project-copy">{service.copy}</p>
+            </Link>
+          ))}
+        </section>
+
+        <section className="section-stack animate-rise-delayed-2 grid gap-4 md:grid-cols-3">
+          {deliveryStandards.map((item) => (
+            <article key={item.title} className="glass-panel rounded-3xl p-6 md:p-8">
+              <h2 className="section-heading">{item.title}</h2>
+              <p className="section-copy mt-3">{item.copy}</p>
+            </article>
+          ))}
+        </section>
+
+        <section className="section-stack animate-rise-delayed-2 grid gap-4 md:grid-cols-[0.72fr_1.28fr]">
+          <article className="glass-panel rounded-3xl p-6 md:p-8">
+            <h2 className="section-title">Delivery Process</h2>
+            <div className="mt-5 grid gap-3">
+              {processSteps.map((item) => (
+                <div key={item.step} className="faq-card">
+                  <p className="project-tag">Step {item.step}</p>
+                  <h3 className="section-heading mt-1">{item.title}</h3>
+                  <p className="section-copy mt-2">{item.copy}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="glass-panel rounded-3xl p-6 md:p-8" id="contact">
+            <h2 className="section-title">Contact ZeroCool Development</h2>
+            <p className="section-copy mt-3 section-intro">
+              Use this intake form for web development, app development, automation, AI
+              integration, or consulting requests. Most responses are sent within one
+              business day.
+            </p>
+            <div className="mt-5 grid gap-6 md:grid-cols-[1.05fr_0.95fr] md:items-start">
+              <LeadForm />
+              <aside className="direct-contact-card">
+                <h3 className="section-heading">Direct Contact</h3>
+                <div className="direct-contact-list">
+                  <div className="contact-row">
+                    <p className="contact-key">Email</p>
+                    <p className="contact-value">
+                      <a href={`mailto:${contactEmail}`} className="contact-link">
+                        {contactEmail}
+                      </a>
+                    </p>
+                  </div>
+                  <div className="contact-row">
+                    <p className="contact-key">Consult</p>
+                    <p className="contact-value">
+                      <a href={bookingUrl} className="contact-link">
+                        Request Consultation
+                      </a>
+                    </p>
+                  </div>
+                  <div className="contact-row">
+                    <p className="contact-key">Focus</p>
+                    <p className="contact-value">Web • Apps • Automation • AI</p>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </article>
+        </section>
+
+        <section className="section-stack animate-rise-delayed-3 glass-panel rounded-3xl p-6 md:p-8">
+          <h2 className="section-title">Insights</h2>
+          <p className="section-copy mt-3 section-intro">
+            Explore conversion, technology planning, and automation guides for growth-focused
+            teams.
+          </p>
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            {insightLinks.map((insight) => (
+              <Link key={insight.href} href={insight.href} className="project-card">
+                <p className="project-tag">Guide</p>
+                <h3 className="project-title">{insight.title}</h3>
+                <p className="project-copy">{insight.copy}</p>
+              </Link>
+            ))}
           </div>
         </section>
 
-        <footer className="pb-3 text-center text-xs tracking-[0.18em] text-slate-300/70 uppercase">
-          <div className="mb-3 flex items-center justify-center">
-            <Image
-              src="/logo.png"
-              alt="ZeroCool Development logo"
-              width={120}
-              height={80}
-              className="brand-logo"
-            />
-          </div>
-          ZeroCool Development | Professional, affordable technology solutions
-        </footer>
-
-        <div className="sticky-mobile-cta">
-          <TrackedLink
-            href="#contact"
-            className="cta-primary"
-            eventName="start_project_click"
-          >
-            Start Your Project
-          </TrackedLink>
-          <TrackedLink
-            href={bookingUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="cta-secondary"
-            eventName="mobile_book_call_click"
-          >
-            Book a Call
-          </TrackedLink>
-        </div>
+        <section className="section-stack animate-rise-delayed-3 grid gap-4 md:grid-cols-3">
+          {faqItems.map((item) => (
+            <article key={item.question} className="faq-card">
+              <h3 className="faq-question">{item.question}</h3>
+              <p className="faq-answer">{item.answer}</p>
+            </article>
+          ))}
+        </section>
       </main>
+
+      <div className="sticky-mobile-cta">
+        <TrackedLink
+          href="#contact"
+          className="cta-primary"
+          eventName="mobile_estimate_click"
+        >
+          Start Project
+        </TrackedLink>
+        <TrackedLink
+          href={bookingUrl}
+          className="cta-secondary"
+          eventName="mobile_consult_click"
+        >
+          Consult
+        </TrackedLink>
+      </div>
     </div>
   );
 }

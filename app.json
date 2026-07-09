@@ -1,5 +1,6 @@
 {
   "name": "seroocool",
+  "region": "nyc",
   "domains": [
     {
       "domain": "zerocool-development.com",
@@ -10,6 +11,20 @@
       "type": "ALIAS"
     }
   ],
+  "ingress": {
+    "rules": [
+      {
+        "component": {
+          "name": "web"
+        },
+        "match": {
+          "path": {
+            "prefix": "/"
+          }
+        }
+      }
+    ]
+  },
   "services": [
     {
       "name": "web",
@@ -19,39 +34,51 @@
       },
       "run_command": "npm run start",
       "source_dir": ".",
+      "http_port": 3000,
+      "instance_count": 1,
+      "instance_size_slug": "basic-xs",
       "envs": [
         {
           "key": "NODE_ENV",
+          "scope": "RUN_AND_BUILD_TIME",
           "value": "production"
         },
         {
           "key": "NEXT_PUBLIC_SITE_URL",
+          "scope": "RUN_AND_BUILD_TIME",
           "value": "https://zerocool-development.com"
         },
         {
           "key": "NEXT_PUBLIC_FACEBOOK_PAGE_URL",
+          "scope": "RUN_AND_BUILD_TIME",
           "value": "https://www.facebook.com/profile.php?id=61591762771267"
         },
         {
           "key": "GOOGLE_SITE_VERIFICATION",
+          "scope": "RUN_AND_BUILD_TIME",
           "value": "cRX_4UMB9i2Ziz6QgHMxDWNoIpPufnDzxWjjSFrwMXQ"
         },
         {
           "key": "NEXT_PUBLIC_HUBSPOT_PORTAL_ID",
+          "scope": "RUN_AND_BUILD_TIME",
           "value": "246703501"
         },
         {
-          "key": "LEAD_TO_EMAIL",
-          "value": "thenewchapter1785@gmail.com"
+          "key": "CONTACT_EMAIL",
+          "scope": "RUN_AND_BUILD_TIME",
+          "value": "zerocool.development.project@gmail.com"
         },
         {
           "key": "LEAD_FROM_EMAIL",
+          "scope": "RUN_AND_BUILD_TIME",
           "value": "onboarding@resend.dev"
+        },
+        {
+          "key": "OPENAI_API_KEY",
+          "scope": "RUN_AND_BUILD_TIME",
+          "value": ""
         }
-      ],
-      "http_port": 3000,
-      "instance_count": 1,
-      "instance_size_slug": "basic-xs"
+      ]
     }
   ],
   "static_sites": [],

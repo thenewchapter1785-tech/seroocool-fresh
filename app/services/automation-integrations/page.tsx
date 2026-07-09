@@ -4,13 +4,14 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Automation and API Integrations",
   description:
-    "Automation and API integration services by $erocool-Development. Connect tools, remove repetitive work, and streamline operations.",
+    "Automation, API integration, and AI workflow services by ZeroCool Development. Connect tools, remove repetitive work, and streamline operations.",
 };
 
 const automationWins = [
   "Sync lead data across CRM, email, and internal tools",
   "Automate repetitive admin actions and status updates",
   "Integrate third-party APIs into one clean workflow",
+  "Add AI-assisted steps for triage, summaries, and customer responses",
   "Create reliable alerts and handoff triggers",
 ];
 
@@ -20,7 +21,7 @@ export default function AutomationIntegrationsPage() {
       <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-6 py-8 md:gap-8 md:px-10 md:py-12">
         <header className="glass-panel rounded-3xl p-7 md:p-10">
           <p className="label-chip inline-flex">Automation + Integrations</p>
-          <h1 className="mt-5 text-4xl leading-tight font-semibold tracking-tight text-cyan-100 md:text-5xl">
+          <h1 className="mt-5 text-4xl leading-tight font-semibold tracking-tight text-blue-100 md:text-5xl">
             Remove bottlenecks with smarter system connections.
           </h1>
           <p className="section-copy mt-4 max-w-3xl">

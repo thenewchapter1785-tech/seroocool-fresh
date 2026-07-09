@@ -13,7 +13,7 @@ This file combines your deployment checklist and feature roadmap so your site ca
   - [ ] NEXT_PUBLIC_META_PIXEL_ID
   - [ ] FACEBOOK_DOMAIN_VERIFICATION
   - [x] RESEND_API_KEY
-  - [x] LEAD_TO_EMAIL (use thenewchapter1785@gmail.com for now)
+  - [x] CONTACT_EMAIL (use zerocool.development.project@gmail.com)
   - [x] LEAD_FROM_EMAIL (later use your custom business email)
   - [x] HUBSPOT_ACCESS_TOKEN
   - [x] NEXT_PUBLIC_HUBSPOT_PORTAL_ID
@@ -120,6 +120,10 @@ This section is reserved for new tasks identified during build sessions.
 - [x] In DNS provider, point `www` CNAME to `seroocool-rjml7.ondigitalocean.app`.
 - [x] In DNS provider, point apex/root domain via CNAME flattening or ANAME/ALIAS to `seroocool-rjml7.ondigitalocean.app`.
 - [x] Installed VS Code extension for Cloudflare management workflow: `alessandrobenassi.cloudflare-devtools`.
+- [ ] Restart VS Code after running `openai-test` bootstrap so installed AI extensions can read `OPENAI_API_KEY` from Windows user environment.
+- [ ] Set `CONTACT_EMAIL` and `OPENAI_API_KEY` in DigitalOcean App Platform env vars after next deployment.
+- [ ] Verify `/api/lead` CORS and rate limiting behavior from production domain and from disallowed origins.
+- [ ] Verify `/api/ai-assistant` responds correctly with a short prompt and returns 429 after repeated rapid requests.
 
 ## 10) Cloudflare Account + API Token Setup (Step-by-Step)
 
@@ -214,7 +218,7 @@ Required env values to include:
 - [ ] `NEXT_PUBLIC_META_PIXEL_ID`
 - [ ] `FACEBOOK_DOMAIN_VERIFICATION`
 - [x] `RESEND_API_KEY`
-- [x] `LEAD_TO_EMAIL`
+- [x] `CONTACT_EMAIL`
 - [x] `LEAD_FROM_EMAIL`
 - [x] `HUBSPOT_ACCESS_TOKEN`
 - [x] `NEXT_PUBLIC_HUBSPOT_PORTAL_ID`

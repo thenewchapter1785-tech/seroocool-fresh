@@ -20,12 +20,15 @@ services:
   - key: NEXT_PUBLIC_SITE_URL
     scope: RUN_AND_BUILD_TIME
     value: https://zerocool-development.com
-  - key: LEAD_TO_EMAIL
+  - key: CONTACT_EMAIL
     scope: RUN_AND_BUILD_TIME
-    value: thenewchapter1785@gmail.com
+    value: zerocool.development.project@gmail.com
   - key: LEAD_FROM_EMAIL
     scope: RUN_AND_BUILD_TIME
     value: onboarding@resend.dev
+  - key: OPENAI_API_KEY
+    scope: RUN_AND_BUILD_TIME
+    value: ""
   git:
     branch: main
     repo_clone_url: https://github.com/thenewchapter1785-tech/seroocool-fresh.git

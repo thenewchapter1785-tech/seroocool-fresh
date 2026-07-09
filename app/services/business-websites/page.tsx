@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Business Website Development",
   description:
-    "Business website development by $erocool-Development. Fast-loading, search-ready websites designed to convert visitors into leads.",
+    "Business website development by ZeroCool Development. Fast-loading, search-ready websites designed to convert visitors into leads.",
 };
 
 const outcomes = [
@@ -20,7 +20,7 @@ export default function BusinessWebsitesPage() {
       <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-6 py-8 md:gap-8 md:px-10 md:py-12">
         <header className="glass-panel rounded-3xl p-7 md:p-10">
           <p className="label-chip inline-flex">Business Websites</p>
-          <h1 className="mt-5 text-4xl leading-tight font-semibold tracking-tight text-cyan-100 md:text-5xl">
+          <h1 className="mt-5 text-4xl leading-tight font-semibold tracking-tight text-blue-100 md:text-5xl">
             Turn your website into a lead-generating asset.
           </h1>
           <p className="section-copy mt-4 max-w-3xl">

@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Custom Web App Development",
   description:
-    "Custom web app development by $erocool-Development. Build dashboards, portals, and product workflows around your business model.",
+    "Custom web app development by ZeroCool Development. Build dashboards, portals, and product workflows around your business model.",
 };
 
 const useCases = [
@@ -20,7 +20,7 @@ export default function CustomWebAppsPage() {
       <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-6 py-8 md:gap-8 md:px-10 md:py-12">
         <header className="glass-panel rounded-3xl p-7 md:p-10">
           <p className="label-chip inline-flex">Custom Web Apps</p>
-          <h1 className="mt-5 text-4xl leading-tight font-semibold tracking-tight text-cyan-100 md:text-5xl">
+          <h1 className="mt-5 text-4xl leading-tight font-semibold tracking-tight text-blue-100 md:text-5xl">
             Build software around how your team actually works.
           </h1>
           <p className="section-copy mt-4 max-w-3xl">

@@ -18,18 +18,28 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-developmen
 const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION ?? "";
 const facebookDomainVerification =
   process.env.FACEBOOK_DOMAIN_VERIFICATION ?? "";
-const siteName = "$erocool-Development";
-const defaultTitle = "$erocool-Development | Full-Stack Developer";
+const siteName = "ZeroCool Development";
+const defaultTitle = "ZeroCool Development | Web, Apps, Automation, AI Integration";
 const defaultDescription =
-  "Business websites, web apps, and automation systems by $erocool-Development. Full-stack delivery built to launch fast, convert visitors, and support long-term growth.";
+  "ZeroCool Development delivers web development, app development, automation, AI integration, and consulting for businesses that need secure, modern digital solutions.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: defaultTitle,
-    template: "%s | $erocool-Development",
+    template: "%s | ZeroCool Development",
   },
   description: defaultDescription,
+  icons: {
+    icon: [
+      {
+        url: "/logo.png",
+        type: "image/png",
+      },
+    ],
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
   manifest: "/manifest.webmanifest",
   alternates: {
     canonical: "/",
@@ -46,19 +56,21 @@ export const metadata: Metadata = {
     },
   },
   keywords: [
-    "$erocool-Development",
-    "$erocool",
-    "full-stack developer",
-    "software developer portfolio",
-    "business website development",
-    "web app development",
-    "API integrations",
-    "website developer",
-    "automation developer",
-    "small business website developer",
-    "landing page developer",
-    "web design",
-    "automation",
+    "ZeroCool Development",
+    "web development",
+    "app development",
+    "business automation",
+    "ai integration",
+    "technology consulting",
+    "business software solutions",
+    "custom software development",
+    "digital transformation",
+    "small business web development",
+    "next.js development",
+    "crm integrations",
+    "mobile app development",
+    "website automation",
+    "ai assistant integration",
   ],
   openGraph: {
     title: defaultTitle,
@@ -71,7 +83,7 @@ export const metadata: Metadata = {
         url: "/og-image.svg",
         width: 1200,
         height: 630,
-        alt: "$erocool-Development full-stack developer profile card",
+        alt: "ZeroCool Development technology services profile card",
       },
     ],
   },

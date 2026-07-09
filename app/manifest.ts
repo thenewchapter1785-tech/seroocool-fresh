@@ -2,19 +2,19 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "$erocool-Development",
-    short_name: "$erocool-Development",
+    name: "ZeroCool Development",
+    short_name: "ZeroCool Dev",
     description:
-      "Business websites, web apps, and automation by $erocool-Development.",
+      "Web development, app development, automation, AI integration, and consulting for modern businesses.",
     start_url: "/",
     display: "standalone",
-    background_color: "#020617",
-    theme_color: "#0f172a",
+    background_color: "#0b0f14",
+    theme_color: "#2f80ff",
     icons: [
       {
-        src: "/next.svg",
-        sizes: "any",
-        type: "image/svg+xml",
+        src: "/logo.png",
+        sizes: "1536x1024",
+        type: "image/png",
       },
     ],
   };

@@ -4,24 +4,24 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Explore $erocool-Development services: business websites, custom web apps, and automation + API integrations.",
+    "Explore ZeroCool Development services for web development, app development, automation, AI integration, and technical consulting.",
 };
 
 const serviceCards = [
   {
     href: "/services/business-websites",
-    title: "Business Websites",
+    title: "Web Development",
     copy: "Conversion-focused websites for local businesses, founders, and service providers.",
   },
   {
     href: "/services/custom-web-apps",
-    title: "Custom Web Apps",
+    title: "App Development",
     copy: "Portals, dashboards, and internal tools designed around your real workflow.",
   },
   {
     href: "/services/automation-integrations",
-    title: "Automation + Integrations",
-    copy: "API connections and automations that reduce manual tasks and speed up operations.",
+    title: "Automation + AI Integrations",
+    copy: "API connections, workflow automation, and AI-assisted operations that reduce manual work.",
   },
 ];
 
@@ -30,9 +30,9 @@ export default function ServicesPage() {
     <div className="site-shell">
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-8 md:gap-8 md:px-10 md:py-12">
         <header className="glass-panel rounded-3xl p-7 md:p-10">
-          <p className="label-chip inline-flex">$erocool-Development Services</p>
-          <h1 className="mt-5 text-4xl leading-tight font-semibold tracking-tight text-cyan-100 md:text-5xl">
-            Build the right solution for your next growth step.
+          <p className="label-chip inline-flex">ZeroCool Development Services</p>
+          <h1 className="mt-5 text-4xl leading-tight font-semibold tracking-tight text-blue-100 md:text-5xl">
+            Build the right software solution for your next growth step.
           </h1>
           <p className="section-copy mt-4 max-w-3xl">
             Choose the service path that matches your current business need, then request a project estimate.

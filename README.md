@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ZeroCool Development Website
 
-## Getting Started
+Production marketing site and lead pipeline for ZeroCool Development.
 
-First, run the development server:
+## Stack
 
-```bash
+- Next.js App Router + TypeScript
+- Tailwind CSS
+- DigitalOcean App Platform
+- Cloudflare DNS/CDN/WAF
+- HubSpot contact upsert + Resend notifications
+
+## Core Features
+
+- Dark blue/white technology brand theme and conversion-focused pages
+- Lead form posting to `/api/lead`
+- Anti-spam checks (honeypot + minimum submit time)
+- Rate limiting, CORS checks, and payload validation/sanitization on API routes
+- HubSpot contact create/update by email
+- Inbox alert via Resend
+- Backend-only AI assistant endpoint at `/api/ai-assistant`
+- SEO routes: `robots.txt`, `sitemap.xml`, `manifest.webmanifest`
+- Security headers and canonical host redirects
+
+## Local Development
+
+```powershell
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Quality Checks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```powershell
+npm run lint
+npm run build
+```
 
-## Learn More
+If your shell cannot find Node/npm, use:
 
-To learn more about Next.js, take a look at the following resources:
+```powershell
+.\scripts\run-npm.ps1 lint
+.\scripts\run-npm.ps1 build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Production Configuration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Set these env vars in DigitalOcean App Platform:
 
-## Deploy on Vercel
+- `NODE_ENV=production`
+- `NEXT_PUBLIC_SITE_URL=https://zerocool-development.com`
+- `CONTACT_EMAIL=zerocool.development.project@gmail.com`
+- `LEAD_FROM_EMAIL=onboarding@resend.dev` (or your verified sender)
+- `RESEND_API_KEY`
+- `HUBSPOT_ACCESS_TOKEN`
+- `NEXT_PUBLIC_HUBSPOT_PORTAL_ID`
+- `OPENAI_API_KEY`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Local env support:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Copy `.env.example` to `.env.local` and set values for local development.
+
+Optional social/attribution variables:
+
+- `NEXT_PUBLIC_FACEBOOK_PAGE_URL`
+- `NEXT_PUBLIC_INSTAGRAM_PROFILE_URL`
+- `NEXT_PUBLIC_META_PIXEL_ID`
+- `FACEBOOK_DOMAIN_VERIFICATION`
+- `GOOGLE_SITE_VERIFICATION`
+
+## Deployment
+
+- App spec: `app.json`
+- Domain-oriented spec: `app-domain-spec.yaml`
+- Setup helper: `scripts/configure-hubspot-env.ps1`
+- Health verification: `scripts/verify-production.ps1`
+
+See full runbook in `DEPLOYMENT.md`.
+
+## Security + SEO
+
+- Security headers are configured in `next.config.ts` including CSP and HSTS.
+- Canonical domain is `https://zerocool-development.com`.
+- SEO metadata and structured data are implemented in App Router pages/layout.
+
+## Lead Pipeline Validation
+
+Run:
+
+```powershell
+.\scripts\verify-production.ps1
+```
+
+Run with synthetic lead:
+
+```powershell
+.\scripts\verify-production.ps1 -RunLiveLeadCheck
+```
+
+Confirm:
+
+- Endpoint returns success
+- Inbox notification is delivered
+- Contact exists in HubSpot

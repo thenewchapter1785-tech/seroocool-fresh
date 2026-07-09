@@ -22,7 +22,7 @@ export default function LeadsGuidePage() {
       <main className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-6 py-8 md:gap-8 md:px-10 md:py-12">
         <article className="glass-panel rounded-3xl p-7 md:p-10">
           <p className="project-tag">Lead Generation Guide</p>
-          <h1 className="mt-4 text-4xl leading-tight font-semibold tracking-tight text-cyan-100 md:text-5xl">
+          <h1 className="mt-4 text-4xl leading-tight font-semibold tracking-tight text-blue-100 md:text-5xl">
             How to Get More Leads From Your Website
           </h1>
           <p className="section-copy mt-4">

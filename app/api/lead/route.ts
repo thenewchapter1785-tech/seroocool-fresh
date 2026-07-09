@@ -1,8 +1,19 @@
 import { NextResponse } from "next/server";
+import {
+  buildCorsHeaders,
+  consumeRateLimit,
+  getAllowedOrigins,
+  getClientIp,
+  getRequestOrigin,
+  isAllowedOrigin,
+  isValidEmail,
+  sanitizeText,
+} from "@/lib/api-security";
 
 type LeadPayload = {
   name?: string;
   email?: string;
+  company?: string;
   projectType?: string;
   budgetRange?: string;
   timeline?: string;
@@ -15,6 +26,7 @@ type LeadPayload = {
 };
 
 const EXTERNAL_REQUEST_TIMEOUT_MS = 8000;
+const ROUTE_KEY = "api:lead";
 
 async function fetchWithTimeout(
   input: RequestInfo | URL,
@@ -106,6 +118,7 @@ async function upsertHubSpotContact(body: LeadPayload) {
       email: body.email,
       firstname: firstName,
       lastname: lastName,
+      company: body.company ?? "",
       lifecyclestage: "lead",
     },
   };
@@ -164,10 +177,61 @@ async function upsertHubSpotContact(body: LeadPayload) {
 }
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as LeadPayload;
+  const allowedOrigins = getAllowedOrigins();
+  const origin = getRequestOrigin(request);
+  const corsHeaders = buildCorsHeaders(origin, allowedOrigins);
+
+  if (!isAllowedOrigin(origin, allowedOrigins)) {
+    return NextResponse.json(
+      { error: "Origin not allowed" },
+      {
+        status: 403,
+        headers: corsHeaders,
+      }
+    );
+  }
+
+  const ip = getClientIp(request);
+  const rate = consumeRateLimit({
+    key: `${ROUTE_KEY}:${ip}`,
+    limit: 5,
+    windowMs: 60_000,
+  });
+
+  if (!rate.ok) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again in a minute." },
+      {
+        status: 429,
+        headers: {
+          ...corsHeaders,
+          "Retry-After": Math.ceil((rate.resetAt - Date.now()) / 1000).toString(),
+        },
+      }
+    );
+  }
+
+  let body: LeadPayload;
+
+  try {
+    body = (await request.json()) as LeadPayload;
+  } catch {
+    return NextResponse.json(
+      { error: "Invalid JSON payload" },
+      {
+        status: 400,
+        headers: corsHeaders,
+      }
+    );
+  }
 
   if (body.website && body.website.trim().length > 0) {
-    return NextResponse.json({ ok: true });
+    return NextResponse.json(
+      { ok: true },
+      {
+        headers: corsHeaders,
+      }
+    );
   }
 
   if (typeof body.submittedAt === "number") {
@@ -175,61 +239,119 @@ export async function POST(request: Request) {
     if (elapsedMs >= 0 && elapsedMs < 1200) {
       return NextResponse.json(
         { error: "Submission failed spam checks" },
-        { status: 400 }
+        {
+          status: 400,
+          headers: corsHeaders,
+        }
       );
     }
   }
 
-  if (!body?.name || !body?.email || !body?.message) {
+  const name = sanitizeText(body?.name, 100);
+  const email = sanitizeText(body?.email, 160).toLowerCase();
+  const company = sanitizeText(body?.company, 120);
+  const projectType = sanitizeText(body?.projectType, 120);
+  const budgetRange = sanitizeText(body?.budgetRange, 80);
+  const timeline = sanitizeText(body?.timeline, 80);
+  const message = sanitizeText(body?.message, 5000);
+  const source = sanitizeText(body?.source, 80);
+  const utmSource = sanitizeText(body?.utmSource, 80);
+  const utmCampaign = sanitizeText(body?.utmCampaign, 120);
+
+  if (!name || !email || !message) {
     return NextResponse.json(
       { error: "Missing required lead fields" },
-      { status: 400 }
+      {
+        status: 400,
+        headers: corsHeaders,
+      }
     );
   }
 
+  if (!isValidEmail(email)) {
+    return NextResponse.json(
+      { error: "Please provide a valid email address" },
+      {
+        status: 400,
+        headers: corsHeaders,
+      }
+    );
+  }
+
+  if (message.length < 10) {
+    return NextResponse.json(
+      { error: "Please add a few more details about your request" },
+      {
+        status: 400,
+        headers: corsHeaders,
+      }
+    );
+  }
+
+  const normalizedBody: LeadPayload = {
+    name,
+    email,
+    company,
+    projectType,
+    budgetRange,
+    timeline,
+    message,
+    source,
+    utmSource,
+    utmCampaign,
+  };
+
   const toEmail =
-    process.env.LEAD_TO_EMAIL ?? "zerocool.development.project@gmail.com";
-  const fromEmail =
-    process.env.LEAD_FROM_EMAIL ?? "onboarding@resend.dev";
+    process.env.CONTACT_EMAIL ??
+    process.env.LEAD_TO_EMAIL ??
+    "zerocool.development.project@gmail.com";
+  const fromEmail = process.env.LEAD_FROM_EMAIL ?? "onboarding@resend.dev";
   const resendApiKey = process.env.RESEND_API_KEY;
 
   console.info("New lead submitted", {
-    name: body.name,
-    email: body.email,
-    projectType: body.projectType,
-    budgetRange: body.budgetRange,
-    timeline: body.timeline,
-    source: body.source,
-    utmSource: body.utmSource,
-    utmCampaign: body.utmCampaign,
+    name,
+    email,
+    company,
+    projectType,
+    budgetRange,
+    timeline,
+    source,
+    utmSource,
+    utmCampaign,
   });
 
-  const hubspotTask = upsertHubSpotContact(body).catch((error) => {
+  const hubspotTask = upsertHubSpotContact(normalizedBody).catch((error) => {
     console.error("HubSpot upsert task failed", error);
   });
 
   if (!resendApiKey) {
-    return NextResponse.json({
-      ok: true,
-      warning:
-        "Lead captured but RESEND_API_KEY is missing, so no inbox email was sent.",
-    });
+    return NextResponse.json(
+      {
+        ok: true,
+        warning:
+          "Lead captured but RESEND_API_KEY is missing, so no inbox email was sent.",
+      },
+      {
+        headers: corsHeaders,
+      }
+    );
   }
 
   const emailText = [
     "New website lead received",
     "",
-    `Name: ${body.name}`,
-    `Email: ${body.email}`,
-    `Project Type: ${body.projectType ?? ""}`,
-    `Budget Range: ${body.budgetRange ?? ""}`,
-    `Timeline: ${body.timeline ?? ""}`,
-    `Source: ${body.source ?? ""}`,
-    `UTM Source: ${body.utmSource ?? ""}`,
-    `UTM Campaign: ${body.utmCampaign ?? ""}`,
+    `Name: ${name}`,
+    `Email: ${email}`,
+    `Company: ${company}`,
+    `Project Type: ${projectType}`,
+    `Budget Range: ${budgetRange}`,
+    `Timeline: ${timeline}`,
+    `Source: ${source}`,
+    `UTM Source: ${utmSource}`,
+    `UTM Campaign: ${utmCampaign}`,
     "",
     "Project Details:",
-    `${body.message}`,
+    message,
   ].join("\n");
 
   let sendResponse: Response;
@@ -244,8 +366,8 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         from: fromEmail,
         to: [toEmail],
-        reply_to: body.email,
-        subject: `New Lead: ${body.projectType ?? "Project Inquiry"}`,
+        reply_to: email,
+        subject: `New Lead: ${projectType || "Project Inquiry"}`,
         text: emailText,
       }),
     });
@@ -253,11 +375,16 @@ export async function POST(request: Request) {
     await hubspotTask;
     console.error("Resend request failed", error);
 
-    return NextResponse.json({
-      ok: true,
-      warning:
-        "Lead captured but email delivery timed out. Please verify RESEND_API_KEY and sender domain.",
-    });
+    return NextResponse.json(
+      {
+        ok: true,
+        warning:
+          "Lead captured but email delivery timed out. Please verify RESEND_API_KEY and sender domain.",
+      },
+      {
+        headers: corsHeaders,
+      }
+    );
   }
 
   if (!sendResponse.ok) {
@@ -265,14 +392,42 @@ export async function POST(request: Request) {
     const sendError = await sendResponse.text();
     console.error("Resend send failure", sendError);
 
-    return NextResponse.json({
-      ok: true,
-      warning:
-        "Lead captured but failed to send inbox email. Check RESEND_API_KEY and LEAD_FROM_EMAIL sender configuration.",
-    });
+    return NextResponse.json(
+      {
+        ok: true,
+        warning:
+          "Lead captured but failed to send inbox email. Check RESEND_API_KEY and LEAD_FROM_EMAIL sender configuration.",
+      },
+      {
+        headers: corsHeaders,
+      }
+    );
   }
 
   await hubspotTask;
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json(
+    { ok: true },
+    {
+      headers: corsHeaders,
+    }
+  );
+}
+
+export async function OPTIONS(request: Request) {
+  const allowedOrigins = getAllowedOrigins();
+  const origin = getRequestOrigin(request);
+  const corsHeaders = buildCorsHeaders(origin, allowedOrigins);
+
+  if (!isAllowedOrigin(origin, allowedOrigins)) {
+    return new NextResponse(null, {
+      status: 403,
+      headers: corsHeaders,
+    });
+  }
+
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
 }
