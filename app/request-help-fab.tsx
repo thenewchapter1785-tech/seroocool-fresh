@@ -30,8 +30,11 @@ export default function RequestHelpFab() {
       </Link>
 
       <div className="sticky-mobile-cta" role="region" aria-label="Quick action">
-        <Link href="/#contact" className="cta-primary">
-          Get Help
+        <Link href="/estimate" className="cta-primary">
+          Free Estimate
+        </Link>
+        <Link href="/#contact" className="cta-secondary">
+          Ask for Help
         </Link>
       </div>
     </>

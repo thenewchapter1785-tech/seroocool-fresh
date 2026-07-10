@@ -4,10 +4,11 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/services/computer-repair", label: "Computer Repair" },
   { href: "/services/remote-tech-support", label: "Tech Support" },
-  { href: "/services", label: "Business Services" },
+  { href: "/services", label: "Business Tech" },
   { href: "/plans", label: "Pricing & Plans" },
+  { href: "/book-service", label: "Book Service" },
   { href: "/about", label: "About" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/#contact", label: "Get Help" },
   { href: "/estimate", label: "Free Estimate", primary: true },
 ];
 

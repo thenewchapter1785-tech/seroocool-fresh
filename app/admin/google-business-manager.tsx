@@ -523,7 +523,8 @@ export default function GoogleBusinessManager({ adminCode }: GoogleBusinessManag
             ))}
           </ul>
           <p className="section-copy mt-4">
-            Recent posts: Placeholder list. Publish a fresh weekly update to improve local visibility.
+            Recent posts are shown when sync is connected. Publish a fresh weekly update to improve
+            local visibility.
           </p>
           <p className="section-copy mt-2">Connected accounts: {accounts.length}</p>
           <p className="section-copy mt-1">Connected locations: {locations.length}</p>

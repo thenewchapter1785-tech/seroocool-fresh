@@ -212,6 +212,14 @@ export default function Home() {
             No pressure and no confusing jargon. Share the problem and we will send clear next
             steps.
           </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link href="/estimate" className="cta-secondary inline-flex">
+              Start With a Free Estimate
+            </Link>
+            <Link href="/book-service" className="cta-secondary inline-flex">
+              Book a Service Visit
+            </Link>
+          </div>
           <TrustBadges />
           <div className="mt-4">
             <LeadForm />
