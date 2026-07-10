@@ -30,7 +30,7 @@ const appointmentOptions = [
   "remote support",
   "on-site consultation",
   "website consultation",
-  "AI consultation",
+  "automation consultation",
   "computer repair drop-off",
 ] as const;
 
@@ -44,7 +44,7 @@ export default function AiAssistantPanel() {
     {
       role: "assistant",
       content:
-        "Tell me what is happening and I will help diagnose the issue. I can also recommend the right service and booking option.",
+        "Tell me what is going wrong, and I will help you figure out the best next step.",
     },
   ]);
   const [lead, setLead] = useState<LeadState>({
@@ -137,11 +137,11 @@ export default function AiAssistantPanel() {
   return (
     <section className="glass-panel rounded-3xl p-6 md:p-8" aria-labelledby="ai-assistant-title">
       <h2 id="ai-assistant-title" className="section-title">
-        AI Diagnostic Assistant
+        Need Tech Help?
       </h2>
       <p className="section-copy mt-3">
-        Ask troubleshooting questions, get service recommendations, and prepare for scheduling in
-        one conversation.
+        Describe what&apos;s wrong. We will ask simple follow-up questions and recommend the best next
+        step.
       </p>
 
       <div className="assistant-chat mt-4" aria-live="polite">
@@ -157,12 +157,12 @@ export default function AiAssistantPanel() {
       </div>
 
       <form className="lead-form mt-4" onSubmit={handleSubmit}>
-        <label htmlFor="assistantPrompt">Your Message</label>
+        <label htmlFor="assistantPrompt">Describe What&apos;s Wrong</label>
         <textarea
           id="assistantPrompt"
           name="assistantPrompt"
           rows={4}
-          placeholder="Example: My computer is very slow and keeps freezing when I open email and browser tabs."
+          placeholder="Example: My laptop is very slow and keeps freezing when I open email."
           value={prompt}
           onChange={(event) => setPrompt(event.target.value)}
           required
@@ -209,7 +209,7 @@ export default function AiAssistantPanel() {
               onChange={(event) =>
                 setLead((current) => ({ ...current, projectType: event.target.value }))
               }
-              placeholder="Computer repair, website, AI automation, etc."
+              placeholder="Computer repair, website help, automation, etc."
             />
           </div>
           <div>
@@ -264,7 +264,7 @@ export default function AiAssistantPanel() {
               onChange={(event) =>
                 setLead((current) => ({ ...current, budgetRange: event.target.value }))
               }
-              placeholder="$500-$2k"
+              placeholder="Optional"
             />
           </div>
           <div>
@@ -275,7 +275,7 @@ export default function AiAssistantPanel() {
               onChange={(event) =>
                 setLead((current) => ({ ...current, timeline: event.target.value }))
               }
-              placeholder="ASAP, 1-2 weeks, 1-2 months"
+              placeholder="ASAP, this week, this month"
             />
           </div>
           <div>
@@ -316,30 +316,29 @@ export default function AiAssistantPanel() {
           onChange={(event) =>
             setLead((current) => ({ ...current, problemDescription: event.target.value }))
           }
-          placeholder="Share any context you want included in your consultation summary."
+          placeholder="Share any details you want us to include."
         />
 
         <button type="submit" className="cta-secondary" disabled={state === "sending"}>
-          {state === "sending" ? "Thinking..." : "Send Message"}
+          {state === "sending" ? "Thinking..." : "Ask for Help"}
         </button>
       </form>
 
       {missingFields.length > 0 ? (
         <p className="response-note mt-3">
-          Missing qualification fields: {missingFields.join(", ")}. Add these details for faster
-          scheduling.
+          Helpful missing details: {missingFields.join(", ")}. Add these for faster scheduling.
         </p>
       ) : null}
 
       {qualifiedCaptured ? (
         <p className="lead-status success mt-3">
-          Qualified lead captured and summary sent for follow-up scheduling.
+          Thanks. Your details were saved and sent for follow-up.
         </p>
       ) : null}
 
       {lastAssistantMessage ? (
         <a href="/book-service" className="cta-primary mt-4 inline-flex">
-          Book This Recommendation
+          Book This Service
         </a>
       ) : null}
 

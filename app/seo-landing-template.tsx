@@ -71,16 +71,16 @@ export default function SeoLandingTemplate(props: LandingTemplateProps) {
           <p className="section-copy mt-4 max-w-3xl">{props.description}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/#contact" className="cta-primary inline-flex">
-              Free Consultation
+              Get Help Now
             </Link>
-            <Link href="/free-consultation" className="cta-secondary inline-flex">
-              Request Strategy Session
+            <Link href="/estimate" className="cta-secondary inline-flex">
+              Free Estimate
             </Link>
           </div>
         </header>
 
         <section className="glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Why Businesses Choose ZeroCool Development</h2>
+          <h2 className="section-title">Why People Choose ZeroCool Development</h2>
           <ul className="mt-4 grid gap-2 text-sm text-slate-100/90 md:grid-cols-2">
             {props.benefits.map((benefit) => (
               <li key={benefit} className="tech-pill">
@@ -102,15 +102,15 @@ export default function SeoLandingTemplate(props: LandingTemplateProps) {
         <section className="glass-panel rounded-3xl p-6 md:p-8">
           <h2 className="section-title">Next Step</h2>
           <p className="section-copy mt-3">
-            Get a free consultation to map your requirements, timeline, and budget with an
-            actionable implementation plan.
+            Tell us what is going on and we will walk you through clear options, timeline, and
+            pricing.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/#contact" className="cta-primary inline-flex">
-              Contact ZeroCool Development
+              Talk to ZeroCool
             </Link>
-            <Link href="/services" className="cta-secondary inline-flex">
-              View Services
+            <Link href="/estimate" className="cta-secondary inline-flex">
+              Free Estimate
             </Link>
           </div>
         </section>

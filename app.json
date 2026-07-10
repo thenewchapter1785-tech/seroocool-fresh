@@ -77,6 +77,46 @@
           "key": "OPENAI_API_KEY",
           "scope": "RUN_AND_BUILD_TIME",
           "value": ""
+        },
+        {
+          "key": "META_APP_ID",
+          "scope": "RUN_AND_BUILD_TIME",
+          "value": ""
+        },
+        {
+          "key": "META_APP_SECRET",
+          "scope": "RUN_AND_BUILD_TIME",
+          "value": ""
+        },
+        {
+          "key": "META_GRAPH_API_VERSION",
+          "scope": "RUN_AND_BUILD_TIME",
+          "value": "v25.0"
+        },
+        {
+          "key": "META_USER_ACCESS_TOKEN",
+          "scope": "RUN_AND_BUILD_TIME",
+          "value": ""
+        },
+        {
+          "key": "META_PAGE_ACCESS_TOKEN",
+          "scope": "RUN_AND_BUILD_TIME",
+          "value": ""
+        },
+        {
+          "key": "META_PAGE_ID",
+          "scope": "RUN_AND_BUILD_TIME",
+          "value": "1131633576708366"
+        },
+        {
+          "key": "META_BUSINESS_ID",
+          "scope": "RUN_AND_BUILD_TIME",
+          "value": ""
+        },
+        {
+          "key": "META_VERIFY_TOKEN",
+          "scope": "RUN_AND_BUILD_TIME",
+          "value": ""
         }
       ]
     }

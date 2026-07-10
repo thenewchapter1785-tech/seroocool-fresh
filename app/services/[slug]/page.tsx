@@ -142,10 +142,9 @@ export default async function ServicePage(props: ServicePageProps) {
         </section>
 
         <section className="glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Recommended Add-On Services</h2>
+          <h2 className="section-title">Related Services You May Need</h2>
           <p className="section-copy mt-3">
-            Most clients bundle this service with related upgrades for stronger outcomes and fewer
-            repeat issues.
+            These services are often requested together to solve the full problem in one visit.
           </p>
           <div className="mt-5 grid gap-4 md:grid-cols-3">
             {recommendations.map((relatedService) => (
@@ -154,7 +153,7 @@ export default async function ServicePage(props: ServicePageProps) {
                 href={`/services/${relatedService.slug}`}
                 className="project-card"
               >
-                <p className="project-tag">Upsell Recommendation</p>
+                <p className="project-tag">Related Service</p>
                 <h3 className="project-title">{relatedService.name}</h3>
                 <p className="project-copy">{relatedService.shortDescription}</p>
               </Link>

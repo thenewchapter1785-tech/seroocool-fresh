@@ -1,11 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 type ServiceType =
   | "computer-repair"
   | "laptop-repair"
   | "phone-troubleshooting"
+  | "wifi-setup"
+  | "device-setup"
   | "pc-diagnostics"
   | "virus-removal"
   | "data-backup"
@@ -53,6 +56,22 @@ const serviceConfig: Record<ServiceType, ServiceConfig> = {
     questionPlaceholder: "Example: freezing, app crashes, or charging problems.",
     upsells: ["Device Cleanup", "Backup Setup", "Security Hardening"],
   },
+  "wifi-setup": {
+    label: "Wi-Fi Setup and Troubleshooting",
+    min: 120,
+    max: 360,
+    question: "What is happening with your Wi-Fi?",
+    questionPlaceholder: "Example: connection drops, slow speed, or weak signal in certain rooms.",
+    upsells: ["Router Optimization", "Whole-Home Coverage Plan", "Network Security Setup"],
+  },
+  "device-setup": {
+    label: "Device Setup",
+    min: 90,
+    max: 320,
+    question: "What device do you need help setting up?",
+    questionPlaceholder: "Example: new printer, smart TV, tablet, or work laptop.",
+    upsells: ["Account Sync", "Security Setup", "Backup Configuration"],
+  },
   "pc-diagnostics": {
     label: "PC Diagnostics",
     min: 99,
@@ -89,49 +108,49 @@ const serviceConfig: Record<ServiceType, ServiceConfig> = {
     label: "Website Development",
     min: 1800,
     max: 12000,
-    question: "What is the main conversion goal for your website?",
-    questionPlaceholder: "Example: more phone calls, estimate requests, and booked consultations.",
-    upsells: ["SEO Optimization", "GBP Optimization", "Monthly Website Care"],
+    question: "What should your website help people do?",
+    questionPlaceholder: "Example: call us, request a quote, or book a visit.",
+    upsells: ["SEO Setup", "Google Business Profile Help", "Monthly Website Care"],
   },
   "app-development": {
     label: "App Development",
     min: 4500,
     max: 36000,
     question: "What should the app help users do first?",
-    questionPlaceholder: "Example: schedule services, track jobs, and receive updates.",
+    questionPlaceholder: "Example: schedule services, track jobs, and send updates.",
     upsells: ["Analytics Dashboard", "CRM Integration", "Ongoing Support"],
   },
   "ai-automation": {
     label: "AI Automation",
     min: 2500,
     max: 28000,
-    question: "Which workflow should AI automate first?",
-    questionPlaceholder: "Example: lead qualification, support triage, or follow-ups.",
+    question: "What repetitive task should automation handle first?",
+    questionPlaceholder: "Example: follow-up messages, ticket sorting, or reminders.",
     upsells: ["CRM Integration", "Business Automation", "Analytics"],
   },
   "hubspot-crm": {
     label: "HubSpot CRM Setup",
     min: 900,
     max: 9800,
-    question: "What stage of your sales process needs the most help?",
-    questionPlaceholder: "Example: lead capture, pipeline tracking, or follow-up automation.",
-    upsells: ["Deal Pipeline Design", "AI Lead Scoring", "Reporting Setup"],
+    question: "Where are leads getting stuck right now?",
+    questionPlaceholder: "Example: new leads not getting follow-ups.",
+    upsells: ["Pipeline Setup", "Automation Rules", "Reporting Setup"],
   },
   "business-automation": {
     label: "Business Automation",
     min: 1800,
     max: 24000,
     question: "Which repetitive process is costing you the most time?",
-    questionPlaceholder: "Example: intake, reminders, approvals, or reporting.",
+    questionPlaceholder: "Example: intake forms, reminders, approvals, or reports.",
     upsells: ["AI Automation", "CRM Setup", "Operations Dashboard"],
   },
   "cloud-security": {
-    label: "Cloud / Security",
+    label: "Website Security and Hosting",
     min: 1200,
     max: 18000,
-    question: "What security or uptime risk concerns you most?",
-    questionPlaceholder: "Example: website attacks, outages, or weak access controls.",
-    upsells: ["Cloudflare Hardening", "Backup Strategy", "Managed Security Checks"],
+    question: "What website safety or outage problem worries you most?",
+    questionPlaceholder: "Example: spam attacks, downtime, or weak login settings.",
+    upsells: ["Cloudflare Setup", "Backup Plan", "Security Checkups"],
   },
 };
 
@@ -177,17 +196,29 @@ function calculateRange(params: {
 }
 
 export default function LiveEstimator() {
+  const searchParams = useSearchParams();
+  const prefilledServiceType = searchParams.get("serviceType");
+  const prefilledProblem = searchParams.get("problem");
+  const prefilledUrgency = searchParams.get("urgency");
+  const prefilledAudienceType = searchParams.get("audienceType");
+
   const [state, setState] = useState<SubmitState>("idle");
   const [errorText, setErrorText] = useState("");
   const [formData, setFormData] = useState(() => ({
-    serviceType: "computer-repair" as ServiceType,
-    urgency: "normal",
+    serviceType:
+      prefilledServiceType && prefilledServiceType in serviceConfig
+        ? (prefilledServiceType as ServiceType)
+        : ("computer-repair" as ServiceType),
+    urgency: prefilledUrgency || "normal",
     complexity: "standard",
     scope: "medium",
-    timeline: "normal",
-    serviceQuestionAnswer: "",
+    timeline: "asap",
+    preferredAppointmentTime: "",
+    serviceQuestionAnswer: prefilledProblem
+      ? `Customer-selected issue: ${prefilledProblem.replace(/-/g, " ")}`
+      : "",
     preferredContactMethod: "email",
-    audienceType: "personal",
+    audienceType: prefilledAudienceType || "personal",
     name: "",
     email: "",
     phone: "",
@@ -234,6 +265,7 @@ export default function LiveEstimator() {
             `Complexity: ${formData.complexity}`,
             `Scope: ${formData.scope}`,
             `Timeline preference: ${formData.timeline}`,
+            `Preferred appointment time: ${formData.preferredAppointmentTime || "not provided"}`,
             `${currentConfig.question} ${formData.serviceQuestionAnswer || "not provided"}`,
             `Upsell recommendations shown: ${estimate.upsells.join(", ")}`,
             `Estimated range shown: ${formatUsd(estimate.min)} - ${formatUsd(estimate.max)}`,
@@ -261,15 +293,14 @@ export default function LiveEstimator() {
 
   return (
     <section className="glass-panel rounded-3xl p-6 md:p-8" id="live-estimator">
-      <p className="label-chip inline-flex">Instant Quote Tool</p>
-      <h2 className="section-title mt-4">Get a Service Estimate Fast</h2>
+      <p className="label-chip inline-flex">Price Estimator</p>
+      <h2 className="section-title mt-4">Get a Quick Price Range</h2>
       <p className="section-copy mt-3">
-        Select your service category, answer service-specific questions, and unlock your estimate
-        after entering contact details.
+        Pick a service, answer a few questions, and we will show a realistic estimate range.
       </p>
 
       <form className="lead-form mt-5" onSubmit={handleSubmit}>
-        <label htmlFor="estimator-service">Service Category</label>
+        <label htmlFor="estimator-service">Service Type</label>
         <select
           id="estimator-service"
           value={formData.serviceType}
@@ -284,6 +315,8 @@ export default function LiveEstimator() {
           <option value="computer-repair">Computer Repair</option>
           <option value="laptop-repair">Laptop Repair</option>
           <option value="phone-troubleshooting">Phone Troubleshooting</option>
+          <option value="wifi-setup">Wi-Fi Setup and Troubleshooting</option>
+          <option value="device-setup">Device Setup</option>
           <option value="pc-diagnostics">PC Diagnostics</option>
           <option value="virus-removal">Virus Removal</option>
           <option value="data-backup">Data Backup</option>
@@ -293,7 +326,7 @@ export default function LiveEstimator() {
           <option value="ai-automation">AI Automation</option>
           <option value="hubspot-crm">HubSpot CRM</option>
           <option value="business-automation">Business Automation</option>
-          <option value="cloud-security">Cloud / Security</option>
+          <option value="cloud-security">Website Security and Hosting</option>
         </select>
 
         <div className="grid gap-3 md:grid-cols-3">
@@ -312,7 +345,7 @@ export default function LiveEstimator() {
             </select>
           </div>
           <div>
-            <label htmlFor="estimator-complexity">Complexity</label>
+            <label htmlFor="estimator-complexity">Problem Difficulty</label>
             <select
               id="estimator-complexity"
               value={formData.complexity}
@@ -320,12 +353,12 @@ export default function LiveEstimator() {
                 setFormData((current) => ({ ...current, complexity: event.target.value }))
               }
             >
-              <option value="standard">Standard</option>
+              <option value="standard">Typical</option>
               <option value="complex">Complex</option>
             </select>
           </div>
           <div>
-            <label htmlFor="estimator-scope">Scope</label>
+            <label htmlFor="estimator-scope">Job Size</label>
             <select
               id="estimator-scope"
               value={formData.scope}
@@ -352,7 +385,7 @@ export default function LiveEstimator() {
           }
         />
 
-        <h3 className="section-heading mt-3">Contact Details (required before estimate reveal)</h3>
+        <h3 className="section-heading mt-3">Contact Details (required before showing estimate)</h3>
         <div className="grid gap-3 md:grid-cols-2">
           <div>
             <label htmlFor="estimator-name">Name</label>
@@ -416,6 +449,20 @@ export default function LiveEstimator() {
             </select>
           </div>
           <div>
+            <label htmlFor="estimator-appointment-time">Preferred Appointment Time</label>
+            <input
+              id="estimator-appointment-time"
+              placeholder="Example: Tuesday after 3 PM"
+              value={formData.preferredAppointmentTime}
+              onChange={(event) =>
+                setFormData((current) => ({
+                  ...current,
+                  preferredAppointmentTime: event.target.value,
+                }))
+              }
+            />
+          </div>
+          <div>
             <label htmlFor="estimator-audience">Business or Personal</label>
             <select
               id="estimator-audience"
@@ -444,7 +491,7 @@ export default function LiveEstimator() {
         </div>
 
         <button type="submit" className="cta-primary" disabled={state === "sending"}>
-          {state === "sending" ? "Calculating..." : "Reveal Free Estimate"}
+          {state === "sending" ? "Calculating..." : "Show My Estimate"}
         </button>
       </form>
 
@@ -454,18 +501,17 @@ export default function LiveEstimator() {
           <p className="section-copy mt-2">
             {estimate.label}: {formatUsd(estimate.min)} to {formatUsd(estimate.max)}
           </p>
-          <h4 className="section-heading mt-4">Recommended Upsells</h4>
+          <h4 className="section-heading mt-4">Helpful Add-Ons</h4>
           <ul className="mt-2 grid gap-2 text-sm text-slate-200/90">
             {estimate.upsells.map((item) => (
               <li key={item}>- {item}</li>
             ))}
           </ul>
           <p className="response-note mt-3">
-            Your request was sent to ZeroCool and logged for HubSpot follow-up. Book a free
-            estimate call for a detailed quote.
+            Your request was sent. Book a call if you want a detailed quote and next-step plan.
           </p>
           <a href="/book-service" className="cta-secondary mt-4 inline-flex">
-            Book Free Estimate Call
+            Book a Call
           </a>
         </div>
       ) : null}

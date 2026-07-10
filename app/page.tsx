@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import AiAssistantPanel from "./ai-assistant-panel";
 import BeforeAfterProjects from "./components/BeforeAfterProjects";
+import CustomerProblemFinder from "./customer-problem-finder";
 import PlatformsSupported from "./components/PlatformsSupported";
 import ReviewsSection from "./components/ReviewsSection";
 import TrustBadges from "./components/TrustBadges";
@@ -15,33 +17,32 @@ import { getContactEmail, getSiteUrl } from "@/lib/env";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "ZeroCool Development | Free Estimate Technology Services",
+  title: "ZeroCool Development | Computer Repair and Tech Support",
   description:
-    "Lead-focused technology support and growth services: repair, websites, AI automation, CRM setup, business automation, and cloud security.",
+    "Computer repair and everyday tech support in plain English. We also help business owners with websites, apps, automation, SEO, and business tech.",
   path: "/",
 });
 
 const coreCtas = [
-  { label: "Request Free Estimate", href: "#contact", style: "primary" },
-  { label: "Book Service", href: "/book-service", style: "secondary" },
-  { label: "Try Instant Quote", href: "/estimate", style: "secondary" },
+  { label: "Get Help Now", href: "#contact", style: "primary" },
+  { label: "Free Estimate", href: "/estimate", style: "secondary" },
 ];
 
 const faqItems = [
   {
-    question: "Do I need technical experience to work with ZeroCool?",
+    question: "Do I need to know technical terms before I contact you?",
     answer:
-      "No. We keep everything beginner-friendly, plain language, and action oriented.",
+      "No. Just describe what you see. We explain everything in plain English.",
   },
   {
-    question: "Can you help with both emergency support and long-term growth?",
+    question: "Can you help with both home tech issues and business tech needs?",
     answer:
-      "Yes. We handle urgent incidents and ongoing website, automation, and support plans.",
+      "Yes. We fix everyday problems for families and also help business owners with websites, apps, automation, and SEO.",
   },
   {
-    question: "Do you offer free estimates?",
+    question: "What if I am not sure what is wrong yet?",
     answer:
-      "Yes. We use free-estimate language throughout intake, booking, and consultation flows.",
+      "That is normal. Tell us what your device is doing, and we will guide you through next steps.",
   },
 ];
 
@@ -70,10 +71,11 @@ export default function Home() {
         name: "ZeroCool Development",
         serviceType: [
           "Computer Repair",
-          "Website Development",
+          "Tech Support",
+          "Website Help",
           "AI Automation",
-          "Business Automation",
-          "Cloud Security",
+          "Business Workflow Automation",
+          "Website Security",
         ],
       },
       {
@@ -120,15 +122,16 @@ export default function Home() {
               className="brand-logo"
               priority
             />
-            <p className="label-chip inline-flex">Dark Cyber Aesthetic • Premium Execution</p>
+            <p className="label-chip inline-flex">Local Computer Repair • Friendly Tech Help</p>
           </div>
 
           <h1 className="relative z-10 text-4xl leading-tight font-semibold tracking-tight md:text-6xl">
-            Free Estimate Technology Services Built to Increase Revenue and Leads
+            Technology Problems? We Can Help.
           </h1>
           <p className="relative z-10 mt-4 max-w-4xl text-base leading-7 text-slate-200/90 md:text-lg">
-            ZeroCool Development combines computer support, websites, automation, and AI systems to
-            increase calls, consultation requests, and qualified lead flow.
+            From slow computers and laptop problems to Wi-Fi issues, phone troubleshooting,
+            websites, and business technology, ZeroCool Development makes technology simple. Honest
+            service, fair pricing, and no confusing tech talk.
           </p>
 
           <div className="relative z-10 mt-6 flex flex-wrap gap-3">
@@ -144,27 +147,70 @@ export default function Home() {
           </div>
         </header>
 
+        <CustomerProblemFinder />
+
+        <section className="glass-panel rounded-3xl p-6 md:p-8">
+          <h2 className="section-title">Not tech savvy? No problem.</h2>
+          <p className="section-copy mt-3">
+            You do not need to know what is wrong. Tell us what your computer, phone, Wi-Fi,
+            website, or business technology is doing and we will explain the options in plain
+            English.
+          </p>
+        </section>
+
+        <section className="glass-panel rounded-3xl p-6 md:p-8">
+          <h2 className="section-title">Choose Your Service Path</h2>
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <article className="faq-card">
+              <h3 className="faq-question">Home and Personal Tech Help</h3>
+              <p className="faq-answer">
+                Computer repair, laptop repair, PC diagnostics, virus and malware removal, slow
+                computer help, phone troubleshooting, device setup, Wi-Fi setup, printer setup,
+                email setup, remote support, custom computers, and gaming PC builds.
+              </p>
+            </article>
+            <article className="faq-card">
+              <h3 className="faq-question">Business Technology Services</h3>
+              <p className="faq-answer">
+                Website design and development, e-commerce, mobile apps, custom business software,
+                SEO, Google Business Profile support, HubSpot CRM, AI automation, business
+                automation, small business IT support, Cloudflare security, and DigitalOcean
+                deployment.
+              </p>
+            </article>
+          </div>
+          <div className="mt-5">
+            <Link href="/services" className="cta-secondary inline-flex">
+              Explore All Services
+            </Link>
+          </div>
+        </section>
+
         <WhyChooseZeroCool />
         <ReviewsSection />
         <BeforeAfterProjects />
 
         <section className="glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Instant Quote Tool</h2>
+          <h2 className="section-title">Free Estimate</h2>
           <p className="section-copy mt-3">
-            Start with service-specific questions and get a real estimate range with upsell recommendations.
+            No pressure. No obligation. Tell us what is happening and we will help you understand
+            the next step.
           </p>
-          <LiveEstimator />
+          <Suspense fallback={<p className="section-copy mt-4">Loading estimate tool...</p>}>
+            <LiveEstimator />
+          </Suspense>
           <div className="mt-4">
             <Link href="/book-service" className="cta-secondary inline-flex">
-              Continue to Book Service
+              Book a Service Visit
             </Link>
           </div>
         </section>
 
         <section className="glass-panel rounded-3xl p-6 md:p-8" id="contact">
-          <h2 className="section-title">Request Your Free Estimate</h2>
+          <h2 className="section-title">Tell Us What Is Going On</h2>
           <p className="section-copy mt-3">
-            Share your issue and we will respond with clear recommendations and next steps.
+            No pressure and no confusing jargon. Share the problem and we will send clear next
+            steps.
           </p>
           <TrustBadges />
           <div className="mt-4">
@@ -177,7 +223,7 @@ export default function Home() {
         <PlatformsSupported />
 
         <section className="glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Latest from the Blog</h2>
+          <h2 className="section-title">Helpful Tips From ZeroCool</h2>
           <div className="mt-4 grid gap-3 md:grid-cols-2">
             {blogPosts.slice(0, 6).map((post) => (
               <Link key={post.slug} href={`/blog/${post.slug}`} className="project-card">
@@ -189,13 +235,13 @@ export default function Home() {
           </div>
           <div className="mt-4">
             <Link href="/blog" className="cta-secondary inline-flex">
-              Explore Blog
+              Read More Tips
             </Link>
           </div>
         </section>
 
         <section className="glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Frequently Asked Questions</h2>
+          <h2 className="section-title">Quick Questions</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-3">
             {faqItems.map((faq) => (
               <article key={faq.question} className="faq-card">
@@ -206,13 +252,13 @@ export default function Home() {
           </div>
           <div className="mt-5 flex flex-wrap gap-3">
             <Link href="/emergency-tech-support" className="cta-primary inline-flex">
-              Request Emergency Help
+              Need Emergency Help
             </Link>
             <Link href="/plans" className="cta-secondary inline-flex">
-              View Monthly Plans
+              See Monthly Support Plans
             </Link>
             <Link href="/free-guides" className="cta-secondary inline-flex">
-              Download Free Guides
+              Get Free How-To Guides
             </Link>
           </div>
         </section>

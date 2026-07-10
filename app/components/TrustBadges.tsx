@@ -1,10 +1,10 @@
 const badges = [
-  "Fast Response",
-  "Beginner-Friendly Support",
-  "Local Rhode Island Coverage",
+  "Fast Replies",
+  "Plain-English Support",
+  "Local Rhode Island Service",
   "Remote Support Available",
-  "Secure Lead Handling",
-  "Free Estimate Focused",
+  "Your Info Stays Private",
+  "Free Estimates",
 ];
 
 export default function TrustBadges() {

@@ -74,10 +74,10 @@ export default function LocalSeoTemplate({ page, path }: LocalSeoTemplateProps) 
           <p className="section-copy mt-4 max-w-3xl">{page.intro}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/#contact" className="cta-primary inline-flex">
-              Request a Free Estimate
+              Get Help Now
             </Link>
-            <Link href="/book-service" className="cta-secondary inline-flex">
-              Book Service
+            <Link href="/estimate" className="cta-secondary inline-flex">
+              Free Estimate
             </Link>
           </div>
         </header>

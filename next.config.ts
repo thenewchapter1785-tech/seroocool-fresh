@@ -8,6 +8,8 @@ const scriptSrc = [
   ...(isDevelopment ? ["'unsafe-eval'"] : []),
   "https://js.hs-scripts.com",
   "https://connect.facebook.net",
+  "https://www.googletagmanager.com",
+  "https://www.clarity.ms",
 ].join(" ");
 
 const contentSecurityPolicy = [
@@ -18,9 +20,9 @@ const contentSecurityPolicy = [
   "form-action 'self'",
   `script-src ${scriptSrc}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://www.facebook.com",
+  "img-src 'self' data: blob: https://www.facebook.com https://www.google-analytics.com https://www.googletagmanager.com",
   "font-src 'self' data:",
-  "connect-src 'self' https://api.hubapi.com https://www.facebook.com https://connect.facebook.net",
+  "connect-src 'self' https://api.hubapi.com https://www.facebook.com https://connect.facebook.net https://www.google-analytics.com https://region1.google-analytics.com https://www.clarity.ms",
   "frame-src 'self' https://js.hsforms.net https://forms.hsforms.com",
   "upgrade-insecure-requests",
 ].join("; ");

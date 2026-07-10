@@ -26,12 +26,12 @@ export default function RequestHelpFab() {
         className={`request-help-fab ${visible ? "is-visible" : ""}`}
         aria-label="Request help"
       >
-        Request Help
+        Need Help?
       </Link>
 
       <div className="sticky-mobile-cta" role="region" aria-label="Quick action">
         <Link href="/#contact" className="cta-primary">
-          Free Estimate
+          Get Help
         </Link>
       </div>
     </>

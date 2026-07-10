@@ -273,10 +273,10 @@ export const serviceCatalog: ServiceItem[] = [
   },
   {
     slug: "cloud-infrastructure",
-    name: "Cloud Infrastructure",
-    shortDescription: "Deploy scalable infrastructure for websites and apps.",
+    name: "Website Hosting Setup",
+    shortDescription: "Set up dependable hosting for websites and apps.",
     fullDescription:
-      "Cloud infrastructure planning for reliability, security, and growth-ready delivery pipelines.",
+      "Hosting setup focused on uptime, security, backups, and easy day-to-day management.",
     category: "business",
     keywords: ["managed IT", "small business IT"],
   },

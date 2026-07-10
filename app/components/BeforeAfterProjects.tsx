@@ -1,23 +1,23 @@
 const projects = [
   {
-    before: "Outdated website with weak lead flow",
-    after: "Conversion-focused pages with clear consultation CTAs",
+    before: "Slow family computer, constant popups, and daily crashes",
+    after: "Computer cleaned up, virus removed, and running normally again",
   },
   {
-    before: "Manual follow-up and missed inquiries",
-    after: "Automated lead intake and structured scheduling",
+    before: "Small business missing calls and messages from the website",
+    after: "Clear contact flow, faster replies, and more booked jobs",
   },
   {
-    before: "Unstable business systems and reactive fixes",
-    after: "Proactive support plans with faster issue resolution",
+    before: "Unstable office tech causing delays every week",
+    after: "Reliable support plan with fewer surprises and faster fixes",
   },
 ];
 
 export default function BeforeAfterProjects() {
   return (
     <section className="glass-panel rounded-3xl p-6 md:p-8" id="before-after">
-      <h2 className="section-title">Before and After Projects</h2>
-      <p className="section-copy mt-3">Editable placeholders for measurable transformation stories.</p>
+      <h2 className="section-title">Before and After</h2>
+      <p className="section-copy mt-3">Example stories you can replace with real customer results.</p>
       <div className="mt-5 grid gap-4 md:grid-cols-3">
         {projects.map((project) => (
           <article key={project.before} className="project-card">

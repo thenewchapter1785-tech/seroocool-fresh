@@ -3,6 +3,7 @@ import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import AnalyticsPlaceholders from "./analytics-placeholders";
 import MetaPixel from "./meta-pixel";
 import HubSpotTracking from "./hubspot-tracking";
+import SiteNavigation from "./site-navigation";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -23,9 +24,9 @@ const googleSiteVerification =
 const facebookDomainVerification =
   process.env.FACEBOOK_DOMAIN_VERIFICATION ?? "";
 const siteName = "ZeroCool Development";
-const defaultTitle = "ZeroCool Development | Web, Apps, Automation, AI Integration";
+const defaultTitle = "ZeroCool Development | Computer Repair and Tech Support";
 const defaultDescription =
-  "ZeroCool Development delivers web development, app development, automation, AI integration, and consulting for businesses that need secure, modern digital solutions.";
+  "ZeroCool Development provides computer repair and tech support in plain English, plus websites, apps, automation, and business tech help for owners.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -61,14 +62,19 @@ export const metadata: Metadata = {
   },
   keywords: [
     "ZeroCool Development",
+    "computer repair",
+    "laptop repair",
+    "virus removal",
+    "wifi problems",
+    "tech support",
+    "rhode island tech support",
     "web development",
     "app development",
     "business automation",
     "ai integration",
     "technology consulting",
-    "business software solutions",
+    "business software help",
     "custom software development",
-    "digital transformation",
     "small business web development",
     "next.js development",
     "crm integrations",
@@ -87,7 +93,7 @@ export const metadata: Metadata = {
         url: "/og-image.svg",
         width: 1200,
         height: 630,
-        alt: "ZeroCool Development technology services profile card",
+        alt: "ZeroCool Development computer repair and tech support",
       },
     ],
   },
@@ -124,7 +130,17 @@ export default function RootLayout({
         <AnalyticsPlaceholders />
         <HubSpotTracking />
         <MetaPixel />
-        {children}
+        <SiteNavigation />
+        <div className="flex-1">{children}</div>
+        <footer className="site-footer">
+          <div className="mx-auto w-full max-w-6xl px-6 py-6 md:px-10">
+            <p className="site-footer-title">Technology Made Simple for Home and Business.</p>
+            <p className="site-footer-copy mt-2">
+              Honest service. Fair pricing. No confusing tech talk. Serving Rhode Island with local
+              and remote support.
+            </p>
+          </div>
+        </footer>
       </body>
     </html>
   );

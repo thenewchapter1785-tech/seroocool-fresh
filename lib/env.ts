@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 export function readOptionalEnv(name: string, fallback = "") {
   const value = process.env[name];
   if (!value) {

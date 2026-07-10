@@ -1,61 +1,80 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { buildPageMetadata } from "@/lib/seo";
+import { getIntegrationStatuses, getMissingEnvironmentVariables } from "@/lib/platform-health";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Growth Dashboard | ZeroCool Development",
+  title: "Operations Snapshot | ZeroCool Development",
   description:
-    "Operational dashboard placeholder for leads, conversion rate, appointments, AI conversations, traffic, rankings, and HubSpot stats.",
+    "Public operations snapshot with integration configuration status and manual setup checklist.",
   path: "/dashboard",
 });
 
-const metrics = [
-  { label: "Total Leads", value: "128" },
-  { label: "Conversion Rate", value: "11.4%" },
-  { label: "AI Conversations", value: "342" },
-  { label: "Appointments", value: "57" },
-  { label: "Revenue Estimates", value: "$186k" },
-  { label: "Popular Services", value: "Website + Repair" },
-  { label: "SEO Ranking Gains", value: "+18 keywords" },
-  { label: "Monthly Traffic", value: "9,420" },
-];
-
 export default function DashboardPage() {
+  const integrations = getIntegrationStatuses();
+  const missingEnv = getMissingEnvironmentVariables();
+
   return (
     <div className="site-shell">
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-8 md:gap-8 md:px-10 md:py-12">
         <header className="glass-panel rounded-3xl p-7 md:p-10">
-          <p className="label-chip inline-flex">Admin Dashboard</p>
+          <p className="label-chip inline-flex">Operations Snapshot</p>
           <h1 className="mt-5 text-4xl leading-tight font-semibold tracking-tight text-blue-100 md:text-5xl">
-            Revenue and Growth Command Center
+            Platform Status for ZeroCool Development
           </h1>
           <p className="section-copy mt-4 max-w-3xl">
-            Placeholder metrics for lead generation, conversion performance, service demand, and
-            marketing visibility.
+            This public page shows real configuration status only. Protected admin tools are
+            available in the admin dashboard.
           </p>
+          <div className="mt-6">
+            <Link href="/admin" className="cta-primary inline-flex">
+              Open Admin Dashboard
+            </Link>
+          </div>
         </header>
 
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {metrics.map((metric) => (
-            <article key={metric.label} className="stat-card">
-              <p className="stat-value">{metric.value}</p>
-              <p className="stat-label">{metric.label}</p>
-            </article>
-          ))}
+        <section className="glass-panel rounded-3xl p-6 md:p-8">
+          <h2 className="section-title">Integration Status</h2>
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            {integrations.map((item) => (
+              <article key={item.name} className="faq-card">
+                <h3 className="faq-question">{item.name}</h3>
+                <p className="project-tag mt-2">{item.status}</p>
+                <p className="faq-answer">{item.detail}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="glass-panel rounded-3xl p-6 md:p-8">
+          <h2 className="section-title">Missing Core Environment Variables</h2>
+          {missingEnv.length ? (
+            <div className="mt-4 grid gap-2 md:grid-cols-2">
+              {missingEnv.map((item) => (
+                <article key={item} className="tech-pill">
+                  {item}
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="section-copy mt-3">No missing variables in the core required set.</p>
+          )}
         </section>
 
         <section className="grid gap-4 md:grid-cols-3">
-          <article className="glass-panel rounded-3xl p-6">
-            <h2 className="section-title">Google Search Console</h2>
-            <p className="section-copy mt-3">Placeholder for impressions, clicks, and query trends.</p>
-          </article>
-          <article className="glass-panel rounded-3xl p-6">
-            <h2 className="section-title">Google Analytics</h2>
-            <p className="section-copy mt-3">Placeholder for sessions, channels, and conversion paths.</p>
-          </article>
-          <article className="glass-panel rounded-3xl p-6">
-            <h2 className="section-title">HubSpot Statistics</h2>
-            <p className="section-copy mt-3">Placeholder for contacts, lifecycle, and pipeline movement.</p>
-          </article>
+          {[
+            "Lead count",
+            "Estimate requests",
+            "Revenue opportunities",
+            "Recent AI chats",
+            "Recent contact forms",
+            "Recent errors",
+          ].map((label) => (
+            <article key={label} className="stat-card">
+              <p className="stat-value">No live data</p>
+              <p className="stat-label">{label}</p>
+            </article>
+          ))}
         </section>
       </main>
     </div>

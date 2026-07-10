@@ -164,8 +164,8 @@ export default function LeadForm() {
   return (
     <form className="lead-form" onSubmit={handleSubmit}>
       <p className="form-kicker">
-        Technology made simple. Tell us what is happening and we will guide you with clear,
-        jargon-free recommendations and a free estimate.
+        Tell us what is happening in your own words. We will reply with simple next steps and a
+        free estimate.
       </p>
 
       <label htmlFor="name">Name</label>
@@ -324,13 +324,13 @@ export default function LeadForm() {
       </div>
 
       <button type="submit" className="cta-primary" disabled={state === "sending"}>
-        {state === "sending" ? "Sending..." : "Request a Free Estimate"}
+        {state === "sending" ? "Sending..." : "Send My Request"}
       </button>
 
-      <p className="response-note">Most replies go out within one business day.</p>
+      <p className="response-note">Most people hear back within one business day.</p>
 
       {state === "success" ? (
-        <p className="lead-status success">Thanks. Your request was sent successfully.</p>
+        <p className="lead-status success">Thanks. Your request is on the way.</p>
       ) : null}
 
       {state === "error" ? (

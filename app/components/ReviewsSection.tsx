@@ -7,20 +7,20 @@ type Review = {
 const placeholderReviews: Review[] = [
   {
     quote:
-      "Editable placeholder review: ZeroCool responded quickly and explained everything clearly.",
-    author: "Placeholder Customer",
+      "My laptop was freezing every day. ZeroCool fixed it fast and explained what happened in simple words.",
+    author: "Local Home Customer",
     source: "Google Review Placeholder",
   },
   {
     quote:
-      "Editable placeholder review: Our website now generates more qualified consultations.",
-    author: "Placeholder Business Owner",
+      "We called for computer support, then had ZeroCool rebuild our website. We now get steady calls from real customers.",
+    author: "Small Business Owner",
     source: "Facebook Review Placeholder",
   },
   {
     quote:
-      "Editable placeholder review: Great support experience and honest recommendations.",
-    author: "Placeholder Home Client",
+      "I finally found someone I can trust with my tech. No pressure, no confusing language, just real help.",
+    author: "Rhode Island Customer",
     source: "Direct Testimonial Placeholder",
   },
 ];
@@ -28,10 +28,9 @@ const placeholderReviews: Review[] = [
 export default function ReviewsSection() {
   return (
     <section className="glass-panel rounded-3xl p-6 md:p-8" id="reviews">
-      <h2 className="section-title">Customer Reviews</h2>
+      <h2 className="section-title">What Customers Say</h2>
       <p className="section-copy mt-3">
-        Replace these editable placeholders with verified customer feedback from Google and
-        Facebook.
+        These are sample placeholders. Replace with your verified Google and Facebook reviews.
       </p>
       <div className="mt-5 grid gap-4 md:grid-cols-3">
         {placeholderReviews.map((review) => (

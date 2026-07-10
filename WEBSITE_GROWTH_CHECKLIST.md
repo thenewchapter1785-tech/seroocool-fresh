@@ -124,6 +124,10 @@ This section is reserved for new tasks identified during build sessions.
 - [ ] Set `CONTACT_EMAIL` and `OPENAI_API_KEY` in DigitalOcean App Platform env vars after next deployment.
 - [ ] Verify `/api/lead` CORS and rate limiting behavior from production domain and from disallowed origins.
 - [ ] Verify `/api/ai-assistant` responds correctly with a short prompt and returns 429 after repeated rapid requests.
+- [ ] Run Lighthouse audits (mobile + desktop) for home, services, and estimate pages; document actual Performance, Accessibility, Best Practices, and SEO scores.
+- [ ] Connect a persistent data source for admin/dashboard metrics (lead count, estimate requests, appointments, AI chats, errors, revenue opportunities).
+- [ ] Verify new Customer Problem Finder analytics events in HubSpot behavioral events (`problem_finder_*`).
+- [ ] Confirm estimate prefill mapping from homepage Problem Finder options to `/estimate?serviceType=...` works for all paths.
 - [ ] Create HubSpot custom contact properties for `preferred_contact_method`, `audience_type`, and `urgency`, then map API fields directly to those properties.
 - [ ] Decide canonical SEO strategy for legacy landing pages (`/web-development`, `/mobile-app-development`, etc.) versus new dynamic service pages to avoid intent overlap.
 - [ ] Replace placeholder emergency phone number in `/emergency-support` with the production support line.
@@ -134,6 +138,26 @@ This section is reserved for new tasks identified during build sessions.
 - [ ] Replace placeholder review text in reusable components with verified Google/Facebook testimonials.
 - [ ] Set `ADMIN_ACCESS_CODE` in production environment before exposing `/admin` links.
 - [ ] Configure HubSpot custom properties or custom object mappings for estimate-specific and booking-specific metadata.
+- [~] Add Google Business Profile env vars in DigitalOcean: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REDIRECT_URI` applied; still need `GOOGLE_REFRESH_TOKEN`, `GOOGLE_BUSINESS_ACCOUNT_ID`, `GOOGLE_BUSINESS_LOCATION_ID`.
+- [ ] Regenerate Google refresh token with scope `https://www.googleapis.com/auth/business.manage` (current token has only Search Console scopes, causing 403 insufficient scope on Business Profile APIs).
+- [ ] Verify admin Google Business routes in production: accounts, locations, location update, reviews, reply publish, posts, photos.
+- [ ] Reconnect DigitalOcean GitHub App installation with private-repo access so future deploys work without temporary public visibility.
+- [~] Set Meta env vars in DigitalOcean: `META_PAGE_ID` configured (`1131633576708366`); still need `META_APP_ID`, `META_APP_SECRET`, `META_USER_ACCESS_TOKEN`, `META_PAGE_ACCESS_TOKEN`.
+- [ ] Verify Facebook Graph API permissions for page management and posting with current tokens.
+- [ ] Test new Meta admin routes in production: pages, page details/update, posts create/schedule, audit, recommendations, confirm-action.
+- [ ] Review Meta page recommendations manually before executing any unpublish actions.
+- [ ] Set new Meta env vars in DigitalOcean for advanced integration: `META_GRAPH_API_VERSION`, `META_VERIFY_TOKEN`, `META_BUSINESS_ID` (optional if available).
+- [ ] Register Meta webhook callback URL (`/api/meta/webhook`) and verify challenge flow with `META_VERIFY_TOKEN`.
+- [ ] Enable and test webhook signature validation end-to-end with real `x-hub-signature-256` events.
+- [ ] Validate diagnostics endpoint (`/api/admin/meta/diagnostics`) shows granted statuses for required permissions.
+- [x] Confirm `x-admin-csrf` write-guard behavior from admin panel and reject cross-origin writes.
+- [~] Decide durable storage strategy for active page persistence (implemented `.meta-active-page.json`; still evaluate multi-instance shared store for production).
+- [x] Wire live engagement actions (reply/hide/unhide/delete) with explicit confirmation text gate.
+- [ ] Add recurring log retention/rotation for `logs/meta-admin-audit.log` in production.
+- [~] Run `npm run meta:test` against production-like environment and document outputs in deployment notes (script expanded; requires `ADMIN_ACCESS_CODE` + running app).
+- [x] Add profile review-before-apply flow for Facebook Page updates with expiring review tokens.
+- [x] Add persisted Meta post drafts endpoint/UI for reusable scheduled content templates.
+- [~] Replace in-memory sync cache with persistent cache file (`.meta-sync-cache.json`); still consider shared datastore for horizontal scale.
 
 ## 10) Cloudflare Account + API Token Setup (Step-by-Step)
 

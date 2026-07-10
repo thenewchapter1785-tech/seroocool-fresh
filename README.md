@@ -12,13 +12,14 @@ Production marketing site and lead pipeline for ZeroCool Development.
 
 ## Core Features
 
-- Dark blue/white technology brand theme and conversion-focused pages
-- Lead form posting to `/api/lead`
+- Dark blue/white technology brand theme focused on trust and lead generation
+- Lead and estimate forms posting to `/api/contact` (`/api/lead` alias supported)
 - Anti-spam checks (honeypot + minimum submit time)
 - Rate limiting, CORS checks, and payload validation/sanitization on API routes
 - HubSpot contact create/update by email
 - Inbox alert via Resend
 - Backend-only AI assistant endpoint at `/api/ai-assistant`
+- Customer Problem Finder flow with estimate prefill links
 - SEO routes: `robots.txt`, `sitemap.xml`, `manifest.webmanifest`
 - Security headers and canonical host redirects
 

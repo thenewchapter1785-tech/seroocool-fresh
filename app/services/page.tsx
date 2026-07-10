@@ -4,9 +4,9 @@ import { buildPageMetadata } from "@/lib/seo";
 import { businessServices, primaryServices } from "@/lib/services";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Full-Service Technology Support | ZeroCool Development",
+  title: "Computer Repair and Business Tech Services | ZeroCool Development",
   description:
-    "Explore complete home and business technology services including repair, support, websites, apps, automation, CRM, cloud security, and deployment.",
+    "Explore computer repair and everyday tech support first, plus website, app, automation, SEO, and business tech services for owners.",
   path: "/services",
 });
 
@@ -17,11 +17,11 @@ export default function ServicesPage() {
         <header className="glass-panel rounded-3xl p-7 md:p-10">
           <p className="label-chip inline-flex">ZeroCool Development Services</p>
           <h1 className="mt-5 text-4xl leading-tight font-semibold tracking-tight text-blue-100 md:text-5xl">
-            Full-Service Technology Help for Home and Business
+            Repair and Tech Support for People and Business Owners
           </h1>
           <p className="section-copy mt-4 max-w-3xl">
-            Whether you need computer repair, network troubleshooting, app development,
-            business automation, or secure cloud deployment, we make technology simple.
+            Start with computer repair and everyday tech support. If you run a business, we also
+            build websites, apps, automation, and practical systems that save time.
           </p>
         </header>
 
@@ -39,7 +39,7 @@ export default function ServicesPage() {
         </section>
 
         <section className="glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Business and Startup Technology Services</h2>
+          <h2 className="section-title">Business Owner Services</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-3">
             {businessServices.map((service) => (
               <Link key={service.slug} href={`/services/${service.slug}`} className="project-card">

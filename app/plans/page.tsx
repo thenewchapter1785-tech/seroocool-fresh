@@ -65,7 +65,8 @@ export default function PlansPage() {
             Monthly Plans That Keep Technology Reliable
           </h1>
           <p className="section-copy mt-4 max-w-3xl">
-            Placeholder pricing is intentionally easy to edit while plan structure stays conversion-ready.
+            Choose a monthly support plan for fewer tech surprises, faster support, and clear
+            ongoing maintenance.
           </p>
         </header>
 
