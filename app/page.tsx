@@ -145,7 +145,6 @@ export default function Home() {
               width={1152}
               height={768}
               className="hero-tech-image"
-              priority
             />
             <div className="hero-image-overlay" />
           </div>

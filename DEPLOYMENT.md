@@ -26,10 +26,31 @@ Set these in DigitalOcean App settings:
 - `NEXT_PUBLIC_SITE_URL=https://zerocool-development.com`
 - `CONTACT_EMAIL=zerocool.development.project@gmail.com`
 - `LEAD_FROM_EMAIL=onboarding@resend.dev` (or your verified sender)
+- `ADMIN_ACCESS_CODE`
 - `RESEND_API_KEY`
 - `HUBSPOT_ACCESS_TOKEN`
 - `NEXT_PUBLIC_HUBSPOT_PORTAL_ID`
 - `OPENAI_API_KEY`
+
+Required for Meta admin and webhook flows:
+
+- `META_APP_ID`
+- `META_APP_SECRET`
+- `META_GRAPH_API_VERSION` (default: `v25.0`)
+- `META_USER_ACCESS_TOKEN`
+- `META_PAGE_ACCESS_TOKEN`
+- `META_PAGE_ID`
+- `META_VERIFY_TOKEN`
+- `META_ADMIN_WRITE_ENABLED=false` (recommended default)
+
+Required for Google Business Profile flows:
+
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `GOOGLE_REDIRECT_URI`
+- `GOOGLE_REFRESH_TOKEN`
+- `GOOGLE_BUSINESS_ACCOUNT_ID`
+- `GOOGLE_BUSINESS_LOCATION_ID`
 
 Optional:
 
@@ -39,6 +60,9 @@ Optional:
 - `NEXT_PUBLIC_META_PIXEL_ID`
 - `FACEBOOK_DOMAIN_VERIFICATION`
 - `GOOGLE_SITE_VERIFICATION`
+- `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`
+- `NEXT_PUBLIC_GA_ID`
+- `NEXT_PUBLIC_CLARITY_ID`
 
 ## Deploy/Update App
 
@@ -56,10 +80,15 @@ Or use the HubSpot setup helper:
 
 ## Cloudflare Configuration
 
-1. Keep SSL/TLS mode as `Full (strict)`.
-2. Enable `Always Use HTTPS`.
-3. Add DNS records required by DigitalOcean for apex and `www`.
-4. Keep proxy enabled (`orange cloud`) unless debugging origin directly.
+1. SSL/TLS mode: `Full (strict)`.
+2. Edge Certificates:
+	- `Always Use HTTPS`: On
+	- `Automatic HTTPS Rewrites`: On
+	- `Minimum TLS Version`: 1.2
+3. DNS records:
+	- Type `CNAME`, name `@`, target `seroocool-rjml7.ondigitalocean.app`, proxy status `Proxied`
+	- Type `CNAME`, name `www`, target `seroocool-rjml7.ondigitalocean.app`, proxy status `Proxied`
+4. In Cloudflare SSL/TLS Origin Server, do not use Flexible mode.
 5. Enable bot protections and WAF managed rules.
 
 Recommended minimum WAF/rate-limit rules:
