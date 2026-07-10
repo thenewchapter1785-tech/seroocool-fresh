@@ -100,6 +100,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.94,
     },
     {
+      url: `${siteUrl}/contact`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
       url: `${siteUrl}/estimate`,
       lastModified: now,
       changeFrequency: "weekly",
@@ -110,6 +116,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.92,
+    },
+    {
+      url: `${siteUrl}/tech-support`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.86,
+    },
+    {
+      url: `${siteUrl}/diagnostic`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.83,
     },
     {
       url: `${siteUrl}/emergency-tech-support`,
@@ -128,6 +146,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.86,
+    },
+    {
+      url: `${siteUrl}/privacy`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.35,
+    },
+    {
+      url: `${siteUrl}/terms`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.35,
     },
     {
       url: `${siteUrl}/blog`,

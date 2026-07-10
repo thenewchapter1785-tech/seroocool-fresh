@@ -160,6 +160,11 @@ This section is reserved for new tasks identified during build sessions.
 - [~] Replace in-memory sync cache with persistent cache file (`.meta-sync-cache.json`); still consider shared datastore for horizontal scale.
 - [x] Create integration readiness handoff matrix with configured/missing credential status and validation outcomes (`docs/integration-readiness-matrix.md`).
 - [x] Create release note for phased backup + conversion updates + validation outcomes (`docs/release-notes-2026-07-10.md`).
+- [x] Rebuild homepage to reference-style structure while preserving ZeroCool branding and existing integrations/routes (`/`, `/free-estimate`, `/contact`, `/diagnostic`, `/tech-support`).
+- [x] Remove long diagnostic/estimate forms from homepage and keep them on dedicated routes.
+- [x] Fix mobile overlap issue by replacing floating homepage FAB with a single sticky CTA and safe-area aware bottom padding.
+- [ ] Replace temporary homepage/why-section visual crops sourced from reference screenshot with production-approved original repair photography.
+- [ ] Configure direct production call number routing for "Call Now" CTA when business phone is finalized.
 
 ## 10) Cloudflare Account + API Token Setup (Step-by-Step)
 

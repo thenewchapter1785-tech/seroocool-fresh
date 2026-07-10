@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import AnalyticsPlaceholders from "./analytics-placeholders";
 import MetaPixel from "./meta-pixel";
 import HubSpotTracking from "./hubspot-tracking";
 import SiteNavigation from "./site-navigation";
+import { getContactEmail } from "@/lib/env";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -133,12 +136,61 @@ export default function RootLayout({
         <SiteNavigation />
         <div className="flex-1">{children}</div>
         <footer className="site-footer">
-          <div className="mx-auto w-full max-w-6xl px-6 py-6 md:px-10">
-            <p className="site-footer-title">Technology Made Simple for Home and Business.</p>
-            <p className="site-footer-copy mt-2">
-              Honest service. Fair pricing. No confusing tech talk. Serving Rhode Island with local
-              and remote support.
-            </p>
+          <div className="mx-auto w-full max-w-6xl px-6 py-10 md:px-10">
+            <div className="footer-grid">
+              <div>
+                <Image
+                  src="/logo.png"
+                  alt="ZeroCool Development logo"
+                  width={210}
+                  height={44}
+                  className="footer-logo"
+                />
+                <p className="site-footer-copy mt-3">Technology Made Simple for Home and Business.</p>
+              </div>
+
+              <div>
+                <p className="footer-heading">Services</p>
+                <ul className="footer-list">
+                  <li><Link href="/services/computer-repair">Computer Repair</Link></li>
+                  <li><Link href="/services/laptop-repair">Laptop Repair</Link></li>
+                  <li><Link href="/services/virus-removal">Virus Removal</Link></li>
+                  <li><Link href="/services/wifi-setup">Wi-Fi Help</Link></li>
+                  <li><Link href="/services/website-development">Website Development</Link></li>
+                  <li><Link href="/services">Business Solutions</Link></li>
+                </ul>
+              </div>
+
+              <div>
+                <p className="footer-heading">Company</p>
+                <ul className="footer-list">
+                  <li><Link href="/about">About Us</Link></li>
+                  <li><Link href="/plans">Pricing</Link></li>
+                  <li><Link href="/locations">Service Area</Link></li>
+                  <li><Link href="/#reviews">Reviews</Link></li>
+                  <li><Link href="/contact">Contact Us</Link></li>
+                </ul>
+              </div>
+
+              <div>
+                <p className="footer-heading">Contact</p>
+                <ul className="footer-list">
+                  <li><Link href="/book-service">Phone</Link></li>
+                  <li><a href={`mailto:${getContactEmail()}`}>{getContactEmail()}</a></li>
+                  <li>Rhode Island service area</li>
+                  <li>Remote support available</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="footer-bottom-row">
+              <p>© 2026 ZeroCool Development. All rights reserved.</p>
+              <div className="footer-bottom-links">
+                <Link href="/privacy">Privacy Policy</Link>
+                <Link href="/terms">Terms of Service</Link>
+                <Link href="/sitemap.xml">Sitemap</Link>
+              </div>
+            </div>
           </div>
         </footer>
       </body>

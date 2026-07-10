@@ -1,16 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import AiAssistantPanel from "./ai-assistant-panel";
-import BeforeAfterProjects from "./components/BeforeAfterProjects";
 import CustomerProblemFinder from "./customer-problem-finder";
-import PlatformsSupported from "./components/PlatformsSupported";
 import ReviewsSection from "./components/ReviewsSection";
-import TrustBadges from "./components/TrustBadges";
 import WhyChooseZeroCool from "./components/WhyChooseZeroCool";
-import LeadForm from "./lead-form";
 import RequestHelpFab from "./request-help-fab";
-import { blogPosts } from "@/lib/blog";
 import { getContactEmail, getSiteUrl } from "@/lib/env";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -21,26 +15,47 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/",
 });
 
-const coreCtas = [
-  { label: "Get Help Now", href: "#contact", style: "primary" },
-  { label: "Free Estimate", href: "/free-estimate", style: "secondary" },
-];
-
-const faqItems = [
+const trustPoints = [
   {
-    question: "Do I need to know technical terms before I contact you?",
-    answer:
-      "No. Just describe what you see. We explain everything in plain English.",
+    title: "Honest Service",
+    copy: "No upsells. Just what you need.",
+    icon: (
+      <svg viewBox="0 0 24 24" className="hero-trust-icon" aria-hidden="true">
+        <path d="M12 3l7 3v5c0 5-3.4 8.8-7 10-3.6-1.2-7-5-7-10V6l7-3z" />
+        <path d="M9.3 12.2l1.9 1.9 3.7-3.7" />
+      </svg>
+    ),
   },
   {
-    question: "Can you help with both home tech issues and business tech needs?",
-    answer:
-      "Yes. We fix everyday problems for families and also help business owners with websites, apps, automation, and SEO.",
+    title: "Fair Pricing",
+    copy: "Transparent quotes with no surprises.",
+    icon: (
+      <svg viewBox="0 0 24 24" className="hero-trust-icon" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M10 9.2c0-1 1-1.8 2.2-1.8 1.1 0 2 .6 2 1.6 0 .8-.5 1.3-1.5 1.7l-1 .4c-1 .4-1.5 1-1.5 1.8" />
+        <path d="M12 16.8v.2" />
+      </svg>
+    ),
   },
   {
-    question: "What if I am not sure what is wrong yet?",
-    answer:
-      "That is normal. Tell us what your device is doing, and we will guide you through next steps.",
+    title: "Fast Service",
+    copy: "Quick turnaround when you need it.",
+    icon: (
+      <svg viewBox="0 0 24 24" className="hero-trust-icon" aria-hidden="true">
+        <path d="M13 3L6 14h5l-1 7 8-12h-5l0-6z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Local & Reliable",
+    copy: "Proudly serving Rhode Island.",
+    icon: (
+      <svg viewBox="0 0 24 24" className="hero-trust-icon" aria-hidden="true">
+        <path d="M4 19v-1.5a3 3 0 013-3h10a3 3 0 013 3V19" />
+        <circle cx="12" cy="8" r="3" />
+        <path d="M5 10.5a2.5 2.5 0 010-5M19 10.5a2.5 2.5 0 000-5" />
+      </svg>
+    ),
   },
 ];
 
@@ -76,210 +91,89 @@ export default function Home() {
           "Website Security",
         ],
       },
-      {
-        "@type": "FAQPage",
-        mainEntity: faqItems.map((item) => ({
-          "@type": "Question",
-          name: item.question,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: item.answer,
-          },
-        })),
-      },
     ],
   };
 
   return (
-    <div className="site-shell">
+    <div className="site-shell homepage-shell">
       <RequestHelpFab />
 
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-8 md:gap-8 md:px-10 md:py-12">
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6 md:gap-8 md:px-8 md:py-10 lg:px-10">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
 
-        <header className="glass-panel hero-panel animate-rise rounded-3xl p-7 md:p-10">
-          <div className="hero-tech-visual" aria-hidden="true">
-            <span className="orb orb-a" />
-            <span className="orb orb-b" />
-            <span className="orb orb-c" />
-            <span className="node node-a" />
-            <span className="node node-b" />
-            <span className="node node-c" />
-            <span className="node node-d" />
+        <section className="hero-split rounded-3xl">
+          <div className="hero-split-content">
+            <h1 className="hero-title">
+              Technology Problems?
+              <br />
+              <span className="hero-accent">We Can Help.</span>
+            </h1>
+            <p className="hero-copy mt-4">
+              From slow computers and laptop problems to Wi-Fi issues, phone troubleshooting,
+              websites, and business technology, ZeroCool Development makes technology simple.
+              Honest service, fair pricing, and no confusing tech talk.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="/contact" className="cta-primary inline-flex">
+                Get Help Now
+              </Link>
+              <Link href="/free-estimate" className="cta-secondary inline-flex">
+                Free Estimate
+              </Link>
+            </div>
+
+            <div className="hero-trust-grid mt-7">
+              {trustPoints.map((point) => (
+                <article key={point.title} className="hero-trust-item">
+                  <span className="hero-trust-icon-wrap">{point.icon}</span>
+                  <div>
+                    <p className="hero-trust-title">{point.title}</p>
+                    <p className="hero-trust-copy">{point.copy}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
 
-          <div className="relative z-10 mb-5 flex items-center justify-between gap-3">
+          <div className="hero-split-media" aria-hidden="true">
             <Image
-              src="/logo.png"
-              alt="ZeroCool Development logo"
-              width={168}
-              height={112}
-              className="brand-logo"
+              src="/reference/zerocool-homepage-reference.png"
+              alt="Computer repair workstation"
+              width={1152}
+              height={768}
+              className="hero-tech-image"
               priority
             />
-            <p className="label-chip inline-flex">Local Computer Repair • Friendly Tech Help</p>
+            <div className="hero-image-overlay" />
           </div>
-
-          <h1 className="relative z-10 text-4xl leading-tight font-semibold tracking-tight md:text-6xl">
-            Technology Problems? We Can Help.
-          </h1>
-          <p className="relative z-10 mt-4 max-w-4xl text-base leading-7 text-slate-200/90 md:text-lg">
-            From slow computers and laptop problems to Wi-Fi issues, phone troubleshooting,
-            websites, and business technology, ZeroCool Development makes technology simple. Honest
-            service, fair pricing, and no confusing tech talk.
-          </p>
-
-          <div className="relative z-10 mt-6 flex flex-wrap gap-3">
-            {coreCtas.map((cta) => (
-              <Link
-                key={cta.label}
-                href={cta.href}
-                className={cta.style === "primary" ? "cta-primary inline-flex" : "cta-secondary inline-flex"}
-              >
-                {cta.label}
-              </Link>
-            ))}
-          </div>
-        </header>
+        </section>
 
         <CustomerProblemFinder />
 
-        <section className="glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Not tech savvy? No problem.</h2>
-          <p className="section-copy mt-3">
-            You do not need to know what is wrong. Tell us what your computer, phone, Wi-Fi,
-            website, or business technology is doing and we will explain the options in plain
-            English.
-          </p>
-        </section>
-
-        <section className="glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Choose Your Service Path</h2>
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            <article className="faq-card">
-              <h3 className="faq-question">Home and Personal Tech Help</h3>
-              <p className="faq-answer">
-                Computer repair, laptop repair, PC diagnostics, virus and malware removal, slow
-                computer help, phone troubleshooting, device setup, Wi-Fi setup, printer setup,
-                email setup, remote support, custom computers, and gaming PC builds.
-              </p>
-            </article>
-            <article className="faq-card">
-              <h3 className="faq-question">Business Technology Services</h3>
-              <p className="faq-answer">
-                Website design and development, e-commerce, mobile apps, custom business software,
-                SEO, Google Business Profile support, HubSpot CRM, AI automation, business
-                automation, small business IT support, Cloudflare security, and DigitalOcean
-                deployment.
-              </p>
-            </article>
-          </div>
-          <div className="mt-5">
-            <Link href="/services" className="cta-secondary inline-flex">
-              Explore All Services
-            </Link>
-          </div>
-        </section>
-
         <WhyChooseZeroCool />
-        <ReviewsSection />
-        <BeforeAfterProjects />
 
-        <section className="glass-panel rounded-3xl p-5 md:p-6">
-          <h2 className="section-title">Need Help?</h2>
-          <p className="section-copy mt-3">
-            Whether your computer is running slow, your laptop won&apos;t turn on, your Wi-Fi keeps
-            disconnecting, or your business needs a professional website, we&apos;re here to help.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-3">
+        <ReviewsSection />
+
+        <section className="bottom-cta-band rounded-2xl">
+          <div>
+            <h2 className="bottom-cta-title">Need Help?</h2>
+            <p className="bottom-cta-copy">
+              Whether it&apos;s a computer problem, Wi-Fi issue, or business technology need, we&apos;re
+              here for you.
+            </p>
+          </div>
+          <div className="bottom-cta-actions">
             <Link href="/free-estimate" className="cta-primary inline-flex">
               Get a Free Estimate
             </Link>
             <Link href="/book-service" className="cta-secondary inline-flex">
               Call Now
             </Link>
-            <Link href="/#contact" className="cta-secondary inline-flex">
+            <Link href="/contact" className="cta-secondary inline-flex">
               Send a Message
-            </Link>
-          </div>
-          <div className="mt-4 grid gap-2 text-sm text-slate-100/90 md:grid-cols-2">
-            {[
-              "Honest Advice",
-              "Fair Pricing",
-              "Fast Service",
-              "No Confusing Tech Talk",
-            ].map((point) => (
-              <p key={point} className="section-copy">
-                ✔ {point}
-              </p>
-            ))}
-          </div>
-        </section>
-
-        <section className="glass-panel rounded-3xl p-6 md:p-8" id="contact">
-          <h2 className="section-title">Tell Us What Is Going On</h2>
-          <p className="section-copy mt-3">
-            No pressure and no confusing jargon. Share the problem and we will send clear next
-            steps.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Link href="/free-estimate" className="cta-secondary inline-flex">
-              Start With a Free Estimate
-            </Link>
-            <Link href="/book-service" className="cta-secondary inline-flex">
-              Book a Service Visit
-            </Link>
-          </div>
-          <TrustBadges />
-          <div className="mt-4">
-            <LeadForm />
-          </div>
-        </section>
-
-        <AiAssistantPanel />
-
-        <PlatformsSupported />
-
-        <section className="glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Helpful Tips From ZeroCool</h2>
-          <div className="mt-4 grid gap-3 md:grid-cols-2">
-            {blogPosts.slice(0, 6).map((post) => (
-              <Link key={post.slug} href={`/blog/${post.slug}`} className="project-card">
-                <p className="project-tag">{post.readTime}</p>
-                <h3 className="project-title">{post.title}</h3>
-                <p className="project-copy">{post.excerpt}</p>
-              </Link>
-            ))}
-          </div>
-          <div className="mt-4">
-            <Link href="/blog" className="cta-secondary inline-flex">
-              Read More Tips
-            </Link>
-          </div>
-        </section>
-
-        <section className="glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Quick Questions</h2>
-          <div className="mt-4 grid gap-4 md:grid-cols-3">
-            {faqItems.map((faq) => (
-              <article key={faq.question} className="faq-card">
-                <h3 className="faq-question">{faq.question}</h3>
-                <p className="faq-answer">{faq.answer}</p>
-              </article>
-            ))}
-          </div>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Link href="/emergency-tech-support" className="cta-primary inline-flex">
-              Need Emergency Help
-            </Link>
-            <Link href="/plans" className="cta-secondary inline-flex">
-              See Monthly Support Plans
-            </Link>
-            <Link href="/free-guides" className="cta-secondary inline-flex">
-              Get Free How-To Guides
             </Link>
           </div>
         </section>
