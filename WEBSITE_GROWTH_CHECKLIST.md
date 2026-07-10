@@ -145,6 +145,8 @@ This section is reserved for new tasks identified during build sessions.
 - [ ] Regenerate Google refresh token with scope `https://www.googleapis.com/auth/business.manage` (current token has only Search Console scopes, causing 403 insufficient scope on Business Profile APIs).
 - [ ] Verify admin Google Business routes in production: accounts, locations, location update, reviews, reply publish, posts, photos.
 - [ ] Reconnect DigitalOcean GitHub App installation with private-repo access so future deploys work without temporary public visibility.
+- [ ] Deployment attempt `581bb005-d27a-4109-83e0-11e7c78a363c` failed with `error cloning repo: authentication required`; restore repo clone access before next deploy.
+- [ ] Merge/push branch `production-cleanup` changes into `main` before the next DigitalOcean deploy, since app spec deploy source is branch `main`.
 - [~] Set Meta env vars in DigitalOcean: `META_PAGE_ID` configured (`1131633576708366`); still need `META_APP_ID`, `META_APP_SECRET`, `META_USER_ACCESS_TOKEN`, `META_PAGE_ACCESS_TOKEN`.
 - [ ] Verify Facebook Graph API permissions for page management and posting with current tokens.
 - [ ] Test new Meta admin routes in production: pages, page details/update, posts create/schedule, audit, recommendations, confirm-action.
