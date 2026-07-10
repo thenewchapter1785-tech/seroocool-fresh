@@ -76,7 +76,7 @@ export default function LocalSeoTemplate({ page, path }: LocalSeoTemplateProps) 
             <Link href="/#contact" className="cta-primary inline-flex">
               Get Help Now
             </Link>
-            <Link href="/estimate" className="cta-secondary inline-flex">
+            <Link href="/free-estimate" className="cta-secondary inline-flex">
               Free Estimate
             </Link>
           </div>

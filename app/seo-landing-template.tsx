@@ -73,7 +73,7 @@ export default function SeoLandingTemplate(props: LandingTemplateProps) {
             <Link href="/#contact" className="cta-primary inline-flex">
               Get Help Now
             </Link>
-            <Link href="/estimate" className="cta-secondary inline-flex">
+            <Link href="/free-estimate" className="cta-secondary inline-flex">
               Free Estimate
             </Link>
           </div>
@@ -109,7 +109,7 @@ export default function SeoLandingTemplate(props: LandingTemplateProps) {
             <Link href="/#contact" className="cta-primary inline-flex">
               Talk to ZeroCool
             </Link>
-            <Link href="/estimate" className="cta-secondary inline-flex">
+            <Link href="/free-estimate" className="cta-secondary inline-flex">
               Free Estimate
             </Link>
           </div>

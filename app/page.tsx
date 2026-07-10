@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense } from "react";
 import AiAssistantPanel from "./ai-assistant-panel";
 import BeforeAfterProjects from "./components/BeforeAfterProjects";
 import CustomerProblemFinder from "./customer-problem-finder";
@@ -10,7 +9,6 @@ import ReviewsSection from "./components/ReviewsSection";
 import TrustBadges from "./components/TrustBadges";
 import WhyChooseZeroCool from "./components/WhyChooseZeroCool";
 import LeadForm from "./lead-form";
-import LiveEstimator from "./live-estimator";
 import RequestHelpFab from "./request-help-fab";
 import { blogPosts } from "@/lib/blog";
 import { getContactEmail, getSiteUrl } from "@/lib/env";
@@ -25,7 +23,7 @@ export const metadata: Metadata = buildPageMetadata({
 
 const coreCtas = [
   { label: "Get Help Now", href: "#contact", style: "primary" },
-  { label: "Free Estimate", href: "/estimate", style: "secondary" },
+  { label: "Free Estimate", href: "/free-estimate", style: "secondary" },
 ];
 
 const faqItems = [
@@ -190,19 +188,34 @@ export default function Home() {
         <ReviewsSection />
         <BeforeAfterProjects />
 
-        <section className="glass-panel rounded-3xl p-6 md:p-8">
-          <h2 className="section-title">Free Estimate</h2>
+        <section className="glass-panel rounded-3xl p-5 md:p-6">
+          <h2 className="section-title">Need Help?</h2>
           <p className="section-copy mt-3">
-            No pressure. No obligation. Tell us what is happening and we will help you understand
-            the next step.
+            Whether your computer is running slow, your laptop won&apos;t turn on, your Wi-Fi keeps
+            disconnecting, or your business needs a professional website, we&apos;re here to help.
           </p>
-          <Suspense fallback={<p className="section-copy mt-4">Loading estimate tool...</p>}>
-            <LiveEstimator />
-          </Suspense>
-          <div className="mt-4">
-            <Link href="/book-service" className="cta-secondary inline-flex">
-              Book a Service Visit
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link href="/free-estimate" className="cta-primary inline-flex">
+              Get a Free Estimate
             </Link>
+            <Link href="/book-service" className="cta-secondary inline-flex">
+              Call Now
+            </Link>
+            <Link href="/#contact" className="cta-secondary inline-flex">
+              Send a Message
+            </Link>
+          </div>
+          <div className="mt-4 grid gap-2 text-sm text-slate-100/90 md:grid-cols-2">
+            {[
+              "Honest Advice",
+              "Fair Pricing",
+              "Fast Service",
+              "No Confusing Tech Talk",
+            ].map((point) => (
+              <p key={point} className="section-copy">
+                ✔ {point}
+              </p>
+            ))}
           </div>
         </section>
 
@@ -213,7 +226,7 @@ export default function Home() {
             steps.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
-            <Link href="/estimate" className="cta-secondary inline-flex">
+            <Link href="/free-estimate" className="cta-secondary inline-flex">
               Start With a Free Estimate
             </Link>
             <Link href="/book-service" className="cta-secondary inline-flex">

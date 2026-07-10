@@ -22,43 +22,43 @@ const options: ProblemOption[] = [
   {
     label: "My Computer Is Slow",
     icon: "PC",
-    href: "/estimate?serviceType=computer-repair&problem=slow-computer",
+    href: "/free-estimate?serviceType=computer-repair&problem=slow-computer",
     analyticsEvent: "problem_finder_slow_computer",
   },
   {
     label: "My Laptop Won't Turn On",
     icon: "LP",
-    href: "/estimate?serviceType=laptop-repair&problem=laptop-wont-turn-on",
+    href: "/free-estimate?serviceType=laptop-repair&problem=laptop-wont-turn-on",
     analyticsEvent: "problem_finder_laptop_power",
   },
   {
     label: "I Think I Have a Virus",
     icon: "VR",
-    href: "/estimate?serviceType=virus-removal&problem=virus-signs",
+    href: "/free-estimate?serviceType=virus-removal&problem=virus-signs",
     analyticsEvent: "problem_finder_virus",
   },
   {
     label: "My Phone Isn't Working Right",
     icon: "PH",
-    href: "/estimate?serviceType=phone-troubleshooting&problem=phone-troubleshooting",
+    href: "/free-estimate?serviceType=phone-troubleshooting&problem=phone-troubleshooting",
     analyticsEvent: "problem_finder_phone",
   },
   {
     label: "My Wi-Fi Keeps Disconnecting",
     icon: "WF",
-    href: "/estimate?serviceType=wifi-setup&problem=wifi-disconnecting",
+    href: "/free-estimate?serviceType=wifi-setup&problem=wifi-disconnecting",
     analyticsEvent: "problem_finder_wifi",
   },
   {
     label: "I Need Help Setting Up a Device",
     icon: "DV",
-    href: "/estimate?serviceType=device-setup&problem=device-setup",
+    href: "/free-estimate?serviceType=device-setup&problem=device-setup",
     analyticsEvent: "problem_finder_device_setup",
   },
   {
     label: "I Need a Website",
     icon: "WB",
-    href: "/estimate?serviceType=website-development&problem=need-website",
+    href: "/free-estimate?serviceType=website-development&problem=need-website",
     analyticsEvent: "problem_finder_website",
   },
   {
@@ -70,7 +70,7 @@ const options: ProblemOption[] = [
   {
     label: "I Want to Automate My Business",
     icon: "AT",
-    href: "/estimate?serviceType=business-automation&problem=business-automation",
+    href: "/free-estimate?serviceType=business-automation&problem=business-automation",
     analyticsEvent: "problem_finder_business_automation",
   },
 ];

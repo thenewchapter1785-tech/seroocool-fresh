@@ -41,7 +41,7 @@ export default function AboutPage() {
             ))}
           </div>
           <div className="mt-6">
-            <Link href="/estimate" className="cta-primary inline-flex">
+            <Link href="/free-estimate" className="cta-primary inline-flex">
               Get a Free Estimate
             </Link>
           </div>

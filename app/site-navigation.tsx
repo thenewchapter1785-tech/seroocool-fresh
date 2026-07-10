@@ -9,7 +9,7 @@ const links = [
   { href: "/book-service", label: "Book Service" },
   { href: "/about", label: "About" },
   { href: "/#contact", label: "Get Help" },
-  { href: "/estimate", label: "Free Estimate", primary: true },
+  { href: "/free-estimate", label: "Free Estimate", primary: true },
 ];
 
 export default function SiteNavigation() {
