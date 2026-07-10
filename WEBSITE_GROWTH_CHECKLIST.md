@@ -154,10 +154,12 @@ This section is reserved for new tasks identified during build sessions.
 - [~] Decide durable storage strategy for active page persistence (implemented `.meta-active-page.json`; still evaluate multi-instance shared store for production).
 - [x] Wire live engagement actions (reply/hide/unhide/delete) with explicit confirmation text gate.
 - [ ] Add recurring log retention/rotation for `logs/meta-admin-audit.log` in production.
-- [~] Run `npm run meta:test` against production-like environment and document outputs in deployment notes (script expanded; requires `ADMIN_ACCESS_CODE` + running app).
+- [~] Run `npm run meta:test` against production-like environment and document outputs in deployment notes (local run now reaches diagnostics route; currently returns `502 Meta request failed` until full Meta credentials are configured).
 - [x] Add profile review-before-apply flow for Facebook Page updates with expiring review tokens.
 - [x] Add persisted Meta post drafts endpoint/UI for reusable scheduled content templates.
 - [~] Replace in-memory sync cache with persistent cache file (`.meta-sync-cache.json`); still consider shared datastore for horizontal scale.
+- [x] Create integration readiness handoff matrix with configured/missing credential status and validation outcomes (`docs/integration-readiness-matrix.md`).
+- [x] Create release note for phased backup + conversion updates + validation outcomes (`docs/release-notes-2026-07-10.md`).
 
 ## 10) Cloudflare Account + API Token Setup (Step-by-Step)
 
