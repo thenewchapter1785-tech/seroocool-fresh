@@ -15,6 +15,11 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/admin",
 });
 
+metadata.robots = {
+  index: false,
+  follow: false,
+};
+
 const manualActions = [
   "Submit a live test lead and verify HubSpot contact + deal creation.",
   "Run Google Business Profile admin checks with valid business.manage scope.",

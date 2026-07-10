@@ -81,6 +81,10 @@ const nextConfig: NextConfig = {
     ];
   },
   async redirects() {
+    if (isDevelopment) {
+      return [];
+    }
+
     return [
       {
         source: "/:path*",

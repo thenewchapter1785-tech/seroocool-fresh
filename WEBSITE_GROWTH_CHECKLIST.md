@@ -100,6 +100,9 @@ HubSpot app scopes needed:
 
 This section is reserved for new tasks identified during build sessions.
 
+- [ ] Add a minimal automated test suite and `npm test` script so production validation includes an executable test gate.
+- [ ] Add a CI guard to avoid running Next build/type generation jobs in parallel (prevents `.next/dev/types` route type corruption).
+- [ ] Start a local app process automatically in the Meta diagnostics workflow (or document one-command wrapper) before running `npm run meta:test`.
 - [x] Set `NEXT_PUBLIC_HUBSPOT_PORTAL_ID` in local and DigitalOcean environments so HubSpot tracking script loads.
 - [ ] Verify HubSpot custom behavioral events are appearing (form view, submit attempt, submit success, submit error, CTA clicks).
 - [ ] Configure HubSpot lifecycle/source mapping for: Facebook Lead, Instagram Lead, Organic Lead.
