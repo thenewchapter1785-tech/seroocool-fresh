@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { submitLeadForm } from "@/lib/client/lead-form-submit";
 import { serviceCatalog } from "@/lib/services";
 
 type QuickLeadFormProps = {
@@ -52,34 +53,23 @@ export default function QuickLeadForm({
         (service) => service.slug === formData.serviceNeeded
       );
 
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          preferredContactMethod: formData.preferredContactMethod,
-          clientType: formData.clientType,
-          projectType: selectedService?.name ?? projectType,
-          formType,
-          urgency: formData.urgency,
-          budgetRange: formData.budgetRange,
-          timeline: formData.timeline,
-          message: formData.problemDescription,
-          website: formData.website,
-          submittedAt: Date.now() - 2000,
-        }),
+      const data = await submitLeadForm("/api/contact", {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        preferredContactMethod: formData.preferredContactMethod,
+        clientType: formData.clientType,
+        projectType: selectedService?.name ?? projectType,
+        formType,
+        urgency: formData.urgency,
+        budgetRange: formData.budgetRange,
+        timeline: formData.timeline,
+        message: formData.problemDescription,
+        website: formData.website,
       });
 
-      const data = (await response.json().catch(() => null)) as
-        | { ok?: boolean; error?: string }
-        | null;
-
-      if (!response.ok || !data?.ok) {
-        throw new Error(data?.error ?? "Submission failed");
+      if (!data.ok) {
+        throw new Error(data.message ?? "Submission failed");
       }
 
       setState("success");

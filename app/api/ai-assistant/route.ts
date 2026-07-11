@@ -9,8 +9,8 @@ import {
   isValidEmail,
   sanitizeText,
 } from "@/lib/api-security";
-import { getContactEmail, getLeadSenderEmail, readOptionalEnv } from "@/lib/env";
-import { upsertHubSpotLead } from "@/lib/hubspot";
+import { readOptionalEnv } from "@/lib/env";
+import { processLeadSubmission } from "@/lib/lead-pipeline";
 
 type LeadDetails = {
   name?: string;
@@ -105,51 +105,6 @@ function getMissingLeadFields(lead: ReturnType<typeof normalizeLead>) {
   ] as const;
 
   return required.filter((item) => !item[1]).map((item) => item[0]);
-}
-
-async function sendQualifiedLeadEmail(params: {
-  lead: ReturnType<typeof normalizeLead>;
-  prompt: string;
-}) {
-  const resendApiKey = readOptionalEnv("RESEND_API_KEY");
-  if (!resendApiKey) {
-    return;
-  }
-
-  const emailText = [
-    "New AI Assistant Qualified Lead",
-    "",
-    `Name: ${params.lead.name}`,
-    `Email: ${params.lead.email}`,
-    `Phone: ${params.lead.phone}`,
-    `Company: ${params.lead.company}`,
-    `Project Type: ${params.lead.projectType}`,
-    `Preferred Contact Method: ${params.lead.preferredContactMethod}`,
-    `Audience Type: ${params.lead.audienceType}`,
-    `Urgency: ${params.lead.urgency}`,
-    `Budget: ${params.lead.budgetRange}`,
-    `Timeline: ${params.lead.timeline}`,
-    `Problem Description: ${params.lead.problemDescription}`,
-    `Preferred Appointment Type: ${params.lead.appointmentType}`,
-    "",
-    "User question:",
-    params.prompt,
-  ].join("\n");
-
-  await fetchWithTimeout("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${resendApiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: getLeadSenderEmail(),
-      to: [getContactEmail()],
-      reply_to: params.lead.email,
-      subject: `AI Qualified Lead: ${params.lead.projectType || "Consultation"}`,
-      text: emailText,
-    }),
-  });
 }
 
 export async function POST(request: Request) {
@@ -279,7 +234,7 @@ export async function POST(request: Request) {
   ].join(" ");
 
   try {
-    upstreamResponse = await fetch(OPENAI_API_URL, {
+    upstreamResponse = await fetchWithTimeout(OPENAI_API_URL, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${openaiApiKey}`,
@@ -330,33 +285,43 @@ export async function POST(request: Request) {
   };
 
   const isQualified = missingFields.length === 0;
+  let qualifiedLeadCaptured = false;
+  let leadCaptureWarning = "";
 
   if (isQualified) {
-    try {
-      await upsertHubSpotLead({
-        name: lead.name,
-        email: lead.email,
-        phone: lead.phone,
-        company: lead.company,
-        projectType: lead.projectType,
-        budgetRange: lead.budgetRange,
-        timeline: lead.timeline,
-        notes: [
-          `AI assistant question: ${prompt}`,
-          `Conversation Summary: ${conversationSummary || "No prior conversation"}`,
-          `Preferred Contact Method: ${lead.preferredContactMethod || "not provided"}`,
-          `Audience Type: ${lead.audienceType || "not provided"}`,
-          `Urgency: ${lead.urgency || "not provided"}`,
-          `Problem Description: ${lead.problemDescription || "not provided"}`,
-          `Preferred Appointment Type: ${lead.appointmentType || "not provided"}`,
-        ].join("\n"),
-        formType: "ai_assistant",
-      });
-
-      await sendQualifiedLeadEmail({ lead, prompt });
-    } catch (error) {
+    const leadResult = await processLeadSubmission({
+      routeKey: "api:ai-assistant:qualified-lead",
+      clientIp: ip,
+      source: "ai_assistant",
+      formType: "ai_assistant",
+      pageUrl: "/diagnostic",
+      name: lead.name,
+      email: lead.email,
+      phone: lead.phone,
+      preferredContactMethod: lead.preferredContactMethod,
+      service: lead.projectType,
+      message: lead.problemDescription || prompt,
+      urgency: lead.urgency,
+      personalOrBusiness: lead.audienceType,
+      budget: lead.budgetRange,
+      timeline: lead.timeline,
+      company: lead.company,
+      metadata: {
+        conversationSummary: conversationSummary || "No prior conversation",
+        appointmentType: lead.appointmentType || "not provided",
+      },
+    }).catch((error) => {
       console.error("Failed to process qualified AI lead", error);
-    }
+      return null;
+    });
+
+    qualifiedLeadCaptured = Boolean(leadResult?.ok);
+    leadCaptureWarning =
+      leadResult && !leadResult.ok
+        ? leadResult.message
+        : !leadResult
+          ? "We could not save your details right now. Please submit the contact form."
+          : "";
   }
 
   return NextResponse.json(
@@ -364,7 +329,8 @@ export async function POST(request: Request) {
       ok: true,
       answer: upstreamJson.output_text ?? "",
       missingLeadFields: missingFields,
-      qualifiedLeadCaptured: isQualified,
+      qualifiedLeadCaptured,
+      leadCaptureWarning,
     },
     {
       headers: corsHeaders,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { submitLeadForm } from "@/lib/client/lead-form-submit";
 
 type SubmitState = "idle" | "sending" | "success" | "error";
 
@@ -52,37 +53,26 @@ export default function BookingForm() {
     setErrorText("");
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          preferredContactMethod: formData.preferredContactMethod,
-          audienceType: formData.audienceType,
-          urgency: formData.urgency,
-          projectType: formData.appointmentType,
-          timeline: formData.preferredDate || "flexible",
-          message: [
-            `Appointment type: ${formData.appointmentType}`,
-            `Preferred date/time: ${formData.preferredDate || "not provided"}`,
-            `Request details: ${formData.details || "not provided"}`,
-          ].join("\n"),
-          formType: "appointment_booking",
-          website: formData.website,
-          submittedAt: formData.submittedAt,
-        }),
+      const payload = await submitLeadForm("/api/contact", {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        preferredContactMethod: formData.preferredContactMethod,
+        audienceType: formData.audienceType,
+        urgency: formData.urgency,
+        projectType: formData.appointmentType,
+        timeline: formData.preferredDate || "flexible",
+        message: [
+          `Appointment type: ${formData.appointmentType}`,
+          `Preferred date/time: ${formData.preferredDate || "not provided"}`,
+          `Request details: ${formData.details || "not provided"}`,
+        ].join("\n"),
+        formType: "appointment_booking",
+        website: formData.website,
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | { ok?: boolean; error?: string }
-        | null;
-
-      if (!response.ok || !payload?.ok) {
-        throw new Error(payload?.error ?? "Could not submit booking request");
+      if (!payload.ok) {
+        throw new Error(payload.message ?? "Could not submit booking request");
       }
 
       setState("success");

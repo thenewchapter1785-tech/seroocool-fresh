@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { submitLeadForm } from "@/lib/client/lead-form-submit";
 import { leadMagnets } from "@/lib/lead-magnets";
 
 export default function FreeGuidesPage() {
@@ -10,33 +11,23 @@ export default function FreeGuidesPage() {
     name: "",
     email: "",
     website: "",
-    submittedAt: Date.now() - 2000,
   }));
 
   async function unlockGuide(slug: string, title: string) {
     setErrorText("");
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          projectType: title,
-          formType: "lead_magnet_download",
-          message: `Lead guide requested: ${title}`,
-          website: formData.website,
-          submittedAt: formData.submittedAt,
-        }),
+      const payload = await submitLeadForm("/api/contact", {
+        name: formData.name,
+        email: formData.email,
+        projectType: title,
+        formType: "lead_magnet_download",
+        message: `Lead guide requested: ${title}`,
+        website: formData.website,
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | { ok?: boolean; error?: string }
-        | null;
-
-      if (!response.ok || !payload?.ok) {
-        throw new Error(payload?.error ?? "Failed to unlock guide");
+      if (!payload.ok) {
+        throw new Error(payload.message ?? "Failed to unlock guide");
       }
 
       setUnlocked((current) => ({ ...current, [slug]: true }));

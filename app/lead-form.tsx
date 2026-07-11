@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { submitLeadForm } from "@/lib/client/lead-form-submit";
 import { serviceCatalog } from "@/lib/services";
 
 declare global {
@@ -12,45 +13,9 @@ declare global {
 
 type SubmitState = "idle" | "sending" | "success" | "error";
 
-function detectSource(utmSource: string | null) {
-  const source = (utmSource ?? "").toLowerCase();
-
-  if (source.includes("facebook") || source === "fb") {
-    return "facebook";
-  }
-
-  if (source.includes("instagram") || source === "ig") {
-    return "instagram";
-  }
-
-  return "organic";
-}
-
-function getInitialTrackingData() {
-  if (typeof window === "undefined") {
-    return {
-      utmSource: "",
-      utmCampaign: "",
-      source: "organic",
-    };
-  }
-
-  const params = new URLSearchParams(window.location.search);
-  const utmSource = params.get("utm_source") ?? "";
-  const utmCampaign = params.get("utm_campaign") ?? "";
-
-  return {
-    utmSource,
-    utmCampaign,
-    source: detectSource(utmSource),
-  };
-}
-
 export default function LeadForm() {
   const router = useRouter();
-  const [trackingData] = useState(getInitialTrackingData);
-  const [source] = useState(trackingData.source);
-  const [formStartAt] = useState(() => Date.now());
+  const [errorText, setErrorText] = useState("");
   const [state, setState] = useState<SubmitState>("idle");
 
   useEffect(() => {
@@ -85,6 +50,7 @@ export default function LeadForm() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setState("sending");
+    setErrorText("");
 
     window._hsq?.push([
       "trackCustomBehavioralEvent",
@@ -98,36 +64,24 @@ export default function LeadForm() {
         (service) => service.slug === formData.serviceNeeded
       );
 
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          company: formData.company,
-          projectType: selectedService?.name ?? formData.serviceNeeded,
-          preferredContactMethod: formData.preferredContactMethod,
-          clientType: formData.clientType,
-          urgency: formData.urgency,
-          budgetRange: formData.budgetRange,
-          timeline: formData.timeline,
-          message: formData.problemDescription,
-          website: formData.website,
-          submittedAt: formStartAt,
-          source,
-          utmSource: trackingData.utmSource,
-          utmCampaign: trackingData.utmCampaign,
-        }),
+      const result = await submitLeadForm("/api/contact", {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.company,
+        projectType: selectedService?.name ?? formData.serviceNeeded,
+        preferredContactMethod: formData.preferredContactMethod,
+        clientType: formData.clientType,
+        urgency: formData.urgency,
+        budgetRange: formData.budgetRange,
+        timeline: formData.timeline,
+        message: formData.problemDescription,
+        website: formData.website,
+        formType: "contact_form",
       });
 
-      if (!response.ok) {
-        const responseBody = (await response.json().catch(() => null)) as
-          | { error?: string }
-          | null;
-        throw new Error(responseBody?.error ?? "Failed to submit lead form");
+      if (!result.ok) {
+        throw new Error(result.message ?? "Failed to submit lead form");
       }
 
       window._hsq?.push([
@@ -135,7 +89,7 @@ export default function LeadForm() {
         {
           email: formData.email,
           firstname: formData.name.split(" ")[0] ?? "",
-          project_source: source,
+          project_source: "website",
         },
       ]);
       window._hsq?.push(["trackPageView"]);
@@ -157,6 +111,7 @@ export default function LeadForm() {
         },
       ]);
       console.error("Lead form submission failed", error);
+      setErrorText(error instanceof Error ? error.message : "Unable to submit lead form");
       setState("error");
     }
   }
@@ -334,9 +289,7 @@ export default function LeadForm() {
       ) : null}
 
       {state === "error" ? (
-        <p className="lead-status error">
-          Something went wrong. Please verify your details and try again.
-        </p>
+        <p className="lead-status error">{errorText || "Something went wrong. Please try again."}</p>
       ) : null}
     </form>
   );

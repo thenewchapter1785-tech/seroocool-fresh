@@ -38,6 +38,7 @@ export default function AiAssistantPanel() {
   const [prompt, setPrompt] = useState("");
   const [state, setState] = useState<AssistantState>("idle");
   const [errorText, setErrorText] = useState("");
+  const [leadCaptureWarning, setLeadCaptureWarning] = useState("");
   const [missingFields, setMissingFields] = useState<string[]>([]);
   const [qualifiedCaptured, setQualifiedCaptured] = useState(false);
   const [conversation, setConversation] = useState<ChatMessage[]>([
@@ -87,6 +88,7 @@ export default function AiAssistantPanel() {
     setPrompt("");
     setState("sending");
     setErrorText("");
+    setLeadCaptureWarning("");
     setQualifiedCaptured(false);
 
     try {
@@ -109,6 +111,7 @@ export default function AiAssistantPanel() {
             error?: string;
             missingLeadFields?: string[];
             qualifiedLeadCaptured?: boolean;
+            leadCaptureWarning?: string;
           }
         | null;
 
@@ -125,6 +128,7 @@ export default function AiAssistantPanel() {
       ]);
       setMissingFields(responseBody.missingLeadFields ?? []);
       setQualifiedCaptured(Boolean(responseBody.qualifiedLeadCaptured));
+      setLeadCaptureWarning(responseBody.leadCaptureWarning ?? "");
       setState("idle");
     } catch (error) {
       setState("error");
@@ -335,6 +339,8 @@ export default function AiAssistantPanel() {
           Thanks. Your details were saved and sent for follow-up.
         </p>
       ) : null}
+
+      {leadCaptureWarning ? <p className="lead-status error mt-3">{leadCaptureWarning}</p> : null}
 
       {lastAssistantMessage ? (
         <a href="/book-service" className="cta-primary mt-4 inline-flex">

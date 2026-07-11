@@ -6,10 +6,9 @@ import {
   getClientIp,
   getRequestOrigin,
   isAllowedOrigin,
-  isValidEmail,
   sanitizeText,
 } from "@/lib/api-security";
-import { upsertHubSpotLead } from "@/lib/hubspot";
+import { processLeadSubmission } from "@/lib/lead-pipeline";
 
 type HubSpotLeadPayload = {
   name?: string;
@@ -81,48 +80,34 @@ export async function POST(request: Request) {
   const email = sanitizeText(body?.email, 160).toLowerCase();
   const company = sanitizeText(body?.company, 120);
 
-  if (!name || !email) {
-    return NextResponse.json(
-      { error: "Missing required HubSpot lead fields" },
-      {
-        status: 400,
-        headers: corsHeaders,
-      }
-    );
+  const result = await processLeadSubmission({
+    routeKey: ROUTE_KEY,
+    clientIp: ip,
+    source: "hubspot_api",
+    formType: "hubspot_direct_lead",
+    name,
+    email,
+    company,
+    message: "Direct HubSpot lead endpoint submission",
+  });
+
+  if (result.ok) {
+    return NextResponse.json(result, {
+      headers: corsHeaders,
+    });
   }
 
-  if (!isValidEmail(email)) {
-    return NextResponse.json(
-      { error: "Please provide a valid email address" },
-      {
-        status: 400,
-        headers: corsHeaders,
-      }
-    );
+  if (result.validationErrors && result.validationErrors.length > 0) {
+    return NextResponse.json(result, {
+      status: 400,
+      headers: corsHeaders,
+    });
   }
 
-  try {
-    const result = await upsertHubSpotLead({ name, email, company });
-
-    return NextResponse.json(
-      {
-        ok: result.ok,
-        action: result.ok && "action" in result ? result.action : null,
-      },
-      {
-        headers: corsHeaders,
-      }
-    );
-  } catch (error) {
-    console.error("HubSpot route error", error);
-    return NextResponse.json(
-      { error: "Failed to create or update HubSpot lead" },
-      {
-        status: 502,
-        headers: corsHeaders,
-      }
-    );
-  }
+  return NextResponse.json(result, {
+    status: 502,
+    headers: corsHeaders,
+  });
 }
 
 export async function OPTIONS(request: Request) {

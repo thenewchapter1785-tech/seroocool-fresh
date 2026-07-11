@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { submitLeadForm } from "@/lib/client/lead-form-submit";
 
 type ServiceType =
   | "computer-repair"
@@ -246,42 +247,33 @@ export default function LiveEstimator() {
     setErrorText("");
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          company: formData.company,
-          preferredContactMethod: formData.preferredContactMethod,
-          audienceType: formData.audienceType,
-          urgency: formData.urgency,
-          budgetRange: `${formatUsd(estimate.min)} - ${formatUsd(estimate.max)}`,
-          timeline: formData.timeline,
-          projectType: currentConfig.label,
-          message: [
-            `Instant quote request for ${currentConfig.label}`,
-            `Complexity: ${formData.complexity}`,
-            `Scope: ${formData.scope}`,
-            `Timeline preference: ${formData.timeline}`,
-            `Preferred appointment time: ${formData.preferredAppointmentTime || "not provided"}`,
-            `${currentConfig.question} ${formData.serviceQuestionAnswer || "not provided"}`,
-            `Upsell recommendations shown: ${estimate.upsells.join(", ")}`,
-            `Estimated range shown: ${formatUsd(estimate.min)} - ${formatUsd(estimate.max)}`,
-          ].join("\n"),
-          formType: "live_estimate",
-          website: formData.website,
-          submittedAt: formData.submittedAt,
-        }),
+      const payload = await submitLeadForm("/api/contact", {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.company,
+        preferredContactMethod: formData.preferredContactMethod,
+        audienceType: formData.audienceType,
+        urgency: formData.urgency,
+        budgetRange: `${formatUsd(estimate.min)} - ${formatUsd(estimate.max)}`,
+        timeline: formData.timeline,
+        projectType: currentConfig.label,
+        message: [
+          `Instant quote request for ${currentConfig.label}`,
+          `Complexity: ${formData.complexity}`,
+          `Scope: ${formData.scope}`,
+          `Timeline preference: ${formData.timeline}`,
+          `Preferred appointment time: ${formData.preferredAppointmentTime || "not provided"}`,
+          `${currentConfig.question} ${formData.serviceQuestionAnswer || "not provided"}`,
+          `Upsell recommendations shown: ${estimate.upsells.join(", ")}`,
+          `Estimated range shown: ${formatUsd(estimate.min)} - ${formatUsd(estimate.max)}`,
+        ].join("\n"),
+        formType: "live_estimate",
+        website: formData.website,
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | { ok?: boolean; error?: string }
-        | null;
-
-      if (!response.ok || !payload?.ok) {
-        throw new Error(payload?.error ?? "Could not submit estimate request");
+      if (!payload.ok) {
+        throw new Error(payload.message ?? "Could not submit estimate request");
       }
 
       setState("success");

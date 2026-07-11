@@ -100,6 +100,11 @@ HubSpot app scopes needed:
 
 This section is reserved for new tasks identified during build sessions.
 
+- [ ] Set local `.env` keys `HUBSPOT_ACCESS_TOKEN` and `RESEND_API_KEY` so `npm run leads:test` can pass before local release validation.
+- [ ] Confirm malformed local `.env` entry `key=...` is intentional; remove or rename if accidental to avoid config drift.
+- [ ] Smoke test new diagnostics route `/api/admin/integrations/lead-pipeline/diagnostics` in production and archive one healthy response snapshot.
+- [ ] Add automated API tests covering lead pipeline: validation errors, honeypot rejection, rate limiting, HubSpot failure, email failure, and partial-failure response semantics.
+- [ ] Add a small ops runbook for lead logs (`logs/lead-submissions.json`, `logs/lead-pipeline-state.json`) including retention and rotation policy.
 - [ ] Add a minimal automated test suite and `npm test` script so production validation includes an executable test gate.
 - [ ] Add a CI guard to avoid running Next build/type generation jobs in parallel (prevents `.next/dev/types` route type corruption).
 - [ ] Start a local app process automatically in the Meta diagnostics workflow (or document one-command wrapper) before running `npm run meta:test`.
