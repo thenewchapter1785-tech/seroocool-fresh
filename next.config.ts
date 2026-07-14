@@ -1,12 +1,19 @@
 import type { NextConfig } from "next";
+import { getSiteUrl } from "./lib/env";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
+const canonicalSiteUrl = getSiteUrl();
+const canonicalHost = new URL(canonicalSiteUrl).host;
+const canonicalHostWithoutWww = canonicalHost.startsWith("www.")
+  ? canonicalHost.slice(4)
+  : canonicalHost;
 
 const scriptSrc = [
   "'self'",
   "'unsafe-inline'",
   ...(isDevelopment ? ["'unsafe-eval'"] : []),
   "https://js.hs-scripts.com",
+  "https://js-na2.hs-scripts.com",
   "https://connect.facebook.net",
   "https://www.googletagmanager.com",
   "https://www.clarity.ms",
@@ -95,7 +102,7 @@ const nextConfig: NextConfig = {
             value: "http",
           },
         ],
-        destination: "https://zerocool-development.com/:path*",
+        destination: `${canonicalSiteUrl}/:path*`,
         permanent: true,
       },
       {
@@ -103,10 +110,10 @@ const nextConfig: NextConfig = {
         has: [
           {
             type: "host",
-            value: "www.zerocool-development.com",
+            value: `www.${canonicalHostWithoutWww}`,
           },
         ],
-        destination: "https://zerocool-development.com/:path*",
+        destination: `${canonicalSiteUrl}/:path*`,
         permanent: true,
       },
     ];

@@ -1,11 +1,11 @@
 import type { MetadataRoute } from "next";
 import { blogPosts } from "@/lib/blog";
+import { getSiteUrl } from "@/lib/env";
 import { localSeoPages } from "@/lib/local-seo-pages";
 import { serviceCatalog } from "@/lib/services";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-development.com";
-
 export default function sitemap(): MetadataRoute.Sitemap {
+  const siteUrl = getSiteUrl();
   const now = new Date();
   const dynamicServiceEntries: MetadataRoute.Sitemap = serviceCatalog.map((service) => ({
     url: `${siteUrl}/services/${service.slug}`,
@@ -26,7 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.76,
   }));
 
-  return [
+  const entries: MetadataRoute.Sitemap = [
     {
       url: siteUrl,
       lastModified: now,
@@ -193,4 +193,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...dynamicLocalLandingEntries,
     ...dynamicBlogEntries,
   ];
+
+  const dedupedByUrl = new Map<string, MetadataRoute.Sitemap[number]>();
+  for (const entry of entries) {
+    dedupedByUrl.set(entry.url, entry);
+  }
+
+  return [...dedupedByUrl.values()];
 }

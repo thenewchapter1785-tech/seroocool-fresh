@@ -10,12 +10,13 @@ type PageMetadataInput = {
 export function buildPageMetadata(input: PageMetadataInput): Metadata {
   const siteUrl = getSiteUrl();
   const absoluteUrl = `${siteUrl}${input.path}`;
+  const socialImageUrl = `${siteUrl}/og-image.svg`;
 
   return {
     title: input.title,
     description: input.description,
     alternates: {
-      canonical: input.path,
+      canonical: absoluteUrl,
     },
     openGraph: {
       title: input.title,
@@ -25,7 +26,7 @@ export function buildPageMetadata(input: PageMetadataInput): Metadata {
       type: "website",
       images: [
         {
-          url: "/og-image.svg",
+          url: socialImageUrl,
           width: 1200,
           height: 630,
           alt: "ZeroCool Development services preview",
@@ -36,7 +37,7 @@ export function buildPageMetadata(input: PageMetadataInput): Metadata {
       card: "summary_large_image",
       title: input.title,
       description: input.description,
-      images: ["/og-image.svg"],
+      images: [socialImageUrl],
     },
   };
 }

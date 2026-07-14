@@ -6,7 +6,7 @@ import AnalyticsPlaceholders from "./analytics-placeholders";
 import MetaPixel from "./meta-pixel";
 import HubSpotTracking from "./hubspot-tracking";
 import SiteNavigation from "./site-navigation";
-import { getContactEmail } from "@/lib/env";
+import { getContactEmail, getSiteUrl } from "@/lib/env";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -19,7 +19,7 @@ const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zerocool-development.com";
+const siteUrl = getSiteUrl();
 const googleSiteVerification =
   process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ??
   process.env.GOOGLE_SITE_VERIFICATION ??
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.webmanifest",
   alternates: {
-    canonical: "/",
+    canonical: siteUrl,
   },
   robots: {
     index: true,
@@ -89,11 +89,11 @@ export const metadata: Metadata = {
     title: defaultTitle,
     description: defaultDescription,
     siteName,
-    url: "/",
+    url: siteUrl,
     type: "website",
     images: [
       {
-        url: "/og-image.svg",
+        url: `${siteUrl}/og-image.svg`,
         width: 1200,
         height: 630,
         alt: "ZeroCool Development computer repair and tech support",
@@ -104,7 +104,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: defaultTitle,
     description: defaultDescription,
-    images: ["/og-image.svg"],
+    images: [`${siteUrl}/og-image.svg`],
   },
   verification:
     googleSiteVerification || facebookDomainVerification

@@ -11,7 +11,8 @@
     "meta:test": "node scripts/meta-test.mjs",
     "hubspot:test": "node scripts/hubspot-test.mjs",
     "email:test": "node scripts/email-test.mjs",
-    "leads:test": "node scripts/leads-test.mjs"
+    "leads:test": "node scripts/leads-test.mjs",
+    "production:verify": "node scripts/production-verify.mjs"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.3.2",

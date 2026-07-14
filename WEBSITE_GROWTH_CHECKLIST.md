@@ -100,6 +100,9 @@ HubSpot app scopes needed:
 
 This section is reserved for new tasks identified during build sessions.
 
+- [x] Run production smoke submission against `/api/contact` and confirm both HubSpot + email provider return success in API response.
+- [ ] Update DigitalOcean production `NEXT_PUBLIC_SITE_URL` to `https://zerocool-development.com`, redeploy, and verify `robots.txt` + `sitemap.xml` no longer emit localhost URLs.
+- [ ] Deploy CSP update that allows `https://js-na2.hs-scripts.com` and re-verify no HubSpot script CSP violations in browser console on key lead pages.
 - [ ] Set local `.env` keys `HUBSPOT_ACCESS_TOKEN` and `RESEND_API_KEY` so `npm run leads:test` can pass before local release validation.
 - [ ] Confirm malformed local `.env` entry `key=...` is intentional; remove or rename if accidental to avoid config drift.
 - [ ] Smoke test new diagnostics route `/api/admin/integrations/lead-pipeline/diagnostics` in production and archive one healthy response snapshot.
