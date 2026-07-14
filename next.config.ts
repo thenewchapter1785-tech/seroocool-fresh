@@ -30,9 +30,9 @@ const contentSecurityPolicy = [
   "form-action 'self'",
   `script-src ${scriptSrc}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://www.facebook.com https://www.google-analytics.com https://www.googletagmanager.com https://track-na2.hubspot.com",
+  "img-src 'self' data: blob: https://www.facebook.com https://www.google-analytics.com https://www.googletagmanager.com https://track-na2.hubspot.com https://forms-na2.hsforms.com",
   "font-src 'self' data:",
-  "connect-src 'self' https://api.hubapi.com https://www.facebook.com https://connect.facebook.net https://www.google-analytics.com https://region1.google-analytics.com https://www.clarity.ms",
+  "connect-src 'self' https://api.hubapi.com https://www.facebook.com https://connect.facebook.net https://www.google-analytics.com https://region1.google-analytics.com https://www.clarity.ms https://forms-na2.hscollectedforms.net",
   "frame-src 'self' https://js.hsforms.net https://forms.hsforms.com",
   "upgrade-insecure-requests",
 ].join("; ");
